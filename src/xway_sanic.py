@@ -3,6 +3,7 @@ from sanic import Sanic
 from sanic.response import json
 from blueprints.v1 import bpv1
 from interfaces import interfaces
+from views.NameView import NameView
 
 def get_my_path():
     """
@@ -12,8 +13,20 @@ def get_my_path():
     return os.path.dirname(os.path.realpath(__file__))
 
 
-app = Sanic("iwaf-backend")
-app.config.from_pyfile("{}/../conf/config.py".format(get_my_path()))
+app = Sanic("xway")
+# print(get_my_path())
+app.config.update_config("{}/../conf/config.py".format(get_my_path()))
+# print(app.config.APP)
+# print(*app.config.APP)
+
+@app.listener('main_process_start')
+async def main_process_start(app, loop):
+    print("---in main_process_start---")
+
+
+@app.listener('main_process_stop')
+async def main_process_stop(app, loop):
+    print("---in main_process_stop---")
 
 
 @app.listener('before_server_start')
@@ -43,7 +56,13 @@ async def after_server_stop(app, loop):
 @app.middleware('request')
 async def request_middleware(request):
     print("---in request_middleware---")
+    # TODO check if login
+    # TODO check if access is allowed
     pass
+
+# @app.on_request
+# async def on_request(request):
+#     print("--- in on_request---")
 
 
 @app.middleware('response')
@@ -64,7 +83,7 @@ def response(data="", code=0, message="success"):
     })
 
 
-@app.route("/api", methods=["POST"])
+@app.route("/api", methods=["POST", "PUT"])
 async def api(request):
     """
     {
@@ -75,6 +94,7 @@ async def api(request):
     :param request:
     :return:
     """
+    print("???")
     req = request.json
     if 'interface' not in req:
         return response("interface not found", 400, "error")
@@ -86,6 +106,24 @@ async def api(request):
     return response(ret)
 
 
-if __name__ == "__main__":
-    app.blueprint(bpv1)
-    app.run(**app.config.APP)
+# @app.route("/api/<tag>", methods=["GET"])
+# async def api2(request, tag):
+#     """
+#     {
+#       "action": "add_rule", ...
+#       "uid": "user id",
+#       "data": "request data",
+#     }
+#     :param request:
+#     :return:
+#     """
+#     print("???api2???", request.id)
+#     print("???api2???", tag)
+#     return response("abc")
+
+
+# if __name__ == "__main__":
+#     print("main...")
+app.blueprint(bpv1)
+app.add_route(NameView.as_view(), "/name/<name>", version=1)
+app.run(**app.config.APP)
