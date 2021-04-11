@@ -7,13 +7,13 @@ from db.crud.base import Base
 from starlette import status as slstatus
 from fastapi import Depends, HTTPException, Security
 from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
-from models.user import UserFromDB
+from models.user import UserOut, UserInDB
 
 class Users(Base):
     async def get_all_user(self):
         records = await self.exec("get_all_user")
         if records:
-            return [UserFromDB(**record) for record in records]
+            return [UserOut(**record) for record in records]
 
         # empty
         return list()
@@ -21,24 +21,42 @@ class Users(Base):
 
     async def add_user(self,
         username: str,
-        salt: str,
         password: str,
         email: Optional[str] = None,
         status: Optional[str] = "enable",
-    ) -> UserFromDB:
-        user = UserFromDB(username=username, email=email, status=status)
+    ) -> UserInDB:
+        user = UserInDB(username=username, email=email, status=status)
+        user.update_password(password)
         record = await self.exec("add_user",
-            username=username,
-            email=email,
-            salt=salt,
-            password=password,
-            status=status,
+            username=user.username,
+            email=user.email,
+            salt=user.salt,
+            password=user.password,
+            status=user.status,
         )
+
         return user.copy(update=dict(record))
 
-    async def get_user_by_id(self, id) -> UserFromDB:
+
+    async def get_user_by_id(self, id) -> UserInDB:
         record = await self.exec("get_user_by_id", id)
         if record:
-            return UserFromDB(**record)
+            return UserInDB(**record)
 
         raise HttpNotFound("user does not exist, id: {0}".format(id))
+
+
+    async def get_user_by_username(self, username) -> UserInDB:
+        record = await self.exec("get_user_by_username", username)
+        if record:
+            return UserInDB(**record)
+
+        raise HttpNotFound("user does not exist, username: {0}".format(username))
+
+
+    async def get_user_by_email(self, email) -> UserInDB:
+        record = await self.exec("get_user_by_email", email)
+        if record:
+            return UserInDB(**record)
+
+        raise HttpNotFound("user does not exist, email: {0}".format(email))

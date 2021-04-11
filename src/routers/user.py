@@ -1,7 +1,7 @@
 from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from models.user import UserIn, UserFromDB, ListOfUserInResponse, UserInResponse
+from models.user import UserIn, UserOut, UserInDB, ListOfUserInResponse, UserInResponse
 from db.crud.users import Users as UserCRUD
 # from utils.response import Response
 
@@ -25,9 +25,9 @@ async def add_user(
     info: UserIn = Body(..., embed=True, alias="user")
 ) -> UserInResponse:
     user_crud = UserCRUD(request.app.state.pgpool)
-    # TODO generate salt and hash pwd
-    user = await user_crud.add_user(info.username, "salt", info.password, info.email, )
+    user = await user_crud.add_user(info.username, info.password, info.email)
 
+    # Note: user is a UserInDB instance, we should return UserOut() to user
     return UserInResponse(data=user)
 
 
@@ -38,6 +38,8 @@ async def get_user(
 ) -> UserInResponse:
     user_crud = UserCRUD(request.app.state.pgpool)
     user = await user_crud.get_user_by_id(user_id)
+
+    # Note: user is a UserInDB instance, we should return UserOut() to user
     return UserInResponse(data=user)
 
 
