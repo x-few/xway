@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import EmailStr, BaseConfig, BaseModel
 from .common import IDModel, DateTimeModel
 from .base import Base
 
-class User(Base):
+class User(BaseModel):
     username: str
     email: Optional[EmailStr] = None
     status: Optional[str] = "enable"
@@ -29,5 +29,8 @@ class UserFromDB(User, IDModel, DateTimeModel):
     # salt: str = ""
     # password: str = ""
 
-# class ListOfUserInResponse(Base):
-#     users
+class ListOfUserInResponse(Base):
+    data: List[UserFromDB]
+
+class UserInResponse(Base):
+    data: UserFromDB

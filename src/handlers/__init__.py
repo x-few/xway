@@ -1,13 +1,11 @@
 from starlette.exceptions import HTTPException
-from fastapi.exceptions import RequestValidationError
+from fastapi.exceptions import RequestValidationError, ValidationError
 from fastapi import FastAPI
 from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
 
 from . import app_start, \
             app_stop, \
-            http_error, \
-            request_validation_error, \
-            connection_refused_error
+            http_error
 
             # response
 
@@ -21,7 +19,5 @@ def add_all_handler(app: FastAPI):
     app.add_exception_handler(HttpClientError, http_error.client)
     app.add_exception_handler(HttpForbidden, http_error.forbidden)
     app.add_exception_handler(HttpNotFound, http_error.notfound)
-    app.add_exception_handler(ConnectionRefusedError, connection_refused_error.handler)
-    app.add_exception_handler(RequestValidationError, request_validation_error.handler)
-
-    # app.add_middleware(response.format_response)
+    app.add_exception_handler(RequestValidationError, http_error.validation_error)
+    app.add_exception_handler(ValidationError, http_error.validation_error)

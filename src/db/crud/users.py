@@ -11,11 +11,12 @@ from models.user import UserFromDB
 
 class Users(Base):
     async def get_all_user(self):
-        try:
-            records = await self.exec("get_all_user")
+        records = await self.exec("get_all_user")
+        if records:
             return [UserFromDB(**record) for record in records]
-        except Exception as e:
-            raise HttpServerError(str(e))
+
+        # empty
+        return list()
 
 
     async def add_user(self,
@@ -25,15 +26,19 @@ class Users(Base):
         email: Optional[str] = None,
         status: Optional[str] = "enable",
     ) -> UserFromDB:
-        try:
-            user = UserFromDB(username=username, email=email, status=status)
-            record = await self.exec("add_user",
-                username=username,
-                email=email,
-                salt=salt,
-                password=password,
-                status=status,
-            )
-            return user.copy(update=dict(record))
-        except Exception as e:
-            raise HttpServerError(str(e))
+        user = UserFromDB(username=username, email=email, status=status)
+        record = await self.exec("add_user",
+            username=username,
+            email=email,
+            salt=salt,
+            password=password,
+            status=status,
+        )
+        return user.copy(update=dict(record))
+
+    async def get_user_by_id(self, id) -> UserFromDB:
+        record = await self.exec("get_user_by_id", id)
+        if record:
+            return UserFromDB(**record)
+
+        raise HttpNotFound("user does not exist, id: {0}".format(id))

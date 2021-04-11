@@ -1,7 +1,9 @@
 
-COMMENT=$(m)
+COMMENT = $(m)
 VALUE := $(if $(n),$(n),head)
 
+PYTHON ?= python3.7
+PIP ?= pip3
 
 .PHONY: prepare
 prepare: prepare-ubuntu
@@ -15,15 +17,15 @@ prepare-centos:
 	sudo yum install python3-devel
 
 freeze:
-	pip3 freeze > requirements.txt
+	$(PIP) freeze > requirements.txt
 
 pip-install:
-	pip3 install -r requirement.txt
+	$(PIP) install -r requirement.txt
 
 start:
 	# cd src; sanic xway.app
 	# cd src; uvicorn xway:app --reload
-	cd src; python3.7 xway.py
+	cd src; $(PYTHON) xway.py
 
 run: start
 
@@ -34,7 +36,7 @@ restart:
 	$(MAKE) stop
 
 test:
-	echo "TODO"
+	cd src; $(PYTHON) -m pytest tests -s
 
 
 # make revision m="comment"
