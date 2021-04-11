@@ -12,8 +12,8 @@ APP = {
 ROUTER_PREFIX = "/api"
 
 POSTGRESQL = {
-    "dsn": "postgres://postgres:postgres@127.0.0.1:5432/xway",
-    "host": "127.0.0.2",
+    # "dsn": "postgres://postgres:postgres@127.0.0.1:5432/xway",
+    "host": "127.0.0.1",
     "port": 5432,
     "user": "postgres",
     "password": "postgres",

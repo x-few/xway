@@ -1,7 +1,11 @@
 import asyncpg
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from loguru import logger
 from config.config import POSTGRESQL as pgconfig
+from asyncpg.connection import Connection
+from asyncpg.pool import Pool
+from starlette.requests import Request
+from typing import AsyncGenerator, Callable, Type
 
 async def connect_to_db(app: FastAPI) -> None:
     logger.info("Connecting to postgres://{}:{}@{}:{}/{}",
@@ -10,11 +14,10 @@ async def connect_to_db(app: FastAPI) -> None:
 
     try:
         app.state.pgpool = await asyncpg.create_pool(**pgconfig)
+        logger.info("Connection established")
     except ConnectionRefusedError:
         app.state.pgpool = None
         logger.error("Connection Refused")
-
-    logger.info("Connection established")
 
 
 async def close_db_connection(app: FastAPI) -> None:

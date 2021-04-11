@@ -1,13 +1,10 @@
 from fastapi import Depends, APIRouter
 from . import login, user
-router = APIRouter()
 
-router.include_router(login.router, prefix="/v1")
-router.include_router(user.router, prefix="/v1")
+def include_all_router(app):
+    router = APIRouter()
 
-# from ..depends import jwt_required
-# from ..factory import app
+    router.include_router(login.router, prefix="/v1")
+    router.include_router(user.router, prefix="/v1")
 
-# app.include_router(site.router)
-# app.include_router(other.router, dependencies=[Depends(jwt_required)])
-# app.include_router(rest.router, dependencies=[Depends(jwt_required)], prefix="/rest")
+    app.include_router(router, prefix="/api")

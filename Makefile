@@ -1,5 +1,7 @@
 
-# all:
+COMMENT=$(m)
+VALUE := $(if $(n),$(n),head)
+
 
 .PHONY: prepare
 prepare: prepare-ubuntu
@@ -23,6 +25,8 @@ start:
 	# cd src; uvicorn xway:app --reload
 	cd src; python3.7 xway.py
 
+run: start
+
 stop:
 
 restart:
@@ -31,3 +35,22 @@ restart:
 
 test:
 	echo "TODO"
+
+
+# make revision m="comment"
+revision:
+	cd src; alembic revision -m "$(COMMENT)"
+
+# make upgrade n=1
+upgrade:
+	cd src; alembic upgrade $(VALUE)
+
+# make downgrade n=2
+downgrade:
+	cd src; alembic downgrade -$(VALUE)
+
+history:
+	cd src; alembic history --verbose
+
+base:
+	cd src; alembic downgrade base
