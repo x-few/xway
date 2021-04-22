@@ -69,7 +69,7 @@ def create_users_table() -> None:
     table_name = "users"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, primary_key=True),
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("username", sa.Text, unique=True, nullable=False, index=True),
         sa.Column("email", sa.Text, unique=True, index=True),
         sa.Column("salt", sa.Text, nullable=False),
@@ -81,11 +81,42 @@ def create_users_table() -> None:
     create_updated_trigger(table_name)
 
 
+# this table is for all users
+def create_default_config_table() -> None:
+    table_name = "default_config"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("key", sa.Text, unique=True, nullable=False, index=True),
+        sa.Column("value", sa.Text, nullable=False),
+        sa.Column("comment", sa.Text, nullable=True),
+    )
+
+def insert_default_config_table() -> None:
+    config_table = sa.table('default_config',
+        sa.Column("key", sa.Text),
+        sa.Column("value", sa.Text),
+        sa.Column("comment", sa.Text),
+    )
+
+    op.bulk_insert(config_table,
+        [
+            {'key':'jwt_subject', 'value': 'access', 'comment': 'jwt_subject for user authentication'},
+            {'key':'jwt_algorithm', 'value': 'HS256', 'comment': 'jwt algorithm'},
+            {'key':'jwt_access_token_expire', 'value': '648000', 'comment': 'access token expire second'},
+            {'key':'secret_key', 'value': '12345abcde', 'comment': 'TODO: Generated at initialization'},
+        ]
+    )
+
+
 def upgrade():
     create_updated_function()
     create_users_table()
+    create_default_config_table()
+    insert_default_config_table()
 
 
 def downgrade():
+    op.drop_table('default_config')
     op.drop_table('users')
     drop_updated_function()

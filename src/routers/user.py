@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Reques
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from models.user import UserIn, UserOut, UserInDB, ListOfUserInResponse, UserInResponse
 from db.crud.users import Users as UserCRUD
-# from utils.response import Response
 
 router = APIRouter()
 

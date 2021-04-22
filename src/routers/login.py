@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, Body, Request
 from models.user import UserIn, UserOut, UserInDB, UserInResponse
 from db.crud.users import Users as UserCRUD
 from models.errors import HttpForbidden
+from services.jwt import create_access_token
 
 router = APIRouter()
 
@@ -22,6 +23,8 @@ async def login(
     if not user.check_password(info.password):
         raise HttpForbidden("invalid username or password")
 
-    # TODO: create access token
+    token = create_access_token(user, request.app.state.default_config)
+
+    print("token: ", token)
 
     return UserInResponse(data=user)

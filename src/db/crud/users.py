@@ -1,5 +1,3 @@
-
-
 from typing import Optional
 
 from db.queries import queries

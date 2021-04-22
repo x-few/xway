@@ -2,7 +2,7 @@ from typing import Optional, List
 from pydantic import EmailStr, BaseConfig, BaseModel
 from .common import IDModel, DateTimeModel
 from .base import Base
-from utils import security
+from services import security
 
 class User(BaseModel):
     username: str
@@ -37,3 +37,6 @@ class ListOfUserInResponse(Base):
 
 class UserInResponse(Base):
     data: UserOut
+
+class UserInJWT(BaseModel):
+    username: str
