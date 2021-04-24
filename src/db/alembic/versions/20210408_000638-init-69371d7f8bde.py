@@ -10,12 +10,21 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import func
 from typing import Tuple
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy_utils import LtreeType
+from sqlalchemy.engine.reflection import Inspector
 
 # revision identifiers, used by Alembic.
 revision = '69371d7f8bde'
 down_revision = None
 branch_labels = None
 depends_on = None
+
+def create_extensions():
+    op.execute("CREATE EXTENSION if not exists ltree;")
+
+def drop_extensions():
+    op.execute("DROP EXTENSION if exists ltree;")
 
 def create_updated_function() -> None:
     op.execute(
@@ -109,14 +118,54 @@ def insert_default_config_table() -> None:
     )
 
 
+def create_operation_log_table() -> None:
+    table_name = "operation_log"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("op", sa.String(length=16), unique=True, nullable=False, index=True),
+        sa.Column("uid", sa.Integer, nullable=False),
+        sa.Column("path", LtreeType, nullable=True),
+        sa.Column("new", JSONB, nullable=True),
+        sa.Column("old", JSONB, nullable=True),
+        *timestamps(),
+    )
+
+
+def create_release_log_table() -> None:
+    table_name = "release_log"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("uid", sa.Integer, nullable=False),
+        sa.Column("start_opid", sa.Integer, nullable=False),
+        sa.Column("end_opid", sa.Integer, nullable=False),
+        *timestamps(),
+    )
+
+
+def get_all_tables():
+    conn = op.get_bind()
+    inspector = Inspector.from_engine(conn)
+    tables = inspector.get_table_names()
+    return tables
+
+
 def upgrade():
+    # tables = get_all_tables()
+    create_extensions()
     create_updated_function()
     create_users_table()
     create_default_config_table()
     insert_default_config_table()
+    create_operation_log_table()
+    create_release_log_table()
 
 
 def downgrade():
+    op.drop_table('release_log')
+    op.drop_table('operation_log')
     op.drop_table('default_config')
     op.drop_table('users')
     drop_updated_function()
+    drop_extensions()

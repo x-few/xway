@@ -4,9 +4,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from models.errors import HttpForbidden
 from starlette.exceptions import HTTPException
 from starlette import status
-from starlette.middleware.authentication import (
-    AuthenticationMiddleware as BaseAuthenticationMiddleware,
-)
 from starlette.requests import HTTPConnection
 
 # from fastapi_contrib.common.responses import UJSONResponse

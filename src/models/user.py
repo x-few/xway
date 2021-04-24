@@ -31,6 +31,10 @@ class UserInDB(User, IDModel, DateTimeModel):
     def check_password(self, password: str) -> bool:
         return security.verify_password(self.salt + password, self.password)
 
+    def is_disabled(self) -> bool:
+        if self.status == "enable":
+            return False
+        return True
 
 class ListOfUserInResponse(Base):
     data: List[UserOut]
@@ -40,3 +44,9 @@ class UserInResponse(Base):
 
 class UserInJWT(BaseModel):
     username: str
+
+class UserWithToken(User):
+    token: Optional[str] = None
+
+class UserWithTokenInResponse(Base):
+    data: UserWithToken
