@@ -8,13 +8,20 @@ from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpN
 from models.user import UserOut, UserInDB
 
 class Users(Base):
-    async def get_all_user(self):
-        records = await self.exec("get_all_user")
-        if records:
-            return [UserOut(**record) for record in records]
+    async def get_all_user(self, offset, limit):
+        record = await self.exec("count_users")
+        if not record or not record[0] or record[0][0] == 0:
+            return list(), 0
 
-        # empty
-        return list()
+        count = record[0][0]
+        users = list()
+
+        records = await self.exec("get_all_user", offset=offset, limit=limit)
+        print("records = ", records)
+        if records:
+            users = [UserOut(**record) for record in records]
+
+        return users, count
 
 
     async def add_user(self,

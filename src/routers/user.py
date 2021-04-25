@@ -7,11 +7,16 @@ from db.crud.users import Users as UserCRUD
 router = APIRouter()
 
 @router.get("/users", response_model=ListOfUserInResponse,)
-async def get_users(request: Request,) -> ListOfUserInResponse:
+async def get_users(
+    request: Request,
+    offset: int = Query(0, ge=0, title="which page"),
+    limit: int = Query(20, gt=0, le=100, title="Page size"),
+) -> ListOfUserInResponse:
     user_crud = UserCRUD(request.app.state.pgpool)
-    users = await user_crud.get_all_user()
+    users, count = await user_crud.get_all_user(offset, limit)
+    print("len(users) = ", len(users))
 
-    return ListOfUserInResponse(data=users)
+    return ListOfUserInResponse(data=users, count=count)
 
 
 # curl localhost:9394/api/v1/user -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'

@@ -38,6 +38,7 @@ class UserInDB(User, IDModel, DateTimeModel):
 
 class ListOfUserInResponse(Base):
     data: List[UserOut]
+    count: int
 
 class UserInResponse(Base):
     data: UserOut

@@ -11,7 +11,8 @@ from starlette.requests import HTTPConnection
 
 class OperationLog(BaseHTTPMiddleware):
     async def save_old_data(self, request):
-        print("---isshe---: save_old_data ---")
+        print("---isshe---: save_old_data ---request.method = ", request.method)
+        print("---isshe---: save_old_data ---request.url.path = ", request.url.path)
         # check url and method
 
         # get data
@@ -31,7 +32,8 @@ class OperationLog(BaseHTTPMiddleware):
         response = await call_next(request)
         if response and response.status_code >= 200 and response.status_code < 300:
             await self.oplog(request)
-        print("---isshe---: response = ", response)
+        # print("---isshe---: response = ", response)
         print("---isshe---: response.status_code = ", response.status_code)
+        # print("---isshe---: response.content = ", response.content)
 
         return response

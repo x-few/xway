@@ -1,5 +1,9 @@
 -- name: get-all-user
-SELECT id, username, email, created, updated, status FROM users;
+SELECT id, username, email, created, updated, status FROM users ORDER BY id desc LIMIT :limit OFFSET :offset;
+
+
+-- name: count-users
+SELECT count(id) from users;
 
 
 -- name: add-user<!
