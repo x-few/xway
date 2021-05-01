@@ -90,6 +90,31 @@ def create_users_table() -> None:
     create_updated_trigger(table_name)
 
 
+def insert_default_users() -> None:
+    table_name = "users"
+    table = sa.table(
+        table_name,
+        sa.Column("username", sa.Text),
+        sa.Column("email", sa.Text),
+        sa.Column("salt", sa.Text),
+        sa.Column("password", sa.Text),
+        sa.Column("status", sa.Text),
+    )
+
+    op.bulk_insert(table,
+        [
+            {
+                'username': 'admin',
+                'email': 'admin@xway.com',
+                'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
+                # password: pwd@xway
+                'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
+                'status': 'enable',
+            },
+        ]
+    )
+
+
 # this table is for all users
 def create_default_config_table() -> None:
     table_name = "default_config"
@@ -101,19 +126,24 @@ def create_default_config_table() -> None:
         sa.Column("comment", sa.Text, nullable=True),
     )
 
+
 def insert_default_config_table() -> None:
-    config_table = sa.table('default_config',
+    table_name = "default_config"
+    table = sa.table(
+        table_name,
         sa.Column("key", sa.Text),
         sa.Column("value", sa.Text),
         sa.Column("comment", sa.Text),
     )
 
-    op.bulk_insert(config_table,
+    op.bulk_insert(table,
         [
             {'key':'jwt_subject', 'value': 'access', 'comment': 'jwt_subject for user authentication'},
             {'key':'jwt_algorithm', 'value': 'HS256', 'comment': 'jwt algorithm'},
-            {'key':'jwt_access_token_expire', 'value': '648000', 'comment': 'access token expire second'},
+            {'key':'jwt_access_token_expire', 'value': '604800', 'comment': 'one week, access token expire second'},
             {'key':'secret_key', 'value': '12345abcde', 'comment': 'TODO: Generated at initialization'},
+            {'key':'jwt_token_prefix', 'value': 'Token', 'comment': 'jwt token prefix'},
+            {'key':'auth_header', 'value': 'Authorization', 'comment': 'http header of authorization'},
         ]
     )
 
@@ -158,6 +188,7 @@ def upgrade():
     create_extensions()
     create_updated_function()
     create_users_table()
+    insert_default_users()
     create_default_config_table()
     insert_default_config_table()
     create_operation_log_table()

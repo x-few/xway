@@ -1,7 +1,6 @@
 from typing import Optional, List
 from pydantic import EmailStr, BaseConfig, BaseModel
-from .common import IDModel, DateTimeModel
-from .base import Base
+from .base import Base, IDModel, DateTimeModel
 from services import security
 
 class User(BaseModel):

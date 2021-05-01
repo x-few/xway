@@ -2,7 +2,8 @@ from starlette.exceptions import HTTPException
 from fastapi.exceptions import RequestValidationError, ValidationError
 from fastapi import FastAPI
 from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
-from middlewares.operation_log import OperationLog
+# from middlewares.operation_log import OperationLog
+# from middlewares.authentication import AuthenticationMiddleware
 from . import app_start, \
             app_stop, \
             http_error
@@ -20,4 +21,6 @@ def add_all_handler(app: FastAPI):
     app.add_exception_handler(RequestValidationError, http_error.validation_error)
     app.add_exception_handler(ValidationError, http_error.validation_error)
 
-    app.add_middleware(OperationLog)
+    # app.add_middleware(OperationLog)
+    # app.add_middleware(AuthenticationMiddleware)
+

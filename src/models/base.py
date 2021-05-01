@@ -1,6 +1,5 @@
 import datetime
-
-from pydantic import BaseConfig, BaseModel
+from pydantic import BaseConfig, BaseModel, Field, validator
 
 
 def convert_datetime_to_realworld(dt: datetime.datetime) -> str:
@@ -19,3 +18,16 @@ class Base(BaseModel):
         allow_population_by_field_name = True
         json_encoders = {datetime.datetime: convert_datetime_to_realworld}
         alias_generator = convert_field_to_camel_case
+
+
+class DateTimeModel(BaseModel):
+    created: datetime.datetime = None  # type: ignore
+    updated: datetime.datetime = None  # type: ignore
+
+    @validator("created", "updated", pre=True)
+    def default_datetime(cls, value: datetime.datetime, ) -> datetime.datetime:
+        return value or datetime.datetime.now()
+
+
+class IDModel(BaseModel):
+    id: int = Field(0, alias="id")

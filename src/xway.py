@@ -1,11 +1,12 @@
 import os
 import uvicorn
 import time
-
 from fastapi import FastAPI
+
 from config import config
 from handlers import add_all_handler
 from routers import include_all_router
+from middlewares import add_all_middleware
 # from starlette.middleware.cors import CORSMiddleware
 
 def application() -> FastAPI:
@@ -19,6 +20,7 @@ def application() -> FastAPI:
     # )
 
     add_all_handler(app)
+    add_all_middleware(app)
 
     include_all_router(app)
 

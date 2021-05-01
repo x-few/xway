@@ -9,16 +9,16 @@ APP = {
     "reload": True,
 }
 
-ROUTER_PREFIX = "/api"
+# ROUTER_PREFIX = "/api"
 
 # openssl rand -hex 32
-SECRET_KEY = "5a5c2b24d662362c1f36e083dd38d8b8724a9523a946bc68c31f9245b46da855"
+# SECRET_KEY = "5a5c2b24d662362c1f36e083dd38d8b8724a9523a946bc68c31f9245b46da855"
 
-JWT = {
-    "SUBJECT": "access",
-    "ALGORITHM": "HS256",
-    "TOKEN_EXPIRE": 24 * 60 * 60,   # 1 day
-}
+# JWT = {
+#     "SUBJECT": "access",
+#     "ALGORITHM": "HS256",
+#     "TOKEN_EXPIRE": 24 * 60 * 60,   # 1 day
+# }
 
 POSTGRESQL = {
     # "dsn": "postgres://postgres:postgres@127.0.0.1:5432/xway",

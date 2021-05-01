@@ -17,6 +17,7 @@ def create_jwt_token(
 ) -> str:
     to_encode = jwt_content.copy()
     expire = datetime.utcnow() + expires_delta
+    print("expire = ", expire)
     to_encode.update(JWTModel(exp=expire, sub=jwt_subject).dict())
     return jwt.encode(to_encode, secret_key, algorithm=jwt_algorithm)
 
