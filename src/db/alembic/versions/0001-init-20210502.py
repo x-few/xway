@@ -85,6 +85,7 @@ def create_users_table() -> None:
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
         sa.Column("status", sa.Text, nullable=False, default="enable"),
+        sa.Column("owner", sa.Integer, nullable=False, default=0),
         *timestamps(),
     )
 
@@ -99,7 +100,8 @@ def insert_default_users() -> None:
         sa.Column("email", sa.Text),
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
-        sa.Column("status", sa.Text),
+        sa.Column("status", sa.Text, default="enable"),
+        sa.Column("owner", sa.Integer, default=0),
     )
 
     op.bulk_insert(table,
@@ -110,7 +112,6 @@ def insert_default_users() -> None:
                 'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
                 # password: pwd@xway
                 'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
-                'status': 'enable',
             },
         ]
     )

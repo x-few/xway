@@ -8,7 +8,7 @@ from models.user import UserOut, UserInDB
 from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
 
 class Users(Base):
-    async def get_all_user(self, offset, limit):
+    async def get_all_user(self, offset, limit) -> list:
         record = await self.exec("count_users")
         if not record or not record[0] or record[0][0] == 0:
             return list(), 0

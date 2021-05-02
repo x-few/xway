@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2
 
 from models.user import UserIn
-from db.crud.users import Users as UserCRUD
+from db.crud.user import Users as UserCRUD
 from models.errors import HttpForbidden
 from services.jwt import create_access_token
 from models.token import Token, TokenInResponse, \

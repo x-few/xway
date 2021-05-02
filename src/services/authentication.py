@@ -10,7 +10,7 @@ from pydantic import ValidationError
 from models.errors import HttpForbidden
 from services.config import get_default_config
 from models.errors import HttpUnauthorized
-from db.crud.users import Users as UserCRUD
+from db.crud.user import Users as UserCRUD
 from models.user import UserInDB
 from services.localization import get_gettext
 
