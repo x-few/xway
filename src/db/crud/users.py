@@ -1,11 +1,11 @@
 from typing import Optional
-
-from db.queries import queries
-from db.crud.base import Base
 from starlette import status as slstatus
 from fastapi import Depends, HTTPException, Security
-from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
+
+from db.crud.base import Base
+from db.queries import queries
 from models.user import UserOut, UserInDB
+from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
 
 class Users(Base):
     async def get_all_user(self, offset, limit):

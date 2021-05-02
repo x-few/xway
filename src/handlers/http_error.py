@@ -7,9 +7,11 @@ from starlette import status
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 
-from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
+from models.errors import HttpServerError, HttpClientError, \
+    HttpForbidden, HttpNotFound, HttpUnauthorized
 
 async def handler(request: Request, exc: HTTPException) -> JSONResponse:
+    # print("exc.status_code = ", exc.status_code)
     return JSONResponse({"errors": [exc.detail]}, status_code=exc.status_code)
 
 async def server(request: Request, exc: HttpServerError) -> JSONResponse:
@@ -20,6 +22,10 @@ async def server(request: Request, exc: HttpServerError) -> JSONResponse:
 async def client(request: Request, exc: HttpClientError) -> JSONResponse:
     return JSONResponse({"errors": [exc.detail]},
         status_code=status.HTTP_400_BAD_REQUEST)
+
+async def notauth(request: Request, exc: HttpUnauthorized) -> JSONResponse:
+    return JSONResponse({"errors": [exc.detail]},
+        status_code=status.HTTP_401_UNAUTHORIZED)
 
 async def forbidden(request: Request, exc: HttpForbidden) -> JSONResponse:
     return JSONResponse({"errors": [exc.detail]},

@@ -1,5 +1,5 @@
 import asyncpg
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from loguru import logger
 from config.config import POSTGRESQL as pgconfig
 from asyncpg.connection import Connection

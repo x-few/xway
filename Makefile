@@ -72,3 +72,20 @@ base:
 .PHONY: psql
 psql:
 	psql -h 127.0.0.1 -p 5432 -U postgres -d xway
+
+local:
+	# find src/ -iname "*.py" | xargs xgettext -o src/locales/zh_CN/LC_MESSAGES/base.po
+	# find src/ -iname "*.py" | xargs xgettext -o src/locales/en_US/LC_MESSAGES/base.po
+	sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/zh_CN/LC_MESSAGES/base.po
+	sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/en_US/LC_MESSAGES/base.po
+	msgfmt -o src/locales/zh_CN/LC_MESSAGES/base.mo src/locales/zh_CN/LC_MESSAGES/base.po
+	msgfmt -o src/locales/en_US/LC_MESSAGES/base.mo src/locales/en_US/LC_MESSAGES/base.po
+
+tr-merge:
+	for lang in `ls src/locales`; do \
+		find src/ -iname "*.py" | xargs xgettext --from-code utf-8 -o src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		msgmerge -U src/locales/$$lang/LC_MESSAGES/base.po src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
+		rm -f src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+	done

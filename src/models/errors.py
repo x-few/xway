@@ -13,6 +13,9 @@ class HttpServerError(BaseException):
 class HttpClientError(BaseException):
     """Raised when Client Error"""
 
+class HttpUnauthorized(BaseException):
+    """Raised when 401 Error"""
+
 class HttpNotFound(BaseException):
     """Raised when 404 Error"""
 

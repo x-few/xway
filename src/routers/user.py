@@ -1,20 +1,25 @@
+# -*- coding: utf-8 -*-
+
 from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+
 from models.user import UserIn, UserOut, UserInDB, ListOfUserInResponse, UserInResponse
 from db.crud.users import Users as UserCRUD
+from services.localization import get_gettext
+
 
 router = APIRouter()
 
-@router.get("/users", response_model=ListOfUserInResponse,)
+@router.get("/users", response_model=ListOfUserInResponse)
 async def get_users(
     request: Request,
     offset: int = Query(0, ge=0, title="which page"),
     limit: int = Query(20, gt=0, le=100, title="Page size"),
+    _ = Depends(get_gettext),
 ) -> ListOfUserInResponse:
     user_crud = UserCRUD(request.app.state.pgpool)
     users, count = await user_crud.get_all_user(offset, limit)
-    print("len(users) = ", len(users))
 
     return ListOfUserInResponse(data=users, count=count)
 

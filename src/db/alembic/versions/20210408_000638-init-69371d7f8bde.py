@@ -176,6 +176,36 @@ def create_release_log_table() -> None:
     )
 
 
+def create_language_table() -> None:
+    table_name = "language"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("name", sa.Text, nullable=False),      # 简体中文、English(US)
+        sa.Column("code", sa.String(length=16), nullable=False),      # zh_CN、en_US
+        sa.Column("domain", sa.Text, nullable=False, default="base"),
+        sa.Column("localedir", sa.Text, nullable=False, default="locales"),
+    )
+
+
+def insert_language_table() -> None:
+    table_name = "language"
+    table = sa.table(
+        table_name,
+        sa.Column("name", sa.Text),
+        sa.Column("code", sa.Text),
+        sa.Column("domain", sa.Text, default="base"),
+        sa.Column("localedir", sa.Text, default="locales"),
+    )
+
+    op.bulk_insert(table,
+        [
+            {'name':'简体中文', 'code': 'zh_CN'},
+            {'name':'English(US)', 'code': 'en_US'},
+        ]
+    )
+
+
 def get_all_tables():
     conn = op.get_bind()
     inspector = Inspector.from_engine(conn)
@@ -193,9 +223,12 @@ def upgrade():
     insert_default_config_table()
     create_operation_log_table()
     create_release_log_table()
+    create_language_table()
+    insert_language_table()
 
 
 def downgrade():
+    op.drop_table('language')
     op.drop_table('release_log')
     op.drop_table('operation_log')
     op.drop_table('default_config')
