@@ -1,11 +1,10 @@
 """init
 
-Revision ID: 69371d7f8bde
+Revision ID: 0001
 Revises:
-Create Date: 2021-04-08 00:06:38.939036
+Create Date: 2021-05-02 23:01:00.322410
 
 """
-
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import func
@@ -14,11 +13,13 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy_utils import LtreeType
 from sqlalchemy.engine.reflection import Inspector
 
+
 # revision identifiers, used by Alembic.
-revision = '69371d7f8bde'
+revision = '0001'
 down_revision = None
 branch_labels = None
 depends_on = None
+
 
 def create_extensions():
     op.execute("CREATE EXTENSION if not exists ltree;")

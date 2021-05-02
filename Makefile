@@ -49,7 +49,9 @@ test:
 .PHONY: revision
 # make revision m="comment"
 revision:
-	cd src; alembic revision -m "$(COMMENT)"
+	$(eval NEXT_ID = $(shell ls src/db/alembic/versions/ | grep -P '^\d{4}-.*\.py$$' | wc -l))
+	$(eval NEXT_ID = $(shell expr $(NEXT_ID) + 1))
+	cd src; alembic revision -m "$(COMMENT)" --rev-id=`printf "%04d" $(NEXT_ID)`
 
 .PHONY: upgrade
 # make upgrade n=1
