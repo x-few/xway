@@ -3,23 +3,31 @@ from pydantic import EmailStr, BaseConfig, BaseModel
 from .base import Base, IDModel, DateTimeModel
 from services import security
 
-class User(BaseModel):
+class User(Base):
     username: str
     email: Optional[EmailStr] = None
     status: Optional[str] = "enable"
 
 
 # from user
-class UserIn(User):
+class UserInCreate(User):
+    owner: Optional[int] = None
     password: str = ""
 
+
+class UserInLogin(User):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
 
 # to user
 class UserOut(User, IDModel, DateTimeModel):
     """UserOut"""
+    creator: int
+    owner: int
 
 
-class UserInDB(User, IDModel, DateTimeModel):
+class UserInDB(UserOut):
     salt: str = ""
     password: str = ""
 
@@ -42,7 +50,7 @@ class ListOfUserInResponse(Base):
 class UserInResponse(Base):
     data: UserOut
 
-class UserInJWT(BaseModel):
+class UserInJWT(Base):
     username: str
 
 class UserWithToken(User):
@@ -50,3 +58,9 @@ class UserWithToken(User):
 
 class UserWithTokenInResponse(Base):
     data: UserWithToken
+
+class UserInUpdate(Base):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    status: Optional[str] = None

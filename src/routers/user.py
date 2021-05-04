@@ -2,26 +2,42 @@
 
 from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 
-from models.user import UserIn, UserOut, UserInDB, ListOfUserInResponse, UserInResponse
-from db.crud.user import Users as UserCRUD
+from models.user import UserInCreate, UserOut, ListOfUserInResponse, UserInResponse, UserInUpdate
+from models.response import Response
+from db.crud.user import User as UserCRUD
 from services.localization import get_gettext
+from services.user import add_user as do_add_user
 
 
 router = APIRouter()
 
 @router.get("/users", response_model=ListOfUserInResponse)
-async def get_users(
+async def get_all_users(
     request: Request,
-    offset: int = Query(0, ge=0, title="which page"),
+    skip: int = Query(0, ge=0, title="which page"),
     limit: int = Query(20, gt=0, le=100, title="Page size"),
     _ = Depends(get_gettext),
 ) -> ListOfUserInResponse:
     user_crud = UserCRUD(request.app.state.pgpool)
-    users, count = await user_crud.get_all_user(offset, limit)
+    users, count = await user_crud.get_all_user(skip, limit)
 
     return ListOfUserInResponse(data=users, count=count)
+
+
+@router.post("/owner_user",
+    status_code=HTTP_201_CREATED,
+    response_model=UserInResponse,
+)
+async def add_owner_user(
+    request: Request,
+    info: UserInCreate = Body(..., embed=True, alias="user")
+) -> UserInResponse:
+    user = await do_add_user(request, info, 0)
+    return UserInResponse(
+        data=user
+    )
 
 
 # curl localhost:9394/api/v1/user -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
@@ -31,13 +47,12 @@ async def get_users(
 )
 async def add_user(
     request: Request,
-    info: UserIn = Body(..., embed=True, alias="user")
+    info: UserInCreate = Body(..., embed=True, alias="user")
 ) -> UserInResponse:
-    user_crud = UserCRUD(request.app.state.pgpool)
-    user = await user_crud.add_user(info.username, info.password, info.email)
-
-    # Note: user is a UserInDB instance, we should return UserOut() to user
-    return UserInResponse(data=user)
+    user = await do_add_user(request, info)
+    return UserInResponse(
+        data=user
+    )
 
 
 @router.get("/user/{user_id}")
@@ -52,12 +67,29 @@ async def get_user(
     return UserInResponse(data=user)
 
 
+@router.delete("/user/{user_id}", status_code=HTTP_204_NO_CONTENT,)
+async def delele_user(
+    request: Request,
+    user_id: int = Path(..., title="The ID of the user"),
+) -> None:
+    user_crud = UserCRUD(request.app.state.pgpool)
+    await user_crud.delete_user_by_id(user_id)
+
+
+
 @router.put("/user/{user_id}")
-async def edit_user(user_id: int = Path(..., title="The ID of the user"),):
-    return {"hello": "put user: {}".format(user_id)}
+async def update_user(
+    request: Request,
+    user_id: int = Path(..., title="The ID of the user"),
+    info: UserInUpdate = Body(..., embed=True, alias="user")
+) -> UserInResponse:
+    user_crud = UserCRUD(request.app.state.pgpool)
+    user = await user_crud.update_user_by_id(
+        id=user_id,
+        username=info.username,
+        password=info.password,
+        email=info.email,
+        status=info.status,
+    )
 
-
-@router.delete("/user/{user_id}")
-async def del_user(user_id: int = Path(..., title="The ID of the user"),):
-    return {"hello": "delete user: {}".format(user_id)}
-
+    return UserInResponse(data=user)

@@ -5,8 +5,8 @@ from pydantic import BaseModel
 class OperationLog(BaseModel):
     op: str
     path: str
-    new: dict
-    old: dict
+    new: Optional[str] = None
+    old: Optional[str] = None
     owner: int
     creator: int
 

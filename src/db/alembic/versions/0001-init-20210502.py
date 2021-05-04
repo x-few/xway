@@ -85,7 +85,8 @@ def create_users_table() -> None:
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
         sa.Column("status", sa.Text, nullable=False, default="enable"),
-        sa.Column("owner", sa.Integer, nullable=False, default=0),
+        sa.Column("owner", sa.Integer, nullable=False),
+        sa.Column("creator", sa.Integer, nullable=False),
         *timestamps(),
     )
 
@@ -102,6 +103,7 @@ def insert_default_users() -> None:
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Text, default="enable"),
         sa.Column("owner", sa.Integer, default=0),
+        sa.Column("creator", sa.Integer, default=0),
     )
 
     op.bulk_insert(table,
@@ -155,7 +157,7 @@ def create_operation_log_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("op", sa.String(length=16), unique=True, nullable=False, index=True),
+        sa.Column("op", sa.String(length=16), nullable=False, ),
         sa.Column("creator", sa.Integer, nullable=False),
         sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("path", LtreeType, nullable=True),

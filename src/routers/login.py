@@ -2,8 +2,8 @@ from copy import deepcopy
 from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2
 
-from models.user import UserIn
-from db.crud.user import Users as UserCRUD
+from models.user import UserInLogin
+from db.crud.user import User as UserCRUD
 from models.errors import HttpForbidden
 from services.jwt import create_access_token
 from models.token import Token, TokenInResponse, \
@@ -16,7 +16,7 @@ router = APIRouter()
 @router.post("/login", response_model=TokenWithUserInResponse)
 async def login(
     request: Request,
-    info: UserIn = Body(..., embed=True, alias="user"),
+    info: UserInLogin = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
     # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> TokenWithUserInResponse:
@@ -44,7 +44,7 @@ async def login(
 @router.post("/token", response_model=TokenInResponse)
 async def login_access_token(
     request: Request,
-    info: UserIn = Body(..., embed=True, alias="user"),
+    info: UserInLogin = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
     # info: OAuth2PasswordRequestForm = Depends()   # Use json instead
 ) -> TokenInResponse:

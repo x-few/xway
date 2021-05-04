@@ -10,12 +10,12 @@ class OperationLog(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
 
-        try:
-            if request.state.oplog['enable']:
-                await record_oplog(request, response)
-        except (KeyError, AttributeError):
-            # TODO warning...
-            print("---isshe--- AttributeError")
-            pass
+        print("---isshe---: OperationLog---")
+        # try:
+        await record_oplog(request, response)
+        # except (KeyError, AttributeError):
+        #     # TODO warning...
+        #     print("---isshe--- AttributeError")
+        #     pass
 
         return response
