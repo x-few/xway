@@ -6,14 +6,17 @@ PYTHON ?= python3
 PIP ?= pip3
 
 .PHONY: prepare
-prepare: prepare-ubuntu
+prepare: prepare-ubuntu prepare-postgresql
 
 .PHONY: prepare-ubuntu
 prepare-ubuntu:
 	sudo apt-get update
 	apt install postgresql
-	# sudo apt-get install python3-dev
-	# pip3 install sanic
+
+.PHONY: prepare-postgresql
+prepare-postgresql:
+	pg_ctlcluster 12 main start
+	cd /tmp; sudo -u postgres psql -c "alter user postgres with password 'postgres'"
 
 .PHONY: prepare-centos
 prepare-centos:
@@ -27,7 +30,7 @@ pip-install:
 	$(PIP) install -r requirements.txt
 
 .PHONY: start
-start:
+start: local
 	pg_ctlcluster 12 main start
 	# cd src; sanic xway.app
 	# cd src; uvicorn xway:app --reload
@@ -75,18 +78,15 @@ base:
 
 .PHONY: psql
 psql:
-	psql -h 127.0.0.1 -p 5432 -U postgres -d xway
+	cd /tmp; sudo -u postgres psql -U postgres -d xway
+	# psql -h 127.0.0.1 -p 5432 -U postgres -d xway
 
 local:
-	# find src/ -iname "*.py" | xargs xgettext -o src/locales/zh_CN/LC_MESSAGES/base.po
-	# find src/ -iname "*.py" | xargs xgettext -o src/locales/en_US/LC_MESSAGES/base.po
-	sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/zh_CN/LC_MESSAGES/base.po
-	sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/en_US/LC_MESSAGES/base.po
-	msgfmt -o src/locales/zh_CN/LC_MESSAGES/base.mo src/locales/zh_CN/LC_MESSAGES/base.po
-	msgfmt -o src/locales/en_US/LC_MESSAGES/base.mo src/locales/en_US/LC_MESSAGES/base.po
-
-tr-merge:
-	for lang in `ls src/locales`; do \
+	@for lang in `ls src/locales`; do \
+		if [ ! -f src/locales/$$lang/LC_MESSAGES/base.mo ]; then \
+			sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/base.po; \
+			msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
+		fi; \
 		find src/ -iname "*.py" | xargs xgettext --from-code utf-8 -o src/locales/$$lang/LC_MESSAGES/new_base.pot; \
 		sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/new_base.pot; \
 		msgmerge -U src/locales/$$lang/LC_MESSAGES/base.po src/locales/$$lang/LC_MESSAGES/new_base.pot; \

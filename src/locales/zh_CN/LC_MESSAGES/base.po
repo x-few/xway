@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-02 13:58+0800\n"
+"POT-Creation-Date: 2021-06-13 01:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/services/authentication.py:53 src/services/authentication.py:55
-#: src/services/authentication.py:61
+#: src/services/authentication.py:31
+msgid "username not found in token"
+msgstr ""
+
+#: src/services/authentication.py:33 src/services/authentication.py:38
+msgid "bad access token"
+msgstr ""
+
+#: src/services/authentication.py:56 src/services/authentication.py:62
 msgid "invalid username or password"
 msgstr "无效的用户名或密码"
 
-#: src/services/authentication.py:58
+#: src/services/authentication.py:59
 msgid "this user has been disabled"
 msgstr "此用户已被禁用"
