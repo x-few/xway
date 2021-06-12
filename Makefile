@@ -24,7 +24,7 @@ freeze:
 
 .PHONY: pip-install
 pip-install:
-	$(PIP) install -r requirement.txt
+	$(PIP) install -r requirements.txt
 
 .PHONY: start
 start:

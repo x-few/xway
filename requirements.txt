@@ -21,13 +21,13 @@ fastapi==0.65.2
 h11==0.12.0
 httptools==0.2.0
 idna==2.8
-Jinja2==2.11.2
+Jinja2==3.0.1
 jsonpatch==1.26
 jsonpointer==2.0
 jsonschema==3.2.0
 language-selector==0.1
 loguru==0.5.3
-MarkupSafe==1.1.1
+MarkupSafe==2.0.1
 netifaces==0.10.4
 oauthlib==3.1.0
 orjson==3.5.3
@@ -42,7 +42,7 @@ pyrsistent==0.17.3
 python-apt==2.0.0+ubuntu0.20.4.1
 python-dotenv==0.17.1
 python-jose==3.3.0
-PyYAML==5.3.1
+PyYAML==5.4.1
 requests==2.24.0
 rsa==4.7.2
 six==1.15.0
@@ -51,7 +51,7 @@ starlette==0.14.2
 typing-extensions==3.10.0.0
 ubuntu-advantage-tools==20.3
 ufw==0.36
-urllib3==1.25.8
+urllib3==1.26.5
 uvicorn==0.14.0
 uvloop==0.15.2
 watchgod==0.7
