@@ -6,6 +6,10 @@ from db.crud.user import User as UserCRUD
 from services.operation_log import set_new_data_id
 
 
+async def get_owner(current_user):
+    return current_user.owner or current_user.id
+
+
 async def add_user(request: Request, info, owner: int = None):
     user_crud = UserCRUD(request.app.state.pgpool)
     current_user = request.state.current_user
@@ -14,7 +18,7 @@ async def add_user(request: Request, info, owner: int = None):
     # eq 0 means root user
     # Users created by this user or its sub-users belong to this user
     if owner == None:
-        owner = current_user.owner or current_user.id
+        owner = await get_owner(current_user)
 
     user = await user_crud.add_user( \
         username=info.username, password=info.password, \

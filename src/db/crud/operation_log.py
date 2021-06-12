@@ -23,7 +23,7 @@ class OperationLog(Base):
 
     async def add_oplog(self, op: str, path: str, new: str, old: str, owner: int, creator: int):
         # oplog = OperationLogInDB()
-        record = await self.exec("add_oplog",
+        await self.exec("add_oplog",
             op=op,
             path=path,
             new=new,
@@ -31,3 +31,34 @@ class OperationLog(Base):
             owner=owner,
             creator=creator,
         )
+
+    async def rollback(self, id: int, owner: int, creator: int):
+        # do rollback
+        try:
+            async with self._pool.acquire() as conn:
+                async with conn.transaction():
+                    records = await queries.get_oplog_gt_id(conn, id=id, owner=owner)
+                    for record in records:
+                        print("---isshe---: record = ", record)
+                        print("---isshe---: record[1] = ", record[1])
+
+                        # do rollback
+                        op = record[1]
+                        if op == "PUT":
+                            # update old
+                            # TODO map queries method
+                            pass
+                        elif op == "POST":
+                            # delete new
+                            pass
+                        elif op == "DELETE":
+                            # add old
+                            pass
+                        else:
+                            # error !
+                            pass
+
+                        # add op log
+
+        except Exception as e:
+            raise HttpServerError(str(e))

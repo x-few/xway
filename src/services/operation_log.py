@@ -113,11 +113,16 @@ async def record(request: Request, response: Response):
     if response.status_code < 200 or response.status_code >= 300:
         return
 
-    method = request.method
-    if not is_need_record(method):
+    try:
+        oplog_enable = request.state.oplog['enable']
+    except AttributeError:
+        oplog_enable = False
+
+    if not oplog_enable:
         return
 
-    if not request.state.oplog['enable']:
+    method = request.method
+    if not is_need_record(method):
         return
 
     dbpool = request.app.state.pgpool
@@ -144,4 +149,9 @@ async def record(request: Request, response: Response):
 
 
 async def rollback(request: Request):
+    # get all operation records that need to be rollback
+
+    # do rollback
+
+    # add new record
     pass
