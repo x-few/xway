@@ -12,12 +12,12 @@ async def connect_to_db(app: FastAPI) -> None:
         pgconfig['user'], pgconfig['password'],
         pgconfig['host'], pgconfig['port'], pgconfig['database'])
 
-    try:
-        app.state.pgpool = await asyncpg.create_pool(**pgconfig)
-        logger.info("Connection established")
-    except ConnectionRefusedError:
-        app.state.pgpool = None
-        logger.error("Connection Refused")
+    # try:
+    app.state.pgpool = await asyncpg.create_pool(**pgconfig)
+    logger.info("Connection established")
+    # except ConnectionRefusedError:
+    #     app.state.pgpool = None
+    #     logger.error("Connection Refused")
 
 
 async def close_db_connection(app: FastAPI) -> None:

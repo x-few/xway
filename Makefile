@@ -2,7 +2,7 @@
 COMMENT = $(m)
 VALUE := $(if $(n),$(n),head)
 
-PYTHON ?= python3.7
+PYTHON ?= python3
 PIP ?= pip3
 
 .PHONY: prepare
@@ -11,8 +11,9 @@ prepare: prepare-ubuntu
 .PHONY: prepare-ubuntu
 prepare-ubuntu:
 	sudo apt-get update
-	sudo apt-get install python3-dev
-	pip3 install sanic
+	apt install postgresql
+	# sudo apt-get install python3-dev
+	# pip3 install sanic
 
 .PHONY: prepare-centos
 prepare-centos:
@@ -27,6 +28,7 @@ pip-install:
 
 .PHONY: start
 start:
+	pg_ctlcluster 12 main start
 	# cd src; sanic xway.app
 	# cd src; uvicorn xway:app --reload
 	cd src; $(PYTHON) xway.py
