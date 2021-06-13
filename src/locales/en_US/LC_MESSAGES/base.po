@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-13 01:27+0800\n"
+"POT-Creation-Date: 2021-06-13 15:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/services/authentication.py:31
-msgid "username not found in token"
+#: src/services/authentication.py:31 src/services/authentication.py:33
+#: src/services/authentication.py:38
+msgid "invalid access token"
 msgstr ""
 
-#: src/services/authentication.py:33 src/services/authentication.py:38
-msgid "bad access token"
-msgstr ""
-
-#: src/services/authentication.py:56 src/services/authentication.py:62
+#: src/services/authentication.py:60 src/services/authentication.py:66
 msgid "invalid username or password"
 msgstr ""
 
-#: src/services/authentication.py:59
+#: src/services/authentication.py:63
 msgid "this user has been disabled"
+msgstr ""
+
+#: src/routers/register.py:34
+msgid "user with this username already exists"
+msgstr ""
+
+#: src/routers/register.py:37
+msgid "user with this email already exists"
 msgstr ""

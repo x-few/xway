@@ -9,7 +9,7 @@ from pydantic import ValidationError
 
 from models.errors import HttpForbidden
 from services.config import get_default_config
-from models.errors import HttpUnauthorized
+from models.errors import HttpUnauthorized, EntityDoesNotExist
 from db.crud.user import User as UserCRUD
 from models.user import UserInDB
 from services.localization import get_gettext
@@ -28,14 +28,14 @@ async def get_current_user(
         payload = jwt.decode(token, config['secret_key'], algorithms=[config['jwt_algorithm']])
         username: str = payload.get("username")
         if username is None:
-            raise HttpUnauthorized(_("username not found in token"))
+            raise HttpUnauthorized(_("invalid access token"))
     except (jwt.JWTError, ValidationError):
-        raise HttpUnauthorized(_("bad access token"))
+        raise HttpUnauthorized(_("invalid access token"))
 
     user_crud = UserCRUD(pgpool)
     user = await user_crud.get_user_by_username(username=username)
     if user is None:
-        raise HttpUnauthorized(_("bad access token"))
+        raise HttpUnauthorized(_("invalid access token"))
 
     # set user to request context
     request.state.current_user = user
@@ -46,11 +46,15 @@ async def get_current_user(
 async def authenticate_user(pgpool, info, _):
     user_crud = UserCRUD(pgpool)
 
-    if info.username:
-        user = await user_crud.get_user_by_username(username=info.username)
+    user = None
+    try:
+        if info.username:
+            user = await user_crud.get_user_by_username(username=info.username)
 
-    if not user and info.email:
-        user = await user_crud.get_user_by_email(email=info.email)
+        if not user and info.email:
+            user = await user_crud.get_user_by_email(email=info.email)
+    except:
+        pass
 
     if not user:
         raise HttpForbidden(_("invalid username or password"))
@@ -64,13 +68,22 @@ async def authenticate_user(pgpool, info, _):
     return user
 
 
-async def get_token_header(request: Request):
-    print("---get_token_header: request.method = ", request.method)
-    # if x_token != "fake-super-secret-token":
-    #     raise HTTPException(status_code=400, detail="X-Token header invalid")
+async def check_username_is_taken(pgpool, username: str) -> bool:
+    user_crud = UserCRUD(pgpool)
+    try:
+        await user_crud.get_user_by_username(username=username)
+    except EntityDoesNotExist:
+        return False
+
+    return True
 
 
-async def get_token_header2(x_token: str = Header(...)):
-    print("---get_token_header2---")
-    # if x_token != "fake-super-secret-token":
-    #     raise HTTPException(status_code=400, detail="X-Token header invalid")
+async def check_email_is_taken(pgpool, email: str) -> bool:
+    user_crud = UserCRUD(pgpool)
+
+    try:
+        await user_crud.get_user_by_email(email=email)
+    except EntityDoesNotExist:
+        return False
+
+    return True

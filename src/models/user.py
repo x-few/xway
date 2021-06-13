@@ -1,6 +1,7 @@
 from typing import Optional, List
 from pydantic import EmailStr, BaseConfig, BaseModel
 from .base import Base, IDModel, DateTimeModel
+from .token import Token
 from services import security
 
 class User(Base):
@@ -53,8 +54,8 @@ class UserInResponse(Base):
 class UserInJWT(Base):
     username: str
 
-class UserWithToken(User):
-    token: Optional[str] = None
+class UserWithToken(UserOut, Token):
+    """UserWithToken"""
 
 class UserWithTokenInResponse(Base):
     data: UserWithToken

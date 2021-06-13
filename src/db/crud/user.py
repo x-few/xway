@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, Security
 from db.crud.base import Base
 from db.queries import queries
 from models.user import UserOut, UserInDB
-from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpNotFound
+from models.errors import EntityDoesNotExist
 
 class User(Base):
     async def get_all_user(self, offset, limit) -> list:
@@ -53,7 +53,7 @@ class User(Base):
         if record:
             return UserInDB(**record)
 
-        raise HttpNotFound("user does not exist, id: {0}".format(id))
+        raise EntityDoesNotExist("user does not exist, id: {0}".format(id))
 
 
     async def get_user_by_username(self, username) -> UserInDB:
@@ -61,7 +61,7 @@ class User(Base):
         if record:
             return UserInDB(**record)
 
-        raise HttpNotFound("user does not exist, username: {0}".format(username))
+        raise EntityDoesNotExist("user does not exist, username: {0}".format(username))
 
 
     async def get_user_by_email(self, email) -> UserInDB:
@@ -69,7 +69,7 @@ class User(Base):
         if record:
             return UserInDB(**record)
 
-        raise HttpNotFound("user does not exist, email: {0}".format(email))
+        raise EntityDoesNotExist("user does not exist, email: {0}".format(email))
 
 
     async def delete_user_by_id(self, id) -> None:

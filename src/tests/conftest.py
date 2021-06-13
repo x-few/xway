@@ -50,3 +50,32 @@ async def client(initialized_app: FastAPI) -> AsyncClient:
         headers={"Content-Type": "application/json"},
     ) as client:
         yield client
+
+@pytest.fixture
+def authorization_prefix() -> str:
+    from app.core.config import JWT_TOKEN_PREFIX
+
+    return JWT_TOKEN_PREFIX
+
+@pytest.fixture
+async def test_user(pool: Pool) -> UserInDB:
+    async with pool.acquire() as conn:
+        return await UsersRepository(conn).create_user(
+            email="test@test.com", password="password", username="username"
+        )
+
+# config = request.app.state.default_config
+@pytest.fixture
+def token(test_user: UserInDB) -> str:
+    return jwt.create_access_token_for_user(test_user, environ["SECRET_KEY"])
+
+
+@pytest.fixture
+def authorized_client(
+    client: AsyncClient, token: str, authorization_prefix: str
+) -> AsyncClient:
+    client.headers = {
+        "Authorization": f"{authorization_prefix} {token}",
+        **client.headers,
+    }
+    return client

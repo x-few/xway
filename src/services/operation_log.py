@@ -11,6 +11,7 @@ CLASS_MAP = {
     # router: crud classname, crud method
     "user": { "classname": User, "method": "get_user_by_id"},
     "owner_user": { "classname": User, "method": "get_user_by_id"},
+    "register": { "classname": User, "method": "get_user_by_id"},
 }
 
 RECORD_METHOD = {
@@ -144,8 +145,14 @@ async def record(request: Request, response: Response):
     oplog_crud = OperationLogCRUD(dbpool)
     path = await gen_btree_path(path_segs, data_id)
     current_user = request.state.current_user
-    owner = current_user.owner or current_user.id
-    await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, owner=owner, creator=current_user.id)
+
+    owner = 0
+    creator = 0
+    if current_user:
+        owner = current_user.owner or current_user.id
+        creator = current_user.id
+
+        await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, owner=owner, creator=creator)
 
 
 async def rollback(request: Request):
