@@ -20,7 +20,7 @@ class Base(BaseModel):
     class Config(BaseConfig):
         allow_population_by_field_name = True
         json_encoders = {datetime.datetime: convert_datetime_to_realworld}
-        alias_generator = convert_field_to_camel_case
+        # alias_generator = convert_field_to_camel_case
         json_loads = orjson.loads
         json_dumps = orjson_dumps
 

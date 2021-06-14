@@ -29,11 +29,12 @@ class User(Base):
         password: str,
         creator: int,
         owner: int,
+        typ: int,
         email: Optional[str] = None,
-        status: Optional[str] = "enable",
+        status: Optional[int] = 1,
     ) -> UserInDB:
 
-        user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner)
+        user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner, typ=typ)
         user.update_password(password)
         record = await self.exec("add_user",
             username=user.username,
@@ -42,7 +43,8 @@ class User(Base):
             password=user.password,
             status=user.status,
             creator=user.creator,
-            owner=user.owner
+            owner=user.owner,
+            typ=user.typ
         )
 
         return user.copy(update=dict(record))

@@ -14,12 +14,12 @@ from models.errors import HttpClientError
 from services.jwt import create_access_token
 from models.token import Token, TokenInResponse
 
-
+ADMIN_USER = 1
 
 router = APIRouter()
 
 
-# curl localhost:9394/api/v1/user -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
+# curl localhost:9394/api/v1/register -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
 @router.post("/register",
     status_code=HTTP_201_CREATED,
     response_model=UserWithTokenInResponse,
@@ -30,7 +30,6 @@ async def register(
     info: UserInCreate = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
 ) -> UserWithTokenInResponse:
-    print("---isshe--: ---1--- ")
     if await check_username_is_taken(request.app.state.pgpool, info.username):
         raise HttpClientError(_("user with this username already exists"))
 
@@ -38,9 +37,7 @@ async def register(
         raise HttpClientError(_("user with this email already exists"))
 
     request.state.current_user = None
-    print("---isshe--: ---2--- ")
-    user = await do_add_user(request, info)
-    print("---isshe--: user = ", user)
+    user = await do_add_user(request, info, ADMIN_USER, _)
 
     token = create_access_token(user, request.app.state.default_config)
     return UserWithTokenInResponse(

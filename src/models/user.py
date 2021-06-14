@@ -7,7 +7,7 @@ from services import security
 class User(Base):
     username: str
     email: Optional[EmailStr] = None
-    status: Optional[str] = "enable"
+    status: Optional[int] = 1
 
 
 # from user
@@ -26,6 +26,7 @@ class UserOut(User, IDModel, DateTimeModel):
     """UserOut"""
     creator: int
     owner: int
+    typ: int
 
 
 class UserInDB(UserOut):
@@ -40,7 +41,7 @@ class UserInDB(UserOut):
         return security.verify_password(self.salt + password, self.password)
 
     def is_disabled(self) -> bool:
-        if self.status == "enable":
+        if self.status == 1:
             return False
         return True
 

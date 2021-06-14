@@ -10,7 +10,7 @@ class OperationLog(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
 
-        print("---isshe---: OperationLog---")
+        # print("---isshe---: OperationLog---")
         # try:
         await record_oplog(request, response)
         # except (KeyError, AttributeError):

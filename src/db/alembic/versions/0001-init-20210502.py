@@ -84,7 +84,8 @@ def create_users_table() -> None:
         sa.Column("email", sa.Text, unique=True, index=True),
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
-        sa.Column("status", sa.Text, nullable=False, default="enable"),
+        sa.Column("status", sa.Integer, nullable=False, default=1),
+        sa.Column("type", sa.Integer, nullable=False, default=1),   # 0: system admin, 1: admin, 2: user
         sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("creator", sa.Integer, nullable=False),
         *timestamps(),
@@ -101,9 +102,10 @@ def insert_default_users() -> None:
         sa.Column("email", sa.Text),
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
-        sa.Column("status", sa.Text, default="enable"),
+        sa.Column("status", sa.Integer, default=1),
         sa.Column("owner", sa.Integer, default=0),
         sa.Column("creator", sa.Integer, default=0),
+        sa.Column("type", sa.Integer, nullable=False, default=1),   # 0: system admin, 1: admin, 2: user
     )
 
     op.bulk_insert(table,

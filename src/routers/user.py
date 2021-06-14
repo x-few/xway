@@ -2,7 +2,7 @@
 
 from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
-from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
+from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from models.user import UserInCreate, UserOut, ListOfUserInResponse, UserInResponse, UserInUpdate
 from models.response import Response
@@ -10,6 +10,7 @@ from db.crud.user import User as UserCRUD
 from services.localization import get_gettext
 from services.user import add_user as do_add_user
 
+SUB_USER = 2
 
 router = APIRouter()
 
@@ -26,18 +27,18 @@ async def get_all_users(
     return ListOfUserInResponse(data=users, count=count)
 
 
-@router.post("/owner_user",
-    status_code=HTTP_201_CREATED,
-    response_model=UserInResponse,
-)
-async def add_owner_user(
-    request: Request,
-    info: UserInCreate = Body(..., embed=True, alias="user")
-) -> UserInResponse:
-    user = await do_add_user(request, info, 0)
-    return UserInResponse(
-        data=user
-    )
+# @router.post("/owner_user",
+#     status_code=HTTP_201_CREATED,
+#     response_model=UserInResponse,
+# )
+# async def add_owner_user(
+#     request: Request,
+#     info: UserInCreate = Body(..., embed=True, alias="user")
+# ) -> UserInResponse:
+#     user = await do_add_user(request, info, 0)
+#     return UserInResponse(
+#         data=user
+#     )
 
 
 # curl localhost:9394/api/v1/user -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
@@ -47,9 +48,10 @@ async def add_owner_user(
 )
 async def add_user(
     request: Request,
-    info: UserInCreate = Body(..., embed=True, alias="user")
+    info: UserInCreate = Body(..., embed=True, alias="user"),
+    _ = Depends(get_gettext),
 ) -> UserInResponse:
-    user = await do_add_user(request, info)
+    user = await do_add_user(request, info, SUB_USER, _)  # normal user, create by admin
     return UserInResponse(
         data=user
     )

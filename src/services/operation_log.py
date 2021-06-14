@@ -152,7 +152,7 @@ async def record(request: Request, response: Response):
         owner = current_user.owner or current_user.id
         creator = current_user.id
 
-        await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, owner=owner, creator=creator)
+    await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, owner=owner, creator=creator)
 
 
 async def rollback(request: Request):
