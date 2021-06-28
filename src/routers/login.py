@@ -51,7 +51,7 @@ async def login_access_token(
 ) -> TokenInResponse:
     user = await authenticate_user(request.app.state.pgpool, info, _)
     token = create_access_token(user, request.app.state.default_config)
-    print(token)
+    # print("token = ", token)
     return TokenInResponse(
         data=Token(
             access_token=token,

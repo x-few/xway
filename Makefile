@@ -31,7 +31,7 @@ pip-install:
 
 .PHONY: start
 start: local
-	pg_ctlcluster 12 main start
+	# pg_ctlcluster 12 main start
 	# cd src; sanic xway.app
 	# cd src; uvicorn xway:app --reload
 	cd src; $(PYTHON) xway.py
@@ -49,7 +49,7 @@ restart:
 
 .PHONY: test
 test:
-	cd src; $(PYTHON) -m pytest tests -s
+	cd src; $(PYTHON) -m pytest -s tests
 
 .PHONY: revision
 # make revision m="comment"

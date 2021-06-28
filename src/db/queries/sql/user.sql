@@ -7,8 +7,8 @@ SELECT count(id) from users;
 
 
 -- name: add-user<!
-INSERT INTO users (username, email, salt, password, status, creator, owner)
-VALUES (:username, :email, :salt, :password, :status, :creator, :owner)
+INSERT INTO users (username, email, salt, password, status, creator, owner, type)
+VALUES (:username, :email, :salt, :password, :status, :creator, :owner, :type)
 RETURNING id, created, updated;
 
 

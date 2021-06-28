@@ -26,12 +26,12 @@ class UserOut(User, IDModel, DateTimeModel):
     """UserOut"""
     creator: int
     owner: int
-    typ: int
+    type: int
 
 
 class UserInDB(UserOut):
     salt: str = ""
-    password: str = ""
+    password: str = ""  # hashed
 
     def update_password(self, password: str) -> None:
         self.salt = security.generate_salt()

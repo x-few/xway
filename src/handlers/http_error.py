@@ -39,7 +39,6 @@ async def entitynotfound(request: Request, exc: EntityDoesNotExist) -> JSONRespo
     return JSONResponse({"errors": [exc.detail]},
         status_code=status.HTTP_404_NOT_FOUND)
 
-
 async def validation_error(
     _: Request,
     exc: Union[RequestValidationError, ValidationError],

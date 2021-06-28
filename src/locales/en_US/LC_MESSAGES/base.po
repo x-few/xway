@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-13 16:07+0800\n"
+"POT-Creation-Date: 2021-06-27 09:29-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,10 +30,10 @@ msgstr ""
 msgid "this user has been disabled"
 msgstr ""
 
-#: src/routers/register.py:33
+#: src/routers/register.py:34
 msgid "user with this username already exists"
 msgstr ""
 
-#: src/routers/register.py:36
+#: src/routers/register.py:37
 msgid "user with this email already exists"
 msgstr ""

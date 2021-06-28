@@ -17,7 +17,7 @@ class User(Base):
         users = list()
 
         records = await self.exec("get_all_user", offset=offset, limit=limit)
-        print("records = ", records)
+        # print("records = ", records)
         if records:
             users = [UserOut(**record) for record in records]
 
@@ -29,12 +29,12 @@ class User(Base):
         password: str,
         creator: int,
         owner: int,
-        typ: int,
+        type: int,
         email: Optional[str] = None,
         status: Optional[int] = 1,
     ) -> UserInDB:
 
-        user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner, typ=typ)
+        user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner, type=type)
         user.update_password(password)
         record = await self.exec("add_user",
             username=user.username,
@@ -44,7 +44,7 @@ class User(Base):
             status=user.status,
             creator=user.creator,
             owner=user.owner,
-            typ=user.typ
+            type=user.type
         )
 
         return user.copy(update=dict(record))

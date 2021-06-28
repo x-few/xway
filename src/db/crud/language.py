@@ -11,9 +11,8 @@ from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpN
 
 class Language(Base):
     async def get_languages(self):
-
         records = await self.exec("get_languages")
-        print("records = ", records)
+        # print("records = ", records)
         if records:
             self.langs = [LanguageInDB(**record) for record in records]
 

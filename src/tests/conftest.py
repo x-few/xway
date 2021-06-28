@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import uuid
 import warnings
-from os import environ, getenv
-
+import os
+import sys
 import pytest
 import alembic.config
 from asgi_lifespan import LifespanManager
@@ -9,14 +11,22 @@ from asyncpg.pool import Pool
 from fastapi import FastAPI
 from httpx import AsyncClient
 
+# CURPATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+# sys.path.insert(0, CURPATH)
+
+from models.user import UserOut, UserInDB
+from services.jwt import create_access_token
+from db.crud.user import User as UserCRUD
 
 @pytest.fixture(autouse=True)
 async def init_db() -> None:
+    # before test, init db
     # clean
     alembic.config.main(argv=["downgrade", "base"])
     # init
     alembic.config.main(argv=["upgrade", "head"])
     yield
+    # after test, clean db
     # clean
     alembic.config.main(argv=["downgrade", "base"])
     # reinit for dev
@@ -24,58 +34,64 @@ async def init_db() -> None:
 
 
 @pytest.fixture
-def app(init_db: None) -> FastAPI:
+async def app(init_db: None) -> FastAPI:
     from xway import application  # local import for testing purpose
 
-    return application()
-
-
-@pytest.fixture
-async def initialized_app(app: FastAPI) -> FastAPI:
+    app = application()
     async with LifespanManager(app):
         yield app
-    # return app
+    # return application()
+
+
+# @pytest.fixture
+# async def initialized_app(app: FastAPI) -> FastAPI:
+#     async with LifespanManager(app):
+#         yield app
+#     # return app
 
 
 @pytest.fixture
-def pool(initialized_app: FastAPI) -> Pool:
-    return initialized_app.state.pgpool
+def pool(app: FastAPI) -> Pool:
+    return app.state.pgpool
 
 
 @pytest.fixture
-async def client(initialized_app: FastAPI) -> AsyncClient:
+def default_config(app: FastAPI) -> Pool:
+    return app.state.default_config
+
+@pytest.fixture
+async def client(app: FastAPI) -> AsyncClient:
     async with AsyncClient(
-        app=initialized_app,
-        base_url="http://testserver",
+        app=app,
+        base_url="http://testxway",
         headers={"Content-Type": "application/json"},
     ) as client:
         yield client
 
-@pytest.fixture
-def authorization_prefix() -> str:
-    from app.core.config import JWT_TOKEN_PREFIX
 
-    return JWT_TOKEN_PREFIX
+@pytest.fixture
+def authorization_prefix(default_config) -> str:
+    return default_config['jwt_token_prefix']
 
 @pytest.fixture
 async def test_user(pool: Pool) -> UserInDB:
-    async with pool.acquire() as conn:
-        return await UsersRepository(conn).create_user(
-            email="test@test.com", password="password", username="username"
-        )
+    user_crud = UserCRUD(pool)
+    return await user_crud.add_user( \
+        username="test", password="pwd@test", \
+        creator=0, owner=0, type=1, email="admin@test.com")
 
 # config = request.app.state.default_config
 @pytest.fixture
-def token(test_user: UserInDB) -> str:
-    return jwt.create_access_token_for_user(test_user, environ["SECRET_KEY"])
+def token(test_user: UserInDB, default_config: dict) -> str:
+    return create_access_token(test_user, default_config)
 
 
 @pytest.fixture
 def authorized_client(
-    client: AsyncClient, token: str, authorization_prefix: str
+    client: AsyncClient,
+    token: str,
+    authorization_prefix: str,
+    default_config: dict,
 ) -> AsyncClient:
-    client.headers = {
-        "Authorization": f"{authorization_prefix} {token}",
-        **client.headers,
-    }
+    client.headers[default_config['auth_header']] = f"{authorization_prefix} {token}"
     return client

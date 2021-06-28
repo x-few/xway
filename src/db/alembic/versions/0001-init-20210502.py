@@ -148,7 +148,7 @@ def insert_default_config_table() -> None:
             {'key':'jwt_algorithm', 'value': 'HS256', 'comment': 'jwt algorithm'},
             {'key':'jwt_access_token_expire', 'value': '604800', 'comment': 'one week, access token expire second'},
             {'key':'secret_key', 'value': '12345abcde', 'comment': 'TODO: Generated at initialization'},
-            {'key':'jwt_token_prefix', 'value': 'Token', 'comment': 'jwt token prefix'},
+            {'key':'jwt_token_prefix', 'value': 'bearer', 'comment': 'jwt token prefix'},
             {'key':'auth_header', 'value': 'Authorization', 'comment': 'http header of authorization'},
         ]
     )

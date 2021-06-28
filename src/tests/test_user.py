@@ -9,18 +9,18 @@ pytestmark = pytest.mark.asyncio
 
 async def test_get_all_user(
     app: FastAPI,
-    client: AsyncClient,
+    authorized_client: AsyncClient,
     pool: Pool
 ) -> None:
-    response = await client.get("/api/v1/users")
-    print(response.json())
+    response = await authorized_client.get("/api/v1/users")
+    # print("response: "response.json())
     assert response.status_code == 200
-    assert response.json() == {'data': []}
+    assert response.json()['count'] == 2
 
-    response = await client.post("/api/v1/user", json={"user":{"username": "fdsafasfaea", "passwordd": "pwd"}})
+    response = await authorized_client.post("/api/v1/user", json={"user":{"username": "fdsafasfaea", "passwordd": "pwd"}})
     assert response.status_code == 201
 
-    response = await client.get("/api/v1/users")
-    print(response.json())
+    response = await authorized_client.get("/api/v1/users")
+    # print("response: "response.json())
     assert response.status_code == 200
 
