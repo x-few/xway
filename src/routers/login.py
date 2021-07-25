@@ -15,14 +15,15 @@ router = APIRouter()
 @router.post("/login", response_model=UserWithTokenInResponse)
 async def login(
     request: Request,
-    # info: UserInLogin = Body(..., embed=True, alias="user"),
+    info: UserInLogin = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
-    info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
+    # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> UserWithTokenInResponse:
 
     user = await authenticate_user(request.app.state.pgpool, info, _)
     token = create_access_token(user, request.app.state.default_config)
-    # print("token: ", token)
+
+    # TODO add login record
 
     return UserWithTokenInResponse(
         data=UserWithToken(
@@ -34,6 +35,7 @@ async def login(
             creator=user.creator,
             owner=user.owner,
             id=user.id,
+            type=user.type,
             access_token=token,
             token_type="bearer",
         ),
@@ -42,19 +44,16 @@ async def login(
 
 # curl "localhost/api/v1/token" -d 'username=username&password=password'
 # curl "localhost/api/v1/token" -d '{"user":{"username":"username", "password": "password"}}'
-@router.post("/token", response_model=TokenInResponse)
+@router.post("/token", response_model=Token)
 async def login_access_token(
     request: Request,
     # info: UserInLogin = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
     info: OAuth2PasswordRequestForm = Depends()   # Use json instead
-) -> TokenInResponse:
+) -> Token:
     user = await authenticate_user(request.app.state.pgpool, info, _)
     token = create_access_token(user, request.app.state.default_config)
-    # print("token = ", token)
-    return TokenInResponse(
-        data=Token(
-            access_token=token,
-            token_type="bearer",
-        ),
+    return Token(
+        access_token=token,
+        token_type="bearer",
     )

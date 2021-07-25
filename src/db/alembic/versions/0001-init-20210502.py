@@ -219,6 +219,20 @@ def get_all_tables():
     return tables
 
 
+def create_login() -> None:
+    table_name = "login"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("user_id", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
+        sa.Column(
+            "created",
+            sa.TIMESTAMP(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+        ),
+    )
+
 def upgrade():
     # tables = get_all_tables()
     create_extensions()
@@ -231,9 +245,11 @@ def upgrade():
     create_release_log_table()
     create_language_table()
     insert_language_table()
+    create_login()
 
 
 def downgrade():
+    op.drop_table('login')
     op.drop_table('language')
     op.drop_table('release_log')
     op.drop_table('operation_log')

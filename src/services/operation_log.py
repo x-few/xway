@@ -7,7 +7,7 @@ from db.crud.user import User
 from models.errors import HttpNotFound, HttpServerError
 
 # TODO support multiple level(like: user/1/xxx/1) in the future
-CLASS_MAP = {
+GET_DATA_CLASS_MAP = {
     # router: crud classname, crud method
     "user": { "classname": User, "method": "get_user_by_id"},
     "owner_user": { "classname": User, "method": "get_user_by_id"},
@@ -27,7 +27,7 @@ async def get_path_segs(path: str):
 #     pass
 
 async def get_data(module_name, id, dbpool):
-    info = CLASS_MAP[module_name]
+    info = GET_DATA_CLASS_MAP[module_name]
     obj = info['classname'](dbpool)
     func = getattr(obj, info['method'])
     # try:
