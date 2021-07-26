@@ -4,6 +4,7 @@ VALUE := $(if $(n),$(n),head)
 
 PYTHON ?= python3
 PIP ?= pip3
+test ?= tests
 
 .PHONY: prepare
 prepare: prepare-ubuntu prepare-postgresql
@@ -49,7 +50,7 @@ restart:
 
 .PHONY: test
 test:
-	cd src; $(PYTHON) -m pytest -s tests
+	cd src; $(PYTHON) -m pytest -s $(test)
 
 .PHONY: revision
 # make revision m="comment"
