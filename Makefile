@@ -1,6 +1,8 @@
 
 COMMENT = $(m)
 VALUE := $(if $(n),$(n),head)
+FROMREV := 0
+TOREV := 0001
 
 PYTHON ?= python3
 PIP ?= pip3
@@ -68,6 +70,18 @@ upgrade:
 # make downgrade n=2
 downgrade:
 	cd src; alembic downgrade -$(VALUE)
+
+gen-upgrade-sql:
+	cd src; alembic upgrade $(FROMREV):$(TOREV) --sql
+
+gen-downgrade-sql:
+	cd src; alembic downgrade $(FROMREV):$(TOREV) --sql
+
+gen-init-sql:
+	cd src; alembic upgrade base:head --sql
+
+gen-uninit-sql:
+	cd src; alembic head:base downgrade --sql
 
 .PHONY: history
 history:

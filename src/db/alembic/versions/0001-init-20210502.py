@@ -225,6 +225,7 @@ def create_login() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("user_id", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
+        sa.Column("ip", sa.Text, nullable=True),
         sa.Column(
             "created",
             sa.TIMESTAMP(timezone=True),

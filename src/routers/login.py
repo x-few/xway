@@ -12,6 +12,7 @@ from services.localization import get_gettext
 
 router = APIRouter()
 
+# TODO limit login rate
 @router.post("/login", response_model=UserWithTokenInResponse)
 async def login(
     request: Request,

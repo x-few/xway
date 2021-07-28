@@ -14,6 +14,8 @@ SUB_USER = 2
 
 router = APIRouter()
 
+# FIXME: add owner to these api
+
 @router.get("/users", response_model=ListOfUserInResponse)
 async def get_all_users(
     request: Request,
