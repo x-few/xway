@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2
 
 from models.user import UserInLogin, UserWithToken, UserWithTokenInResponse
-from db.crud.user import User as UserCRUD
+from models.login_record import LoginRecordInDB
+from db.crud.login_record import LoginRecord
 from models.errors import HttpForbidden
 from services.jwt import create_access_token
 from models.token import Token, TokenInResponse
@@ -21,10 +22,12 @@ async def login(
     # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> UserWithTokenInResponse:
 
-    user = await authenticate_user(request.app.state.pgpool, info, _)
+    pgpool = request.app.state.pgpool
+    user = await authenticate_user(pgpool, info, _)
     token = create_access_token(user, request.app.state.default_config)
 
-    # TODO add login record
+    login_record_crud = LoginRecord(pgpool)
+    login_record_crud.add_login_record(id=user.id, host=request.client.host)
 
     return UserWithTokenInResponse(
         data=UserWithToken(

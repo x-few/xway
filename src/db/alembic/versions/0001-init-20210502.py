@@ -220,12 +220,12 @@ def get_all_tables():
 
 
 def create_login() -> None:
-    table_name = "login"
+    table_name = "login_record"
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("user_id", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
-        sa.Column("ip", sa.Text, nullable=True),
+        sa.Column("uid", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
+        sa.Column("host", sa.Text, nullable=True),
         sa.Column(
             "created",
             sa.TIMESTAMP(timezone=True),
@@ -250,7 +250,7 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_table('login')
+    op.drop_table('login_record')
     op.drop_table('language')
     op.drop_table('release_log')
     op.drop_table('operation_log')
