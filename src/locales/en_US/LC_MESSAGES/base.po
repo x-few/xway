@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-27 09:29-0300\n"
+"POT-Creation-Date: 2021-07-31 14:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,24 @@ msgstr ""
 
 #: src/services/authentication.py:63
 msgid "this user has been disabled"
+msgstr ""
+
+#: src/routers/users.py:30 src/routers/users.py:63 src/routers/users.py:92
+#: src/routers/users.py:120 src/routers/users.py:150
+msgid "current user not found"
+msgstr ""
+
+#: src/routers/users.py:76
+msgid "bad user type"
+msgstr ""
+
+#: src/routers/users.py:100 src/routers/users.py:107 src/routers/users.py:129
+#: src/routers/users.py:136 src/routers/users.py:155 src/routers/users.py:162
+msgid "user not found"
+msgstr ""
+
+#: src/routers/users.py:124
+msgid "not allowed delete current user"
 msgstr ""
 
 #: src/routers/register.py:34

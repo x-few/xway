@@ -121,7 +121,7 @@ async def delete_user(
 
     if user_id == current_user.id:
         # can not delete myself
-        raise HttpForbidden(_("not allowed delete yourself"))
+        raise HttpForbidden(_("not allowed delete current user"))
 
     user_crud = UserCRUD(request.app.state.pgpool)
     target_user = await user_crud.get_user_by_id(user_id)
