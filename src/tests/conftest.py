@@ -14,7 +14,7 @@ from httpx import AsyncClient
 # CURPATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # sys.path.insert(0, CURPATH)
 
-from models.user import UserOut, UserInDB
+from models.user import UserInDB
 from services.jwt import create_access_token
 from db.crud.user import User as UserCRUD
 

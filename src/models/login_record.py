@@ -7,9 +7,10 @@ from .base import Base, IDModel, DateTimeModel
 
 
 class LoginRecordInDB(DateTimeModel, IDModel):
+    id: Optional[int] = None
     uid: int
     host: Optional[str] = None
 
 
-class LoginRecordInResponse(Base):
-    data: LoginRecordInDB
+class LoginRecordInResponse(LoginRecordInDB):
+    """"""

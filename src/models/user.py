@@ -16,20 +16,19 @@ class UserInCreate(User):
     password: str = ""
 
 
-class UserInLogin(User):
+class UserInLogin(Base):
     username: Optional[str] = None
-    email: Optional[EmailStr] = None
     password: Optional[str] = None
 
 # to user
-class UserOut(User, IDModel, DateTimeModel):
-    """UserOut"""
+class UserInResponse(User, IDModel, DateTimeModel):
+    """UserInResponse"""
     creator: int
     owner: int
     type: int
 
 
-class UserInDB(UserOut):
+class UserInDB(UserInResponse):
     salt: str = ""
     password: str = ""  # hashed
 
@@ -46,20 +45,17 @@ class UserInDB(UserOut):
         return True
 
 class ListOfUserInResponse(Base):
-    data: List[UserOut]
+    data: List[UserInResponse]
     count: int
-
-class UserInResponse(Base):
-    data: UserOut
 
 class UserInJWT(Base):
     username: str
 
-class UserWithToken(UserOut, Token):
+class UserWithToken(UserInResponse, Token):
     """UserWithToken"""
 
-class UserWithTokenInResponse(Base):
-    data: UserWithToken
+class UserWithTokenInResponse(UserWithToken):
+    """"""
 
 class UserInUpdate(Base):
     username: Optional[str] = None

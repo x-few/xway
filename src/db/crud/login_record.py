@@ -35,4 +35,4 @@ class LoginRecord(Base):
         record = await self.exec("add_login_record", uid=uid, host=host)
 
         # return id
-        return record[0]
+        return LoginRecordInDB(id=record[0], uid=uid, host=host)

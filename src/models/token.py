@@ -1,8 +1,6 @@
 from pydantic import EmailStr, BaseConfig, BaseModel
 from typing import Optional
 
-# from .user import UserOut
-
 class Token(BaseModel):
     access_token: str
     token_type: str

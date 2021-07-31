@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, Security
 
 from db.crud.base import Base
 from db.queries import queries
-from models.user import UserOut, UserInDB
+from models.user import UserInDB
 from models.errors import EntityDoesNotExist
 
 class User(Base):
@@ -19,7 +19,7 @@ class User(Base):
         records = await self.exec("get_all_user", offset=offset, limit=limit)
         # print("records = ", records)
         if records:
-            users = [UserOut(**record) for record in records]
+            users = [UserInDB(**record) for record in records]
 
         return users, count
 

@@ -12,7 +12,6 @@ async def test_login_record(
     authorized_client: AsyncClient,
     pool: Pool
 ) -> None:
-    response = await authorized_client.post("/api/v1/add_login_record")
+    response = await authorized_client.post("/api/v1/login_record")
     print("response: ", response.json())
-    assert response.status_code == 200
-    # assert response.json()['count'] == 2
+    assert response.status_code == 201

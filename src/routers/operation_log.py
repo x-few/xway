@@ -11,7 +11,7 @@ from services.user import get_owner
 
 router = APIRouter()
 
-@router.get("/oplogs", response_model=ListOfOperationLogInResponse)
+@router.get("/oplog/list", response_model=ListOfOperationLogInResponse)
 async def get_oplogs(
     request: Request,
     skip: int = Query(0, ge=0, title="which page"),
