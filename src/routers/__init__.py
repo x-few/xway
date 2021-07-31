@@ -11,7 +11,7 @@ def include_all_router(app):
     router.include_router(register.router, prefix="/v1", tags=["register"],
         dependencies=[Depends(init_oplog)],)
     router.include_router(login_record.router, prefix="/v1", tags=["login_record"],
-    #    dependencies=[Depends(get_current_user)],
+        dependencies=[Depends(get_current_user)],
     )
     router.include_router(user.router, prefix="/v1", tags=["user"],
         dependencies=[Depends(get_current_user), Depends(init_oplog)],)

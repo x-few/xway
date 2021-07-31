@@ -15,4 +15,4 @@ async def add_login_record(
     user = request.state.current_user
 
     login_record_crud = LoginRecord(request.app.state.pgpool)
-    login_record_crud.add_login_record(id=user.id, host=request.client.host)
+    await login_record_crud.add_login_record(uid=user.id, host=request.client.host)
