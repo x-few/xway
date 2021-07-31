@@ -2,13 +2,14 @@
 
 from fastapi import Request
 
-from db.crud.user import User as UserCRUD
+from db.crud.users import User as UserCRUD
 from services.operation_log import set_new_data_id
 from models.errors import HttpClientError
 
 SUB_USER=2
 
 async def get_owner(current_user):
+    # if owner == 0, return id
     return current_user.owner or current_user.id
 
 

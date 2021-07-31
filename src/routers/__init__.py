@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter
 
-from . import login, user, logout, language, operation_log, register, login_record
+from . import login, users, logout, language, operation_log, register, login_record
 from services.authentication import get_current_user
 from services.operation_log import init as init_oplog
 
@@ -13,7 +13,7 @@ def include_all_router(app):
     router.include_router(login_record.router, prefix="/v1", tags=["login_record"],
         dependencies=[Depends(get_current_user)],
     )
-    router.include_router(user.router, prefix="/v1", tags=["user"],
+    router.include_router(users.router, prefix="/v1", tags=["users"],
         dependencies=[Depends(get_current_user), Depends(init_oplog)],)
     router.include_router(language.router, prefix="/v1", tags=["language"],
         dependencies=[Depends(get_current_user)],)

@@ -10,8 +10,8 @@ from pydantic import ValidationError
 from models.errors import HttpForbidden
 from services.config import get_default_config
 from models.errors import HttpUnauthorized, EntityDoesNotExist
-from db.crud.user import User as UserCRUD
-from models.user import UserInDB
+from db.crud.users import User as UserCRUD
+from models.users import UserInDB
 from services.localization import get_gettext
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")

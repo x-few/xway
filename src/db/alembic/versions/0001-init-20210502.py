@@ -84,7 +84,7 @@ def create_users_table() -> None:
         sa.Column("email", sa.Text, unique=True, index=True),
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
-        sa.Column("status", sa.Integer, nullable=False, default=1),
+        sa.Column("status", sa.Integer, nullable=False, default=1), # 0: disabled, 1: enabled
         sa.Column("type", sa.Integer, nullable=False, default=1),   # 0: system admin, 1: admin, 2: user
         sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("creator", sa.Integer, nullable=False),

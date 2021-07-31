@@ -14,9 +14,9 @@ from httpx import AsyncClient
 # CURPATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # sys.path.insert(0, CURPATH)
 
-from models.user import UserInDB
+from models.users import UserInDB
 from services.jwt import create_access_token
-from db.crud.user import User as UserCRUD
+from db.crud.users import User as UserCRUD
 
 @pytest.fixture(autouse=True)
 async def init_db() -> None:

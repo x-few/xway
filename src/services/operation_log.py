@@ -3,13 +3,13 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from db.crud.operation_log import OperationLog as OperationLogCRUD
-from db.crud.user import User
+from db.crud.users import User
 from models.errors import HttpNotFound, HttpServerError
 
 # TODO support multiple level(like: user/1/xxx/1) in the future
 GET_DATA_CLASS_MAP = {
     # router: crud classname, crud method
-    "user": { "classname": User, "method": "get_user_by_id"},
+    "users": { "classname": User, "method": "get_user_by_id"},
     "owner_user": { "classname": User, "method": "get_user_by_id"},
     "register": { "classname": User, "method": "get_user_by_id"},
 }

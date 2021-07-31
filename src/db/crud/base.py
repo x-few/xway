@@ -18,4 +18,6 @@ class Base:
                     func = getattr(queries, name)
                     return await func(conn, *args, **kwargs)
         except Exception as e:
+            func = getattr(queries, name)
+            print(func.sql)
             raise HttpServerError(str(e))

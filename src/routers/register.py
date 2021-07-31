@@ -4,11 +4,11 @@ from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
 from starlette.status import HTTP_201_CREATED
 
-from models.user import UserInCreate, UserWithToken, UserWithTokenInResponse, UserInResponse
+from models.users import UserInCreate, UserWithToken, UserWithTokenInResponse, UserInResponse
 from models.response import Response
-from db.crud.user import User as UserCRUD
+from db.crud.users import User as UserCRUD
 from services.localization import get_gettext
-from services.user import add_user as do_add_user
+from services.users import add_user as do_add_user
 from services.authentication import check_username_is_taken, check_email_is_taken
 from models.errors import HttpClientError
 from services.jwt import create_access_token

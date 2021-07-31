@@ -4,7 +4,7 @@ from typing import Dict
 from jose import jwt
 from pydantic import ValidationError
 
-from models.user import User, UserInJWT
+from models.users import User, UserInJWT
 from models.jwt import JWT as JWTModel
 
 def create_jwt_token(

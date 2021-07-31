@@ -6,7 +6,7 @@ from starlette.status import HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from models.operation_log import OperationLog, ListOfOperationLogInResponse
 from db.crud.operation_log import OperationLog as OperationLogCRUD
 from services.localization import get_gettext
-from services.user import get_owner
+from services.users import get_owner
 
 
 router = APIRouter()

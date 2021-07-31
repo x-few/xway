@@ -2,7 +2,7 @@ from copy import deepcopy
 from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2
 
-from models.user import UserInLogin, UserWithToken, UserWithTokenInResponse
+from models.users import UserInLogin, UserWithToken, UserWithTokenInResponse
 from models.login_record import LoginRecordInDB
 from db.crud.login_record import LoginRecord
 from models.errors import HttpForbidden

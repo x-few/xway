@@ -3,6 +3,7 @@ from pydantic import EmailStr, BaseConfig, BaseModel
 from .base import Base, IDModel, DateTimeModel
 from .token import Token
 from services import security
+from utils.const import USER_STATUS_ENABLED
 
 class User(Base):
     username: str
@@ -26,6 +27,9 @@ class UserInResponse(User, IDModel, DateTimeModel):
     creator: int
     owner: int
     type: int
+    # salt: str = None
+    # password: str = None
+
 
 
 class UserInDB(UserInResponse):
@@ -40,7 +44,7 @@ class UserInDB(UserInResponse):
         return security.verify_password(self.salt + password, self.password)
 
     def is_disabled(self) -> bool:
-        if self.status == 1:
+        if self.status == USER_STATUS_ENABLED:
             return False
         return True
 
@@ -61,4 +65,4 @@ class UserInUpdate(Base):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
     password: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[int] = None

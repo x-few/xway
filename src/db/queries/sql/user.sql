@@ -1,8 +1,16 @@
--- name: get-all-user
+-- name: get-sub-users
+SELECT * FROM users where owner = :uid or id = :uid ORDER BY id desc LIMIT :limit OFFSET :offset;
+
+
+-- name: count-sub-users
+SELECT count(id) from users where owner = :uid or id = :uid;
+
+
+-- name: get-all-users
 SELECT * FROM users ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-users
+-- name: count-all-users
 SELECT count(id) from users;
 
 
@@ -14,6 +22,10 @@ RETURNING id, created, updated;
 
 -- name: get-user-by-id^
 SELECT * FROM users where id = :id;
+
+
+-- name: get-user-by-id-and-owner^
+SELECT * FROM users where id = :id and owner = :owner;
 
 
 -- name: get-user-by-username^
@@ -35,7 +47,7 @@ SET username        = :username,
     email           = :email,
     salt            = :salt,
     password        = :password,
-    status          = :status,
+    status          = :status
 WHERE id = :id
 RETURNING
     updated;
