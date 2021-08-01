@@ -31,12 +31,32 @@ async def test_get_all_user(
     assert response.status_code == 200
     assert response.json()['id'] == app_id
 
+    response = await authorized_client.get("/api/v1/users/{}".format(1))
+    assert response.status_code == 404
+
+    response = await authorized_client.get("/api/v1/users/{}".format(10000))
+    assert response.status_code == 404
+
     response = await authorized_client.put("/api/v1/users/{}".format(app_id),
         json={"user": {"username": "bcd", "status": 2}})
     assert response.status_code == 200
     assert response.json()['status'] == 2
     assert response.json()['username'] == "bcd"
     assert response.json()['email'] == "abc@bcd.com"
+
+    response = await authorized_client.put("/api/v1/users/{}".format(1),
+        json={"user": {"username": "bcd", "status": 2}})
+    assert response.status_code == 404
+
+    response = await authorized_client.put("/api/v1/users/{}".format(10000),
+        json={"user": {"username": "bcd", "status": 2}})
+    assert response.status_code == 404
+
+    response = await authorized_client.delete("/api/v1/users/{}".format(1))
+    assert response.status_code == 404
+
+    response = await authorized_client.delete("/api/v1/users/{}".format(10000))
+    assert response.status_code == 404
 
     response = await authorized_client.delete("/api/v1/users/{}".format(app_id))
     assert response.status_code == 204

@@ -86,6 +86,7 @@ async def add_user(
 async def get_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
+    _ = Depends(get_gettext),
 ) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:
@@ -114,6 +115,7 @@ async def get_user(
 async def delete_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
+    _ = Depends(get_gettext),
 ) -> None:
     current_user = request.state.current_user
     if not current_user:
@@ -143,7 +145,8 @@ async def delete_user(
 async def update_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
-    info: UserInUpdate = Body(..., embed=True, alias="user")
+    info: UserInUpdate = Body(..., embed=True, alias="user"),
+    _ = Depends(get_gettext),
 ) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:
