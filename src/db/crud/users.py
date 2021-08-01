@@ -7,6 +7,7 @@ from db.crud.base import Base
 from db.queries import queries
 from models.users import UserInDB
 from models.errors import EntityDoesNotExist
+from models.errors import HttpClientError
 
 class User(Base):
     async def get_sub_users(self, uid, offset, limit) -> list:
@@ -48,6 +49,8 @@ class User(Base):
         email: Optional[str] = None,
         status: Optional[int] = 1,
     ) -> UserInDB:
+        if not password or not username:
+            raise HttpClientError("bad username or password")
 
         user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner, type=type)
         user.update_password(password)

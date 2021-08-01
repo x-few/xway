@@ -57,12 +57,14 @@ async def authenticate_user(pgpool, info, _):
         pass
 
     if not user:
+        print("----ishse---: 1----")
         raise HttpForbidden(_("invalid username or password"))
 
     if user.is_disabled():
         raise HttpForbidden(_("this user has been disabled"))
 
     if not user.check_password(info.password):
+        print("----ishse---: 2----info.password = ", info.password)
         raise HttpForbidden(_("invalid username or password"))
 
     return user

@@ -10,8 +10,31 @@ from services.jwt import create_access_token
 from models.token import Token, TokenInResponse
 from services.authentication import authenticate_user
 from services.localization import get_gettext
+from utils.const import AUTH_TYPES
 
 router = APIRouter()
+
+
+async def do_login(request, info, _):
+    pgpool = request.app.state.pgpool
+
+    # TODO: support admin level config
+    config = request.app.state.default_config
+
+    user = await authenticate_user(pgpool, info, _)
+    token = create_access_token(user, config)
+
+    token_type = config.get('jwt_token_prefix')
+    token_type_value = AUTH_TYPES.get(token_type)
+
+    host = request.client.host
+
+    login_record_crud = LoginRecord(pgpool)
+    await login_record_crud.add_login_record(uid=user.id,
+        host=host, type=token_type_value, token=token)
+
+    return user, token, token_type
+
 
 # TODO limit login rate
 @router.post("/login", response_model=UserWithTokenInResponse)
@@ -22,27 +45,20 @@ async def login(
     # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> UserWithTokenInResponse:
 
-    pgpool = request.app.state.pgpool
-    user = await authenticate_user(pgpool, info, _)
-    token = create_access_token(user, request.app.state.default_config)
-
-    login_record_crud = LoginRecord(pgpool)
-    login_record_crud.add_login_record(id=user.id, host=request.client.host)
+    user, token, token_type = await do_login(request, info, _)
 
     return UserWithTokenInResponse(
-        data=UserWithToken(
-            username=user.username,
-            email=user.email,
-            status=user.status,
-            created=user.created,
-            updated=user.updated,
-            creator=user.creator,
-            owner=user.owner,
-            id=user.id,
-            type=user.type,
-            access_token=token,
-            token_type="bearer",
-        ),
+        username=user.username,
+        email=user.email,
+        status=user.status,
+        created=user.created,
+        updated=user.updated,
+        creator=user.creator,
+        owner=user.owner,
+        id=user.id,
+        type=user.type,
+        access_token=token,
+        token_type=token_type,
     )
 
 
@@ -55,9 +71,9 @@ async def login_access_token(
     _ = Depends(get_gettext),
     info: OAuth2PasswordRequestForm = Depends()   # Use json instead
 ) -> Token:
-    user = await authenticate_user(request.app.state.pgpool, info, _)
-    token = create_access_token(user, request.app.state.default_config)
+    user, token, token_type = await do_login(request, info, _)
+
     return Token(
         access_token=token,
-        token_type="bearer",
+        token_type=token_type_key,
     )

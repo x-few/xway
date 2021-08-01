@@ -39,8 +39,8 @@ class OperationLog(Base):
                 async with conn.transaction():
                     records = await queries.get_oplog_gt_id(conn, id=id, owner=owner)
                     for record in records:
-                        print("---isshe---: record = ", record)
-                        print("---isshe---: record[1] = ", record[1])
+                        # print("---isshe---: record = ", record)
+                        # print("---isshe---: record[1] = ", record[1])
 
                         # do rollback
                         op = record[1]

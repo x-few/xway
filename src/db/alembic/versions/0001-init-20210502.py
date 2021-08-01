@@ -13,6 +13,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy_utils import LtreeType
 from sqlalchemy.engine.reflection import Inspector
 
+from utils.const import AUTH_TYPE_OAUTH2_BEARER_JWT
+
 
 # revision identifiers, used by Alembic.
 revision = '0001'
@@ -219,13 +221,15 @@ def get_all_tables():
     return tables
 
 
-def create_login() -> None:
+def create_login_record() -> None:
     table_name = "login_record"
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("uid", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
         sa.Column("host", sa.Text, nullable=True),
+        sa.Column("type", sa.Integer, nullable=True, default=AUTH_TYPE_OAUTH2_BEARER_JWT),
+        sa.Column("token", sa.Text, nullable=True),
         sa.Column(
             "created",
             sa.TIMESTAMP(timezone=True),
@@ -246,7 +250,7 @@ def upgrade():
     create_release_log_table()
     create_language_table()
     insert_language_table()
-    create_login()
+    create_login_record()
 
 
 def downgrade():

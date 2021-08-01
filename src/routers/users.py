@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Reques
 from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from typing import Optional
 
-from models.users import UserInCreate, ListOfUserInResponse, UserInResponse, UserInUpdate
+from models.users import UserInCreate, UserListInResponse, UserInResponse, UserInUpdate
 from models.response import Response
 from db.crud.users import User as UserCRUD
 from services.localization import get_gettext
@@ -18,13 +18,13 @@ router = APIRouter()
 
 # FIXME: add owner to these api
 
-@router.get("/users", response_model=ListOfUserInResponse)
+@router.get("/users", response_model=UserListInResponse)
 async def get_users(
     request: Request,
-    skip: int = Query(0, ge=0, title="which page"),
-    limit: int = Query(20, gt=0, le=100, title="Page size"),
+    page: int = Query(1, ge=1, title="which page"),
+    pagesize: int = Query(20, ge=1, le=100, title="Page size"),
     _ = Depends(get_gettext),
-) -> ListOfUserInResponse:
+) -> UserListInResponse:
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
@@ -35,16 +35,17 @@ async def get_users(
     users = None
     count = 0
 
+    offset = (page - 1) * pagesize
     user_crud = UserCRUD(request.app.state.pgpool)
     if is_admin_user(user_type) or is_normal_user(user_type):
-        users, count = await user_crud.get_sub_users(owner, skip, limit)
+        users, count = await user_crud.get_sub_users(owner, offset, pagesize)
     elif is_system_maintainer(user_type):
         # admin, can delete any user
-        users, count = await user_crud.get_all_users(skip, limit)
+        users, count = await user_crud.get_all_users(offset, pagesize)
     else:
         raise HttpServerError()
 
-    return ListOfUserInResponse(data=users, count=count)
+    return UserListInResponse(data=users, count=count)
 
 
 # curl localhost:9394/api/v1/users -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'

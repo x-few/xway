@@ -48,7 +48,7 @@ class UserInDB(UserInResponse):
             return False
         return True
 
-class ListOfUserInResponse(Base):
+class UserListInResponse(Base):
     data: List[UserInResponse]
     count: int
 

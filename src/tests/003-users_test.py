@@ -27,6 +27,11 @@ async def test_get_all_user(
     assert response.status_code == 200
     assert len(response.json()['data']) == 2
 
+    response = await authorized_client.get("/api/v1/users", params={"page": 1, "pagesize": 1})
+    assert response.status_code == 200
+    assert len(response.json()['data']) == 1
+    assert response.json()['count'] == 2
+
     response = await authorized_client.get("/api/v1/users/{}".format(app_id))
     assert response.status_code == 200
     assert response.json()['id'] == app_id

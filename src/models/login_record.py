@@ -10,7 +10,13 @@ class LoginRecordInDB(DateTimeModel, IDModel):
     id: Optional[int] = None
     uid: int
     host: Optional[str] = None
+    type: Optional[int] = None
+    token: Optional[str] = None
 
 
 class LoginRecordInResponse(LoginRecordInDB):
     """"""
+
+class LoginRecordListInResponse(Base):
+    data: List[LoginRecordInDB]
+    count: int

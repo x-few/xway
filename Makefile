@@ -6,7 +6,7 @@ TOREV := 0001
 
 PYTHON ?= python3
 PIP ?= pip3
-test ?= tests
+FILES ?= $(if $(file),tests/$(shell basename $(file)),tests)
 
 .PHONY: prepare
 prepare: prepare-ubuntu prepare-postgresql
@@ -52,7 +52,7 @@ restart:
 
 .PHONY: test
 test:
-	cd src; $(PYTHON) -m pytest -s $(test)
+	cd src; $(PYTHON) -m pytest -s $(FILES)
 
 .PHONY: revision
 # make revision m="comment"

@@ -23,7 +23,7 @@ def create_jwt_token(
 
 
 def create_access_token(user: User, config: dict) -> str:
-    print("config = ", config)
+    # print("config = ", config)
     return create_jwt_token(
         jwt_content=UserInJWT(username=user.username).dict(),
         secret_key=config['secret_key'],
