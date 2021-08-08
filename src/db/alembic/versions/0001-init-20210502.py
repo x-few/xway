@@ -87,8 +87,6 @@ def create_users_table() -> None:
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
         sa.Column("status", sa.Integer, nullable=False, default=1), # 0: disabled, 1: enabled
-        sa.Column("type", sa.Integer, nullable=False, default=1),   # 0: system admin, 1: admin, 2: user
-        sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("creator", sa.Integer, nullable=False),
         *timestamps(),
     )
@@ -105,9 +103,6 @@ def insert_default_users() -> None:
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Integer, default=1),
-        sa.Column("owner", sa.Integer, default=0),
-        sa.Column("creator", sa.Integer, default=0),
-        sa.Column("type", sa.Integer, nullable=False, default=1),   # 0: system admin, 1: admin, 2: user
     )
 
     op.bulk_insert(table,
@@ -163,7 +158,6 @@ def create_operation_log_table() -> None:
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("op", sa.String(length=16), nullable=False, ),
         sa.Column("creator", sa.Integer, nullable=False),
-        sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("path", LtreeType, nullable=True),
         sa.Column("new", JSONB, nullable=True),
         sa.Column("old", JSONB, nullable=True),
@@ -177,7 +171,6 @@ def create_release_log_table() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("creator", sa.Integer, nullable=False),
-        sa.Column("owner", sa.Integer, nullable=False),
         sa.Column("start_opid", sa.Integer, nullable=False),
         sa.Column("end_opid", sa.Integer, nullable=False),
         *timestamps(),
@@ -226,7 +219,7 @@ def create_login_record() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("uid", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
+        sa.Column("creator", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
         sa.Column("host", sa.Text, nullable=True),
         sa.Column("type", sa.Integer, nullable=True, default=AUTH_TYPE_OAUTH2_BEARER_JWT),
         sa.Column("token", sa.Text, nullable=True),

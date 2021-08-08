@@ -13,7 +13,6 @@ class User(Base):
 
 # from user
 class UserInCreate(User):
-    owner: Optional[int] = None
     password: str = ""
 
 
@@ -25,8 +24,6 @@ class UserInLogin(Base):
 class UserInResponse(User, IDModel, DateTimeModel):
     """UserInResponse"""
     creator: int
-    owner: int
-    type: int
     # salt: str = None
     # password: str = None
 

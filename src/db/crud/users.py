@@ -105,7 +105,7 @@ class User(Base):
 
 
     async def delete_user_by_id(self, id) -> None:
-        await self.exec("delete_user_by_id", id)
+        return await self.exec("delete_user_by_id", id)
 
 
     async def update_user_by_id(self,

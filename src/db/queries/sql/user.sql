@@ -1,11 +1,3 @@
--- name: get-sub-users
-SELECT * FROM users where owner = :uid or id = :uid ORDER BY id desc LIMIT :limit OFFSET :offset;
-
-
--- name: count-sub-users
-SELECT count(id) from users where owner = :uid or id = :uid;
-
-
 -- name: get-all-users
 SELECT * FROM users ORDER BY id desc LIMIT :limit OFFSET :offset;
 
@@ -15,17 +7,13 @@ SELECT count(id) from users;
 
 
 -- name: add-user<!
-INSERT INTO users (username, email, salt, password, status, creator, owner, type)
-VALUES (:username, :email, :salt, :password, :status, :creator, :owner, :type)
+INSERT INTO users (username, email, salt, password, status, creator, type)
+VALUES (:username, :email, :salt, :password, :status, :creator, :type)
 RETURNING id, created, updated;
 
 
 -- name: get-user-by-id^
 SELECT * FROM users where id = :id;
-
-
--- name: get-user-by-id-and-owner^
-SELECT * FROM users where id = :id and owner = :owner;
 
 
 -- name: get-user-by-username^
@@ -37,7 +25,7 @@ SELECT * FROM users where email = :email;
 
 
 -- name: delete-user-by-id<!
-DELETE FROM users where id = :id RETURNING updated;
+DELETE FROM users where id = :id RETURNING id;
 
 
 -- name: update-user-by-id<!

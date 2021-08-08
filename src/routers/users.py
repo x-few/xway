@@ -16,8 +16,6 @@ from utils.const import is_system_maintainer, is_admin_user, is_normal_user, \
 
 router = APIRouter()
 
-# FIXME: add owner to these api
-
 @router.get("/users", response_model=UserListInResponse)
 async def get_users(
     request: Request,
@@ -29,21 +27,9 @@ async def get_users(
     if not current_user:
         raise HttpNotFound(_("current user not found"))
 
-    owner = await get_owner(current_user)
-    user_type = current_user.type
-
-    users = None
-    count = 0
-
     offset = (page - 1) * pagesize
     user_crud = UserCRUD(request.app.state.pgpool)
-    if is_admin_user(user_type) or is_normal_user(user_type):
-        users, count = await user_crud.get_sub_users(owner, offset, pagesize)
-    elif is_system_maintainer(user_type):
-        # admin, can delete any user
-        users, count = await user_crud.get_all_users(offset, pagesize)
-    else:
-        raise HttpServerError()
+    users, count = await user_crud.get_all_users(offset, pagesize)
 
     return UserListInResponse(data=users, count=count)
 
@@ -56,31 +42,9 @@ async def get_users(
 async def add_user(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
-    user_type: Optional[int] = get_user_type_normal_user(),
     _ = Depends(get_gettext),
 ) -> UserInResponse:
-    current_user = request.state.current_user
-    if not current_user:
-        raise HttpNotFound(_("current user not found"))
-
-    owner = await get_owner(current_user)
-    current_user_type = current_user.type
-
-    user = None
-
-    user_crud = UserCRUD(request.app.state.pgpool)
-    if is_admin_user(current_user_type) or is_normal_user(current_user_type):
-        user = await do_add_user(request, info, get_user_type_normal_user(), _)
-    elif is_system_maintainer(current_user_type):
-        if is_normal_user(user_type):
-            # admin, can not add sub-user
-            raise HttpClientError(_("bad user type"))
-
-        user = await do_add_user(request, info, user_type, _)
-    else:
-        raise HttpServerError()
-
-    return user
+    return user = await do_add_user(request, info, _)
 
 
 @router.get("/users/{user_id}", response_model=UserInResponse,)
@@ -101,18 +65,13 @@ async def get_user(
     if not target_user:
         raise HttpNotFound(_("user not found"))
 
-    user_type = current_user.type
-    if not (is_system_maintainer(user_type) and is_admin_user(target_user.type)):
-        current_owner = await get_owner(current_user)
-        target_owner = await get_owner(target_user)
-        if current_owner != target_owner:
-            raise HttpNotFound(_("user not found"))
-
     return target_user
 
 
-
-@router.delete("/users/{user_id}", status_code=HTTP_204_NO_CONTENT,)
+@router.delete("/users/{user_id}",
+    status_code=HTTP_204_NO_CONTENT,
+    response_model=UserInResponse,
+)
 async def delete_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
@@ -131,15 +90,8 @@ async def delete_user(
     if not target_user:
         raise HttpNotFound(_("user not found"))
 
-    user_type = current_user.type
-    if not (is_system_maintainer(user_type) and is_admin_user(target_user.type)):
-        current_owner = await get_owner(current_user)
-        target_owner = await get_owner(target_user)
-        if current_owner != target_owner:
-            raise HttpNotFound(_("user not found"))
-
     await user_crud.delete_user_by_id(user_id)
-    return None
+    return target_user
 
 
 @router.put("/users/{user_id}", response_model=UserInResponse,)
@@ -158,13 +110,6 @@ async def update_user(
     if not target_user:
         raise HttpNotFound(_("user not found"))
 
-    user_type = current_user.type
-    if not (is_system_maintainer(user_type) and is_admin_user(target_user.type)):
-        current_owner = await get_owner(current_user)
-        target_owner = await get_owner(target_user)
-        if current_owner != target_owner:
-            raise HttpNotFound(_("user not found"))
-
     password = target_user.password
     if info.password:
         # TODO Check if the password meets the requirements
@@ -173,7 +118,6 @@ async def update_user(
     target_user.username = info.username or target_user.username
     target_user.email = info.email or target_user.email
     target_user.status = info.status or target_user.status
-    # target_user.status = info.type,   # unsupported
 
     user = await user_crud.update_user_by_id(
         id=user_id,
