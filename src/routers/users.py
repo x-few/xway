@@ -69,14 +69,13 @@ async def get_user(
 
 
 @router.delete("/users/{user_id}",
-    status_code=HTTP_204_NO_CONTENT,
     response_model=UserInResponse,
 )
 async def delete_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
     _ = Depends(get_gettext),
-) -> None:
+) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
@@ -109,6 +108,11 @@ async def update_user(
     target_user = await user_crud.get_user_by_id(user_id)
     if not target_user:
         raise HttpNotFound(_("user not found"))
+
+    if info.username:
+        temp_user = await user_crud.get_user_by_username(info.username)
+        if temp_user and temp_user.id != target_user.id:
+            raise HttpClientError(_("username already exists"))
 
     password = target_user.password
     if info.password:

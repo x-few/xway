@@ -26,7 +26,7 @@ class User(Base):
 
 
     async def get_all_users(self, offset, limit) -> list:
-        record = await self.exec("count_all_users", uid=uid)
+        record = await self.exec("count_all_users")
         if not record or not record[0] or record[0][0] == 0:
             return list(), 0
 
