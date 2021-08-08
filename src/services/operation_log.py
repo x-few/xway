@@ -146,13 +146,11 @@ async def record(request: Request, response: Response):
     path = await gen_btree_path(path_segs, data_id)
     current_user = request.state.current_user
 
-    owner = 0
     creator = 0
     if current_user:
-        owner = current_user.owner or current_user.id
         creator = current_user.id
 
-    await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, owner=owner, creator=creator)
+    await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, creator=creator)
 
 
 async def rollback(request: Request):

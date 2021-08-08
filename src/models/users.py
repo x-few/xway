@@ -20,13 +20,13 @@ class UserInLogin(Base):
     username: Optional[str] = None
     password: Optional[str] = None
 
+
 # to user
 class UserInResponse(User, IDModel, DateTimeModel):
     """UserInResponse"""
     creator: int
     # salt: str = None
     # password: str = None
-
 
 
 class UserInDB(UserInResponse):

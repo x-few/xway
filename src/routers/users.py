@@ -9,7 +9,7 @@ from models.users import UserInCreate, UserListInResponse, UserInResponse, UserI
 from models.response import Response
 from db.crud.users import User as UserCRUD
 from services.localization import get_gettext
-from services.users import add_user as do_add_user, get_owner
+from services.users import add_user as do_add_user
 from models.errors import HttpClientError, HttpForbidden, HttpServerError, HttpNotFound
 from utils.const import is_system_maintainer, is_admin_user, is_normal_user, \
     get_user_type_normal_user, get_user_type_system_maintainer, get_user_type_admin_user
@@ -44,7 +44,7 @@ async def add_user(
     info: UserInCreate = Body(..., embed=True, alias="user"),
     _ = Depends(get_gettext),
 ) -> UserInResponse:
-    return user = await do_add_user(request, info, _)
+    return await do_add_user(request, info, _)
 
 
 @router.get("/users/{user_id}", response_model=UserInResponse,)

@@ -78,7 +78,7 @@ async def test_user(pool: Pool) -> UserInDB:
     user_crud = UserCRUD(pool)
     return await user_crud.add_user( \
         username="test", password="pwd@test", \
-        creator=0, owner=0, type=1, email="admin@test.com")
+        creator=0, email="admin@test.com")
 
 # config = request.app.state.default_config
 @pytest.fixture

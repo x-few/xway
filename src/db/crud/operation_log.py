@@ -7,41 +7,37 @@ from models.errors import HttpServerError, HttpClientError, HttpForbidden, HttpN
 
 class OperationLog(Base):
 
-    async def get_oplog_by_owner(self, owner: int, offset: int, limit: int) -> list:
-        dbres = await self.exec("count_oplog_by_owner", owner=owner)
+    async def get_all(self, offset: int, limit: int) -> list:
+        dbres = await self.exec("count_all_oplog")
         if not dbres or not dbres[0] or dbres[0][0] == 0:
             return list(), 0
 
         count = dbres[0][0]
         oplogs = list()
 
-        records = await self.exec("get_oplog_by_owner", owner=owner, offset=offset, limit=limit)
+        records = await self.exec("get_all_oplog", offset=offset, limit=limit)
         if records:
             oplogs = [OperationLogInDB(**record) for record in records]
 
         return oplogs, count
 
-    async def add_oplog(self, op: str, path: str, new: str, old: str, owner: int, creator: int):
+    async def add_oplog(self, op: str, path: str, new: str, old: str, creator: int):
         # oplog = OperationLogInDB()
         await self.exec("add_oplog",
             op=op,
             path=path,
             new=new,
             old=old,
-            owner=owner,
             creator=creator,
         )
 
-    async def rollback(self, id: int, owner: int, creator: int):
+    async def rollback(self, id: int, creator: int):
         # do rollback
         try:
             async with self._pool.acquire() as conn:
                 async with conn.transaction():
-                    records = await queries.get_oplog_gt_id(conn, id=id, owner=owner)
+                    records = await queries.get_oplog_gt_id(conn, id=id)
                     for record in records:
-                        # print("---isshe---: record = ", record)
-                        # print("---isshe---: record[1] = ", record[1])
-
                         # do rollback
                         op = record[1]
                         if op == "PUT":

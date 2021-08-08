@@ -103,6 +103,7 @@ def insert_default_users() -> None:
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Integer, default=1),
+        sa.Column("creator", sa.Integer, nullable=False),
     )
 
     op.bulk_insert(table,
@@ -113,6 +114,7 @@ def insert_default_users() -> None:
                 'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
                 # password: pwd@xway
                 'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
+                'creator': 0,   # default user
             },
         ]
     )

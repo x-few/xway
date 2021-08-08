@@ -54,7 +54,6 @@ async def login(
         created=user.created,
         updated=user.updated,
         creator=user.creator,
-        owner=user.owner,
         id=user.id,
         type=user.type,
         access_token=token,

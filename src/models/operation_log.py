@@ -7,7 +7,6 @@ class OperationLog(BaseModel):
     path: str
     new: Optional[str] = None
     old: Optional[str] = None
-    owner: int
     creator: int
 
 

@@ -10,19 +10,19 @@ from models.errors import EntityDoesNotExist
 from models.errors import HttpClientError
 
 class User(Base):
-    async def get_sub_users(self, uid, offset, limit) -> list:
-        record = await self.exec("count_sub_users", uid=uid)
-        if not record or not record[0] or record[0][0] == 0:
-            return list(), 0
+    # async def get_sub_users(self, uid, offset, limit) -> list:
+    #     record = await self.exec("count_sub_users", uid=uid)
+    #     if not record or not record[0] or record[0][0] == 0:
+    #         return list(), 0
 
-        count = record[0][0]
-        users = list()
+    #     count = record[0][0]
+    #     users = list()
 
-        records = await self.exec("get_sub_users", uid=uid, offset=offset, limit=limit)
-        if records:
-            users = [UserInDB(**record) for record in records]
+    #     records = await self.exec("get_sub_users", uid=uid, offset=offset, limit=limit)
+    #     if records:
+    #         users = [UserInDB(**record) for record in records]
 
-        return users, count
+    #     return users, count
 
 
     async def get_all_users(self, offset, limit) -> list:
@@ -43,16 +43,14 @@ class User(Base):
     async def add_user(self,
         username: str,
         password: str,
-        creator: int,
-        owner: int,
-        type: int,
         email: Optional[str] = None,
         status: Optional[int] = 1,
+        creator: Optional[int] = 0,
     ) -> UserInDB:
         if not password or not username:
             raise HttpClientError("bad username or password")
 
-        user = UserInDB(username=username, email=email, status=status, creator=creator, owner=owner, type=type)
+        user = UserInDB(username=username, email=email, status=status, creator=creator)
         user.update_password(password)
         record = await self.exec("add_user",
             username=user.username,
@@ -61,20 +59,9 @@ class User(Base):
             password=user.password,
             status=user.status,
             creator=user.creator,
-            owner=user.owner,
-            type=user.type
         )
 
         return user.copy(update=dict(record))
-
-
-    async def get_user_by_id_and_owner(self, id, owner) -> UserInDB:
-        record = await self.exec("get_user_by_id_and_owner", id=id, owner=owner)
-        if record:
-            return UserInDB(**record)
-
-        return None
-        # raise EntityDoesNotExist("user does not exist, id: {0}, owner: {1}".format(id, owner))
 
 
     async def get_user_by_id(self, id) -> UserInDB:
