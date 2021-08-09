@@ -8,10 +8,10 @@ from .base import Base, IDModel, DateTimeModel
 
 class LoginRecordInDB(DateTimeModel, IDModel):
     id: Optional[int] = None
-    uid: int
     host: Optional[str] = None
     type: Optional[int] = None
     token: Optional[str] = None
+    creator: int
 
 
 class LoginRecordInResponse(LoginRecordInDB):

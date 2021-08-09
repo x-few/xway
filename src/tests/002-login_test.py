@@ -12,6 +12,7 @@ async def test_register(
     client: AsyncClient,
     pool: Pool
 ) -> None:
-    response = await client.post("/api/v1/login", json={"user": {"username": "admin", "password": "pwd@xway"}})
+    response = await client.post("/api/v1/login",
+        json={"user": {"username": "admin", "password": "pwd@xway"}})
     print("response: ", response.json())
     assert response.status_code == 200

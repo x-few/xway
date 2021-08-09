@@ -30,7 +30,7 @@ async def do_login(request, info, _):
     host = request.client.host
 
     login_record_crud = LoginRecord(pgpool)
-    await login_record_crud.add_login_record(uid=user.id,
+    await login_record_crud.add(creator=user.id,
         host=host, type=token_type_value, token=token)
 
     return user, token, token_type

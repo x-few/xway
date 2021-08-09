@@ -10,21 +10,6 @@ from models.errors import EntityDoesNotExist
 from models.errors import HttpClientError
 
 class User(Base):
-    # async def get_sub_users(self, uid, offset, limit) -> list:
-    #     record = await self.exec("count_sub_users", uid=uid)
-    #     if not record or not record[0] or record[0][0] == 0:
-    #         return list(), 0
-
-    #     count = record[0][0]
-    #     users = list()
-
-    #     records = await self.exec("get_sub_users", uid=uid, offset=offset, limit=limit)
-    #     if records:
-    #         users = [UserInDB(**record) for record in records]
-
-    #     return users, count
-
-
     async def get_all_users(self, offset, limit) -> list:
         record = await self.exec("count_all_users")
         if not record or not record[0] or record[0][0] == 0:
