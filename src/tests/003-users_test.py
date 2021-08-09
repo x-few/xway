@@ -17,7 +17,8 @@ async def test_get_all_user(
     assert response.status_code == 200
     assert response.json()['count'] == 2
 
-    response = await authorized_client.post("/api/v1/users", json={"user":{"username": "testuser", "password": "pwd", "email": "abc@bcd.com"}})
+    response = await authorized_client.post("/api/v1/users",
+        json={"user":{"username": "testuser", "password": "pwd", "email": "abc@bcd.com"}})
     assert response.status_code == 201
 
     app_id = response.json()['id']

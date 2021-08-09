@@ -12,8 +12,8 @@ async def test_register(
     client: AsyncClient,
     pool: Pool
 ) -> None:
-    response = await client.post("/api/v1/register", json={"user":{"username": "abc", "password": "pwd"}})
+    response = await client.post("/api/v1/register",
+        json={"user":{"username": "test_register", "password": "register@password"}})
     body = response.json()
     assert response.status_code == 201
-    assert body['data']
-    assert body['data']['username'] == 'abc'
+    assert body['username'] == 'test_register'

@@ -64,28 +64,31 @@ async def authenticate_user(pgpool, info, _):
         raise HttpForbidden(_("this user has been disabled"))
 
     if not user.check_password(info.password):
-        print("----ishse---: 2----info.password = ", info.password)
         raise HttpForbidden(_("invalid username or password"))
 
     return user
 
 
 async def check_username_is_taken(pgpool, username: str) -> bool:
+    if not username:
+        return False
+
     user_crud = UserCRUD(pgpool)
-    try:
-        await user_crud.get_user_by_username(username=username)
-    except EntityDoesNotExist:
+    user = await user_crud.get_user_by_username(username=username)
+    if user is None:
         return False
 
     return True
 
 
 async def check_email_is_taken(pgpool, email: str) -> bool:
-    user_crud = UserCRUD(pgpool)
+    if not email:
+        return False
 
-    try:
-        await user_crud.get_user_by_email(email=email)
-    except EntityDoesNotExist:
+    user_crud = UserCRUD(pgpool)
+    user = await user_crud.get_user_by_email(email=email)
+
+    if user is None:
         return False
 
     return True
