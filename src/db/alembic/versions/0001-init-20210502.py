@@ -13,7 +13,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy_utils import LtreeType
 from sqlalchemy.engine.reflection import Inspector
 
-from utils.const import AUTH_TYPE_OAUTH2_BEARER_JWT
+from utils.const import AUTH_TYPE_OAUTH2_BEARER_JWT, \
+    PERMISSIONS_STATUS_ENABLE, \
+    PERMISSIONS_METHOD_ALL
 
 
 # revision identifiers, used by Alembic.
@@ -233,6 +235,19 @@ def create_login_record() -> None:
         ),
     )
 
+
+def create_permission() -> None:
+    table_name = "permission"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("method", sa.Integer, nullable=True, default=PERMISSIONS_METHOD_ALL),
+        sa.Column("uri", sa.Text, nullable=False),
+        sa.Column("status", sa.Integer, nullable=True, default=PERMISSIONS_STATUS_ENABLE),
+    )
+
+
 def upgrade():
     # tables = get_all_tables()
     create_extensions()
@@ -246,9 +261,11 @@ def upgrade():
     create_language_table()
     insert_language_table()
     create_login_record()
+    create_permission()
 
 
 def downgrade():
+    op.drop_table('permission')
     op.drop_table('login_record')
     op.drop_table('language')
     op.drop_table('release_log')
