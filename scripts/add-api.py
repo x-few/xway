@@ -8,6 +8,9 @@ def render_file(filename, values):
 
 
 if __name__ == '__main__':
+
+    # TODO: save values, in case we need it in the future.
+
     values = {
         'table_name': 'permission',
         'fields': [
