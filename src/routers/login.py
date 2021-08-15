@@ -31,7 +31,7 @@ async def do_login(request, info, _):
 
     login_record_crud = LoginRecord(pgpool)
     await login_record_crud.add(creator=user.id,
-        host=host, type=token_type_value, token=token)
+                                host=host, type=token_type_value, token=token)
 
     return user, token, token_type
 
@@ -41,7 +41,7 @@ async def do_login(request, info, _):
 async def login(
     request: Request,
     info: UserInLogin = Body(..., embed=True, alias="user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
     # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> UserWithTokenInResponse:
 
@@ -66,12 +66,12 @@ async def login(
 async def login_access_token(
     request: Request,
     # info: UserInLogin = Body(..., embed=True, alias="user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
     info: OAuth2PasswordRequestForm = Depends()   # Use json instead
 ) -> Token:
     user, token, token_type = await do_login(request, info, _)
 
     return Token(
         access_token=token,
-        token_type=token_type_key,
+        token_type=token_type,
     )

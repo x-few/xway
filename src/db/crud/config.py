@@ -1,6 +1,7 @@
 from db.crud.base import Base
 # from models.config import Config as ConfigModel
 
+
 class Config(Base):
     async def get_all_default_config(self):
         records = await self.exec("get_all_default_config")

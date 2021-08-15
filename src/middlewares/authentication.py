@@ -9,6 +9,7 @@ from fastapi import Header, Security, Depends
 
 # from fastapi_contrib.common.responses import UJSONResponse
 
+
 class AuthenticationMiddleware(BaseHTTPMiddleware):
     async def authentication(self, request):
         # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="test auth")

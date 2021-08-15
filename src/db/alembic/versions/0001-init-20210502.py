@@ -28,8 +28,10 @@ depends_on = None
 def create_extensions():
     op.execute("CREATE EXTENSION if not exists ltree;")
 
+
 def drop_extensions():
     op.execute("DROP EXTENSION if exists ltree;")
+
 
 def create_updated_function() -> None:
     op.execute(
@@ -84,11 +86,13 @@ def create_users_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("username", sa.Text, unique=True, nullable=False, index=True),
+        sa.Column("username", sa.Text, unique=True,
+                  nullable=False, index=True),
         sa.Column("email", sa.Text, unique=True, index=True),
         sa.Column("salt", sa.Text, nullable=False),
         sa.Column("password", sa.Text, nullable=False,),
-        sa.Column("status", sa.Integer, nullable=False, default=1), # 0: disabled, 1: enabled
+        sa.Column("status", sa.Integer, nullable=False,
+                  default=1),  # 0: disabled, 1: enabled
         sa.Column("creator", sa.Integer, nullable=False),
         *timestamps(),
     )
@@ -109,17 +113,17 @@ def insert_default_users() -> None:
     )
 
     op.bulk_insert(table,
-        [
-            {
-                'username': 'admin',
-                'email': 'admin@xway.com',
-                'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
-                # password: pwd@xway
-                'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
-                'creator': 0,   # default user
-            },
-        ]
-    )
+                   [
+                       {
+                           'username': 'admin',
+                           'email': 'admin@xway.com',
+                           'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
+                           # password: pwd@xway
+                           'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
+                           'creator': 0,   # default user
+                       },
+                   ]
+                   )
 
 
 # this table is for all users
@@ -144,15 +148,21 @@ def insert_default_config_table() -> None:
     )
 
     op.bulk_insert(table,
-        [
-            {'key':'jwt_subject', 'value': 'access', 'comment': 'jwt_subject for user authentication'},
-            {'key':'jwt_algorithm', 'value': 'HS256', 'comment': 'jwt algorithm'},
-            {'key':'jwt_access_token_expire', 'value': '604800', 'comment': 'one week, access token expire second'},
-            {'key':'secret_key', 'value': '12345abcde', 'comment': 'TODO: Generated at initialization'},
-            {'key':'jwt_token_prefix', 'value': 'bearer', 'comment': 'jwt token prefix'},
-            {'key':'auth_header', 'value': 'Authorization', 'comment': 'http header of authorization'},
-        ]
-    )
+                   [
+                       {'key': 'jwt_subject', 'value': 'access',
+                           'comment': 'jwt_subject for user authentication'},
+                       {'key': 'jwt_algorithm', 'value': 'HS256',
+                           'comment': 'jwt algorithm'},
+                       {'key': 'jwt_access_token_expire', 'value': '604800',
+                           'comment': 'one week, access token expire second'},
+                       {'key': 'secret_key', 'value': '12345abcde',
+                           'comment': 'TODO: Generated at initialization'},
+                       {'key': 'jwt_token_prefix', 'value': 'bearer',
+                           'comment': 'jwt token prefix'},
+                       {'key': 'auth_header', 'value': 'Authorization',
+                           'comment': 'http header of authorization'},
+                   ]
+                   )
 
 
 def create_operation_log_table() -> None:
@@ -187,7 +197,8 @@ def create_language_table() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),      # 简体中文、English(US)
-        sa.Column("code", sa.String(length=16), nullable=False),      # zh_CN、en_US
+        sa.Column("code", sa.String(length=16),
+                  nullable=False),      # zh_CN、en_US
         sa.Column("domain", sa.Text, nullable=False, default="base"),
         sa.Column("localedir", sa.Text, nullable=False, default="locales"),
     )
@@ -204,11 +215,11 @@ def insert_language_table() -> None:
     )
 
     op.bulk_insert(table,
-        [
-            {'name':'简体中文', 'code': 'zh_CN'},
-            {'name':'English(US)', 'code': 'en_US'},
-        ]
-    )
+                   [
+                       {'name': '简体中文', 'code': 'zh_CN'},
+                       {'name': 'English(US)', 'code': 'en_US'},
+                   ]
+                   )
 
 
 def get_all_tables():
@@ -223,9 +234,11 @@ def create_login_record() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("creator", sa.Integer, sa.ForeignKey('users.id'), nullable=False),
+        sa.Column("creator", sa.Integer, sa.ForeignKey(
+            'users.id'), nullable=False),
         sa.Column("host", sa.Text, nullable=True),
-        sa.Column("type", sa.Integer, nullable=True, default=AUTH_TYPE_OAUTH2_BEARER_JWT),
+        sa.Column("type", sa.Integer, nullable=True,
+                  default=AUTH_TYPE_OAUTH2_BEARER_JWT),
         sa.Column("token", sa.Text, nullable=True),
         sa.Column(
             "created",
@@ -242,9 +255,11 @@ def create_permission() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),
-        sa.Column("method", sa.Integer, nullable=True, default=PERMISSIONS_METHOD_ALL),
+        sa.Column("method", sa.Integer, nullable=True,
+                  default=PERMISSIONS_METHOD_ALL),
         sa.Column("uri", sa.Text, nullable=False),
-        sa.Column("status", sa.Integer, nullable=True, default=PERMISSIONS_STATUS_ENABLE),
+        sa.Column("status", sa.Integer, nullable=True,
+                  default=PERMISSIONS_STATUS_ENABLE),
     )
 
 

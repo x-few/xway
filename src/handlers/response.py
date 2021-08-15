@@ -2,6 +2,7 @@ import time
 
 from fastapi import FastAPI, Request
 
+
 async def format_response(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)

@@ -17,6 +17,7 @@ class LoginRecordInDB(DateTimeModel, IDModel):
 class LoginRecordInResponse(LoginRecordInDB):
     """"""
 
+
 class LoginRecordListInResponse(Base):
     data: List[LoginRecordInDB]
     count: int

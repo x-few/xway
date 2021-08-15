@@ -9,9 +9,9 @@ from models.errors import HttpNotFound, HttpServerError
 # TODO support multiple level(like: user/1/xxx/1) in the future
 GET_DATA_CLASS_MAP = {
     # router: crud classname, crud method
-    "users": { "classname": User, "method": "get_user_by_id"},
-    "owner_user": { "classname": User, "method": "get_user_by_id"},
-    "register": { "classname": User, "method": "get_user_by_id"},
+    "users": {"classname": User, "method": "get_user_by_id"},
+    "owner_user": {"classname": User, "method": "get_user_by_id"},
+    "register": {"classname": User, "method": "get_user_by_id"},
 }
 
 RECORD_METHOD = {
@@ -20,11 +20,13 @@ RECORD_METHOD = {
     "DELETE": True,
 }
 
+
 async def get_path_segs(path: str):
     return path.split("/")
 
 # async def get_path(request: Request):
 #     pass
+
 
 async def get_data(module_name, id, dbpool):
     info = GET_DATA_CLASS_MAP[module_name]

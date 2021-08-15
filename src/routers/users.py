@@ -16,12 +16,13 @@ from utils.const import is_system_maintainer, is_admin_user, is_normal_user, \
 
 router = APIRouter()
 
+
 @router.get("/users", response_model=UserListInResponse)
 async def get_users(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserListInResponse:
     current_user = request.state.current_user
     if not current_user:
@@ -36,13 +37,13 @@ async def get_users(
 
 # curl localhost:9394/api/v1/users -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
 @router.post("/users",
-    status_code=HTTP_201_CREATED,
-    response_model=UserInResponse,
-)
+             status_code=HTTP_201_CREATED,
+             response_model=UserInResponse,
+             )
 async def add_user(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInResponse:
     return await do_add_user(request, info, _)
 
@@ -51,7 +52,7 @@ async def add_user(
 async def get_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:
@@ -69,12 +70,12 @@ async def get_user(
 
 
 @router.delete("/users/{user_id}",
-    response_model=UserInResponse,
-)
+               response_model=UserInResponse,
+               )
 async def delete_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:
@@ -98,7 +99,7 @@ async def update_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
     info: UserInUpdate = Body(..., embed=True, alias="user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInResponse:
     current_user = request.state.current_user
     if not current_user:

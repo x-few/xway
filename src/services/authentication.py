@@ -17,15 +17,18 @@ from services.localization import get_gettext
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
 # curl "localhost:9394/api/v1/users" -H "Authorization: bearer <jwt-token>"
+
+
 async def get_current_user(
     request: Request,
     token: str = Depends(oauth2_scheme),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInDB:
     try:
         config = request.app.state.default_config
         pgpool = request.app.state.pgpool
-        payload = jwt.decode(token, config['secret_key'], algorithms=[config['jwt_algorithm']])
+        payload = jwt.decode(token, config['secret_key'], algorithms=[
+                             config['jwt_algorithm']])
         username: str = payload.get("username")
         if username is None:
             raise HttpUnauthorized(_("invalid access token"))

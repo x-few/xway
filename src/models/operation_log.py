@@ -2,6 +2,7 @@ from typing import Optional, List
 from .base import Base, IDModel, DateTimeModel
 from pydantic import BaseModel
 
+
 class OperationLog(BaseModel):
     op: str
     path: str

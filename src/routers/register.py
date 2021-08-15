@@ -17,15 +17,17 @@ from models.token import Token, TokenInResponse
 router = APIRouter()
 
 # curl localhost:9394/api/v1/register -XPOST -d '{"user":{"username": "abc", "password": "pwd"}}'
-@router.post("/register",
-    status_code=HTTP_201_CREATED,
-    response_model=UserInResponse,
 
-)
+
+@router.post("/register",
+             status_code=HTTP_201_CREATED,
+             response_model=UserInResponse,
+
+             )
 async def register(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
-    _ = Depends(get_gettext),
+    _=Depends(get_gettext),
 ) -> UserInResponse:
     if await check_username_is_taken(request.app.state.pgpool, info.username):
         raise HttpClientError(_("user with this username already exists"))

@@ -7,13 +7,14 @@ from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 pytestmark = pytest.mark.asyncio
 
+
 async def test_register(
     app: FastAPI,
     client: AsyncClient,
     pool: Pool
 ) -> None:
     response = await client.post("/api/v1/register",
-        json={"user":{"username": "test_register", "password": "register@password"}})
+                                 json={"user": {"username": "test_register", "password": "register@password"}})
     body = response.json()
     assert response.status_code == 201
     assert body['username'] == 'test_register'

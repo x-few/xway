@@ -10,13 +10,14 @@ from utils.const import AUTH_TYPES
 
 router = APIRouter()
 
+
 @router.post("/login_record",
-    status_code=HTTP_201_CREATED,
-    response_model=LoginRecordInResponse,
-)
+             status_code=HTTP_201_CREATED,
+             response_model=LoginRecordInResponse,
+             )
 async def add(
-    request: Request,
-    _ = Depends(get_gettext),
+        request: Request,
+        _=Depends(get_gettext),
 ) -> LoginRecordInResponse:
     user = request.state.current_user
 
@@ -26,19 +27,19 @@ async def add(
 
     login_record_crud = LoginRecord(request.app.state.pgpool)
     record = await login_record_crud.add(creator=user.id,
-        host=request.client.host, type=token_type_value, token="")
+                                         host=request.client.host, type=token_type_value, token="")
 
     return record
 
 
 @router.get("/login_record",
-    response_model=LoginRecordListInResponse,
-)
+            response_model=LoginRecordListInResponse,
+            )
 async def list(
-    request: Request,
-    page: int = Query(1, ge=1, title="which page"),
-    pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _ = Depends(get_gettext),
+        request: Request,
+        page: int = Query(1, ge=1, title="which page"),
+        pagesize: int = Query(20, ge=1, le=100, title="Page size"),
+        _=Depends(get_gettext),
 ) -> LoginRecordListInResponse:
     user = request.state.current_user
 

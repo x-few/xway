@@ -10,5 +10,6 @@ async def set_default_config(app: FastAPI):
     app.state.default_config = await config_crud.get_all_default_config()
     # print(app.state.default_config)
 
+
 async def get_default_config(request: Request):
     return request.app.state.default_config

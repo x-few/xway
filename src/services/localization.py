@@ -5,6 +5,7 @@ from starlette.requests import Request
 
 from db.crud.language import Language as LanguageCRUD
 
+
 async def init_translation_object(app: FastAPI) -> None:
     # get languages from db
     lang_crud = LanguageCRUD(app.state.pgpool)

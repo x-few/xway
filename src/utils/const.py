@@ -10,7 +10,7 @@ AUTH_TYPE_OAUTH2_BEARER_JWT = 1
 AUTH_TYPE_OAUTH2_BEARER_JWT_PREFIX = "bearer"
 
 AUTH_TYPES = {
-    AUTH_TYPE_OAUTH2_BEARER_JWT_PREFIX : AUTH_TYPE_OAUTH2_BEARER_JWT
+    AUTH_TYPE_OAUTH2_BEARER_JWT_PREFIX: AUTH_TYPE_OAUTH2_BEARER_JWT
 }
 
 PERMISSIONS_STATUS_ENABLE = 1
@@ -27,17 +27,22 @@ PERMISSIONS_METHOD_DELETE = 5
 def is_system_maintainer(user_type):
     return user_type == USER_TYPE_SYSTEM_MAINTAINER
 
+
 def is_admin_user(user_type):
     return user_type == USER_TYPE_ADMIN_USER
+
 
 def is_normal_user(user_type):
     return user_type == USER_TYPE_NORMAL_USER
 
+
 def get_user_type_system_maintainer():
     return USER_TYPE_SYSTEM_MAINTAINER
 
+
 def get_user_type_admin_user():
     return USER_TYPE_ADMIN_USER
+
 
 def get_user_type_normal_user():
     return USER_TYPE_NORMAL_USER

@@ -7,10 +7,11 @@ from asyncpg.pool import Pool
 from starlette.requests import Request
 from typing import AsyncGenerator, Callable, Type
 
+
 async def connect_to_db(app: FastAPI) -> None:
     logger.info("Connecting to postgres://{}:{}@{}:{}/{}",
-        pgconfig['user'], pgconfig['password'],
-        pgconfig['host'], pgconfig['port'], pgconfig['database'])
+                pgconfig['user'], pgconfig['password'],
+                pgconfig['host'], pgconfig['port'], pgconfig['database'])
 
     # try:
     app.state.pgpool = await asyncpg.create_pool(**pgconfig)

@@ -18,6 +18,7 @@ from models.users import UserInDB
 from services.jwt import create_access_token
 from db.crud.users import User as UserCRUD
 
+
 @pytest.fixture(autouse=True)
 async def init_db() -> None:
     # before test, init db
@@ -59,6 +60,7 @@ def pool(app: FastAPI) -> Pool:
 def default_config(app: FastAPI) -> Pool:
     return app.state.default_config
 
+
 @pytest.fixture
 async def client(app: FastAPI) -> AsyncClient:
     async with AsyncClient(
@@ -73,14 +75,17 @@ async def client(app: FastAPI) -> AsyncClient:
 def authorization_prefix(default_config) -> str:
     return default_config['jwt_token_prefix']
 
+
 @pytest.fixture
 async def test_user(pool: Pool) -> UserInDB:
     user_crud = UserCRUD(pool)
-    return await user_crud.add_user( \
-        username="test", password="pwd@test", \
+    return await user_crud.add_user(
+        username="test", password="pwd@test",
         creator=0, email="admin@test.com")
 
 # config = request.app.state.default_config
+
+
 @pytest.fixture
 def token(test_user: UserInDB, default_config: dict) -> str:
     return create_access_token(test_user, default_config)
@@ -93,5 +98,6 @@ def authorized_client(
     authorization_prefix: str,
     default_config: dict,
 ) -> AsyncClient:
-    client.headers[default_config['auth_header']] = f"{authorization_prefix} {token}"
+    client.headers[default_config['auth_header']
+                   ] = f"{authorization_prefix} {token}"
     return client

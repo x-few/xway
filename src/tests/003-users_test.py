@@ -7,6 +7,7 @@ from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 pytestmark = pytest.mark.asyncio
 
+
 async def test_get_all_user(
     app: FastAPI,
     authorized_client: AsyncClient,
@@ -18,7 +19,7 @@ async def test_get_all_user(
     assert response.json()['count'] == 2
 
     response = await authorized_client.post("/api/v1/users",
-        json={"user":{"username": "testuser", "password": "pwd", "email": "abc@bcd.com"}})
+                                            json={"user": {"username": "testuser", "password": "pwd", "email": "abc@bcd.com"}})
     assert response.status_code == 201
 
     app_id = response.json()['id']
@@ -45,18 +46,18 @@ async def test_get_all_user(
     assert response.status_code == 404
 
     response = await authorized_client.put("/api/v1/users/{}".format(app_id),
-        json={"user": {"username": "bcd", "status": 2}})
+                                           json={"user": {"username": "bcd", "status": 2}})
     assert response.status_code == 200
     assert response.json()['status'] == 2
     assert response.json()['username'] == "bcd"
     assert response.json()['email'] == "abc@bcd.com"
 
     response = await authorized_client.put("/api/v1/users/{}".format(1),
-        json={"user": {"username": "bcd", "status": 2}})
+                                           json={"user": {"username": "bcd", "status": 2}})
     assert response.status_code == 400
 
     response = await authorized_client.put("/api/v1/users/{}".format(10000),
-        json={"user": {"username": "bcd", "status": 2}})
+                                           json={"user": {"username": "bcd", "status": 2}})
     assert response.status_code == 404
 
     response = await authorized_client.delete("/api/v1/users/{}".format(10000))

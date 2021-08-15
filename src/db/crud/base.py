@@ -3,6 +3,7 @@ from asyncpg.pool import Pool
 from db.queries import queries
 from models.errors import HttpServerError
 
+
 class Base:
     def __init__(self, pool: Pool) -> None:
         self._pool = pool

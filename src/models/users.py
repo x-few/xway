@@ -5,6 +5,7 @@ from .token import Token
 from services import security
 from utils.const import USER_STATUS_ENABLED
 
+
 class User(Base):
     username: str
     email: Optional[EmailStr] = None
@@ -45,18 +46,23 @@ class UserInDB(UserInResponse):
             return False
         return True
 
+
 class UserListInResponse(Base):
     data: List[UserInResponse]
     count: int
 
+
 class UserInJWT(Base):
     username: str
+
 
 class UserWithToken(UserInResponse, Token):
     """UserWithToken"""
 
+
 class UserWithTokenInResponse(UserWithToken):
     """"""
+
 
 class UserInUpdate(Base):
     username: Optional[str] = None

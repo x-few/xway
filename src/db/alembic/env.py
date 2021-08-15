@@ -38,7 +38,8 @@ def create_db_if_not_exist(database="xway"):
     )
 
     with connectable.connect() as conn:
-        cursor = conn.execute("SELECT 1 FROM pg_database WHERE datname = '%s'" % database)
+        cursor = conn.execute(
+            "SELECT 1 FROM pg_database WHERE datname = '%s'" % database)
         exists = cursor.fetchone()
         if not exists:
             logger.info("Creating database '%s'." % database)
@@ -47,7 +48,6 @@ def create_db_if_not_exist(database="xway"):
             conn.connection.connection.set_isolation_level(1)
         else:
             logger.info("Database '%s' already exists." % database)
-
 
 
 def run_migrations_offline():
@@ -94,6 +94,7 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 create_db_if_not_exist()
 
