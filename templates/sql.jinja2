@@ -1,0 +1,39 @@
+-- name: list-{{ table_name }}s
+SELECT * FROM {{ table_name }} ORDER BY id desc LIMIT :limit OFFSET :offset;
+
+
+-- name: count-{{ table_name }}s
+SELECT count(id) from {{ table_name }};
+
+
+-- name: get-{{ table_name }}-by-id^
+SELECT * FROM {{ table_name }} where id = :id;
+
+
+-- name: delete-{{ table_name }}-by-id<!
+DELETE FROM {{ table_name }} where id = :id RETURNING id;
+
+
+-- name: add-{{ table_name }}<!
+INSERT INTO {{ table_name }} (
+{%- for field in fields %}
+    {{ field.name }}{% if not loop.last %},{% endif -%}
+{% endfor %}
+)
+VALUES (
+{%- for field in fields %}
+    :{{ field.name }}{% if not loop.last %},{% endif -%}
+{% endfor %}
+)
+RETURNING id, created;
+
+
+-- name: update-{{ table_name }}-by-id<!
+UPDATE
+    {{ table_name }}
+SET
+{%- for field in fields %}
+    {{ field.name }} = :{{ field.name }}{% if not loop.last %},{% endif -%}
+{% endfor %}
+WHERE id = :id
+RETURNING updated;

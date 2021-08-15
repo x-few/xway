@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from copy import deepcopy
-from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
-from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from fastapi import APIRouter, Depends, Path, Query, Body, Request
+from starlette.status import HTTP_201_CREATED
 from typing import Optional
 
-from models.users import UserInCreate, UserListInResponse, UserInResponse, UserInUpdate
+from models.users import UserInCreate, \
+    UserListInResponse, \
+    UserInResponse, UserInUpdate
 from models.response import Response
 from db.crud.users import User as UserCRUD
 from services.localization import get_gettext
 from services.users import add_user as do_add_user
-from models.errors import HttpClientError, HttpForbidden, HttpServerError, HttpNotFound
+from models.errors import HttpClientError, HttpForbidden, HttpNotFound
 from utils.const import is_system_maintainer, is_admin_user, is_normal_user, \
     get_user_type_normal_user, get_user_type_system_maintainer, get_user_type_admin_user
 
@@ -115,7 +117,7 @@ async def update_user(
         if temp_user and temp_user.id != target_user.id:
             raise HttpClientError(_("username already exists"))
 
-    password = target_user.password
+    # password = target_user.password
     if info.password:
         # TODO Check if the password meets the requirements
         target_user.update_password(info.password)

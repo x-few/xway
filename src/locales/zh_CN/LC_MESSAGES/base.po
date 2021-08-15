@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-31 14:17-0300\n"
+"POT-Creation-Date: 2021-08-15 12:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/services/authentication.py:31 src/services/authentication.py:33
-#: src/services/authentication.py:38
+#: src/services/authentication.py:34 src/services/authentication.py:36
+#: src/services/authentication.py:41
 msgid "invalid access token"
 msgstr "无效的访问令牌"
 
-#: src/services/authentication.py:60 src/services/authentication.py:66
+#: src/services/authentication.py:64 src/services/authentication.py:70
 msgid "invalid username or password"
 msgstr "无效的用户名或密码"
 
-#: src/services/authentication.py:63
+#: src/services/authentication.py:67
 msgid "this user has been disabled"
 msgstr "此用户已被禁用"
 
-#: src/routers/users.py:30 src/routers/users.py:63 src/routers/users.py:92
-#: src/routers/users.py:120 src/routers/users.py:150
+#: src/routers/users.py:31 src/routers/users.py:61 src/routers/users.py:84
+#: src/routers/users.py:108
 msgid "current user not found"
 msgstr "没找到当前用户"
 
-#: src/routers/users.py:76
-msgid "bad user type"
-msgstr "无效的用户类型"
-
-#: src/routers/users.py:100 src/routers/users.py:107 src/routers/users.py:129
-#: src/routers/users.py:136 src/routers/users.py:155 src/routers/users.py:162
+#: src/routers/users.py:69 src/routers/users.py:93 src/routers/users.py:113
 msgid "user not found"
 msgstr "没有找到此用户"
 
-#: src/routers/users.py:124
+#: src/routers/users.py:88
 msgid "not allowed delete current user"
 msgstr "不允许删除当前用户"
 
-#: src/routers/register.py:34
+#: src/routers/users.py:118
+#, fuzzy
+msgid "username already exists"
+msgstr "用户名已存在"
+
+#: src/routers/register.py:33
 msgid "user with this username already exists"
 msgstr "用户名已存在"
 
-#: src/routers/register.py:37
+#: src/routers/register.py:36
 msgid "user with this email already exists"
 msgstr "邮箱已存在"
+
+#~ msgid "bad user type"
+#~ msgstr "无效的用户类型"

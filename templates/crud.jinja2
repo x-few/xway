@@ -1,0 +1,61 @@
+from datetime import datetime
+
+from db.crud.base import Base
+from models.{{ table_name }} import {{ table_name | capitalize }}InDB, \
+    {{ table_name | capitalize }}InCreate, \
+    {{ table_name | capitalize }}InUpdate
+
+
+class {{ table_name | capitalize }}(Base):
+    async def list_{{ table_name }}s(self, offset, limit) -> list:
+        record = await self.exec("count_{{ table_name }}s")
+        if not record or not record[0] or record[0][0] == 0:
+            return list(), 0
+
+        count = record[0][0]
+        {{ table_name }}s = list()
+
+        records = await self.exec("get_{{ table_name }}s", offset=offset, limit=limit)
+        if records:
+            {{ table_name }}s = [{{ table_name | capitalize }}InDB(**record) for record in records]
+
+        return {{ table_name }}s, count
+
+
+    async def add_{{ table_name }}(self, {{ table_name }}: {{ table_name | capitalize }}InCreate
+    ) -> {{ table_name | capitalize }}InDB:
+        record = await self.exec("add_{{ table_name }}",
+                            {%- for field in fields %}
+                                {%- if field.name != "id" %}
+                                {{ field.name }}={{ table_name }}.{{ field.name }},
+                                {%- endif %}
+                            {%- endfor %}
+                                )
+
+        return record[0][0]     # id
+
+
+    async def get_{{ table_name }}_by_id(self, id) -> {{ table_name | capitalize }}InDB:
+        record = await self.exec("get_{{ table_name }}_by_id", id)
+        if record:
+            return {{ table_name | capitalize }}InDB(**record)
+
+        return None
+
+
+    async def delete_{{ table_name }}_by_id(self, id) -> None:
+        return await self.exec("delete_{{ table_name }}_by_id", id)
+
+
+    async def update_{{ table_name }}_by_id(self, id: int, {{ table_name }}: {{ table_name | capitalize }}InUpdate
+    ) -> datetime:
+        record = await self.exec("update_{{ table_name }}_by_id",
+                        id=id,
+                    {%- for field in fields %}
+                        {%- if field.name != "id" %}
+                        {{ field.name }}={{ table_name }}.{{ field.name }},
+                        {%- endif %}
+                    {%- endfor %}
+                        )
+
+        return record[0][0]     # updated

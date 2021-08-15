@@ -15,11 +15,11 @@ async def list_languages(
     """Get all supported languages.
 
     Args:
-        request (Request): http request
+        request (Request): http request.
         _ ([type], optional): translation function. Defaults to Depends(get_gettext).
 
     Returns:
-        LanguagesInResponse: list of languages
+        LanguagesInResponse: list of languages.
     """
     languages_crud = LanguageCRUD(request.app.state.pgpool)
     langs: LanguageInDB = await languages_crud.list()

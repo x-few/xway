@@ -1,0 +1,32 @@
+from typing import Optional, List
+
+from .base import Base, IDModel, DateTimeModel
+
+class {{ table_name | capitalize }}InCreate(Base):
+    {%- for field in fields %}
+    {%- if field.name != "id" and not field.default %}
+    {{ field.name }}: {{ field.type }}
+    {%- endif %}
+    {%- endfor %}
+    {%- for field in fields %}
+    {%- if field.name != "id" and field.default %}
+    {{ field.name }}: Optional[{{ field.type }}] = {{ field.default }}
+    {%- endif %}
+    {%- endfor %}
+
+
+class {{ table_name | capitalize }}sInUpdate({{ table_name | capitalize }}InCreate):
+    """{{ table_name | capitalize }}sInUpdate"""
+
+
+class {{ table_name | capitalize }}InDB({{ table_name | capitalize }}InCreate, IDModel, DateTimeModel):
+    """{{ table_name | capitalize }}InDB"""
+
+
+class {{ table_name | capitalize }}sInResponse({{ table_name | capitalize }}InDB):
+    """{{ table_name | capitalize }}sInResponse"""
+
+
+class {{ table_name | capitalize }}sListInResponse(Base):
+    data: List[{{ table_name | capitalize }}sInResponse]
+    count: Optional[int] = None

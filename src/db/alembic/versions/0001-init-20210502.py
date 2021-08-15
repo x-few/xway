@@ -1,4 +1,4 @@
-"""init
+"""init.
 
 Revision ID: 0001
 Revises:
@@ -255,9 +255,10 @@ def create_permission() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),
+        sa.Column("uri", sa.Text, nullable=False),
+        sa.Column("desc", sa.Text, nullable=True),
         sa.Column("method", sa.Integer, nullable=True,
                   default=PERMISSIONS_METHOD_ALL),
-        sa.Column("uri", sa.Text, nullable=False),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
     )
@@ -276,11 +277,11 @@ def upgrade():
     create_language_table()
     insert_language_table()
     create_login_record()
-    # create_permission()
+    create_permission()
 
 
 def downgrade():
-    # op.drop_table('permission')
+    op.drop_table('permission')
     op.drop_table('login_record')
     op.drop_table('language')
     op.drop_table('release_log')
