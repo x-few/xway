@@ -9,5 +9,5 @@ class LanguageInDB(BaseModel):
     localedir: str
 
 
-class LanguageInResponse(BaseModel):
+class LanguagesInResponse(BaseModel):
     data: List[LanguageInDB]

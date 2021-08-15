@@ -276,11 +276,11 @@ def upgrade():
     create_language_table()
     insert_language_table()
     create_login_record()
-    create_permission()
+    # create_permission()
 
 
 def downgrade():
-    op.drop_table('permission')
+    # op.drop_table('permission')
     op.drop_table('login_record')
     op.drop_table('language')
     op.drop_table('release_log')
