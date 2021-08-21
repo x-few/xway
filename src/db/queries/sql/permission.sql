@@ -14,4 +14,32 @@ SELECT * FROM permission where id = :id;
 DELETE FROM permission where id = :id RETURNING id;
 
 
+-- name: add-permission<!
+INSERT INTO permission (
+    name,
+    uri,
+    desc,
+    method,
+    status
+)
+VALUES (
+    :name,
+    :uri,
+    :desc,
+    :method,
+    :status
+)
+RETURNING id, created;
 
+
+-- name: update-permission-by-id<!
+UPDATE
+    permission
+SET
+    name = :name,
+    uri = :uri,
+    desc = :desc,
+    method = :method,
+    status = :status
+WHERE id = :id
+RETURNING updated;

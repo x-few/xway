@@ -17,12 +17,16 @@ DELETE FROM {{ table_name }} where id = :id RETURNING id;
 -- name: add-{{ table_name }}<!
 INSERT INTO {{ table_name }} (
 {%- for field in fields %}
+    {%- if field.name != "id" %}
     {{ field.name }}{% if not loop.last %},{% endif -%}
+    {%- endif -%}
 {% endfor %}
 )
 VALUES (
 {%- for field in fields %}
+    {%- if field.name != "id" %}
     :{{ field.name }}{% if not loop.last %},{% endif -%}
+    {%- endif -%}
 {% endfor %}
 )
 RETURNING id, created;
@@ -33,7 +37,10 @@ UPDATE
     {{ table_name }}
 SET
 {%- for field in fields %}
+    {%- if field.name != "id" %}
     {{ field.name }} = :{{ field.name }}{% if not loop.last %},{% endif -%}
+    {%- endif -%}
 {% endfor %}
 WHERE id = :id
 RETURNING updated;
+

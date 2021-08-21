@@ -108,3 +108,6 @@ local:
 		msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
 		rm -f src/locales/$$lang/LC_MESSAGES/new_base.pot; \
 	done
+
+add-api:
+	cd scripts; $(PYTHON) add-api.py

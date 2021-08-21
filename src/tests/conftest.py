@@ -10,6 +10,7 @@ from asgi_lifespan import LifespanManager
 from asyncpg.pool import Pool
 from fastapi import FastAPI
 from httpx import AsyncClient
+from typing import Any
 
 # CURPATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # sys.path.insert(0, CURPATH)
@@ -17,6 +18,15 @@ from httpx import AsyncClient
 from models.users import UserInDB
 from services.jwt import create_access_token
 from db.crud.users import User as UserCRUD
+
+
+def random_value(type) -> Any:
+    if type == "int":
+        return 0
+    elif type == "str":
+        return "xxx"
+    else:
+        return "yyy"
 
 
 @pytest.fixture(autouse=True)

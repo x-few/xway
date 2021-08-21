@@ -15,18 +15,19 @@ class {{ table_name | capitalize }}InCreate(Base):
     {%- endfor %}
 
 
-class {{ table_name | capitalize }}sInUpdate({{ table_name | capitalize }}InCreate):
-    """{{ table_name | capitalize }}sInUpdate"""
+class {{ table_name | capitalize }}InUpdate({{ table_name | capitalize }}InCreate):
+    """{{ table_name | capitalize }}InUpdate"""
 
 
 class {{ table_name | capitalize }}InDB({{ table_name | capitalize }}InCreate, IDModel, DateTimeModel):
     """{{ table_name | capitalize }}InDB"""
 
 
-class {{ table_name | capitalize }}sInResponse({{ table_name | capitalize }}InDB):
-    """{{ table_name | capitalize }}sInResponse"""
+class {{ table_name | capitalize }}InResponse({{ table_name | capitalize }}InDB):
+    """{{ table_name | capitalize }}InResponse"""
 
 
-class {{ table_name | capitalize }}sListInResponse(Base):
-    data: List[{{ table_name | capitalize }}sInResponse]
+class {{ table_name | capitalize }}ListInResponse(Base):
+    data: List[{{ table_name | capitalize }}InResponse]
     count: Optional[int] = None
+

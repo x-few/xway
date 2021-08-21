@@ -41,3 +41,7 @@ if __name__ == '__main__':
     res = render_file('../templates/model.jinja2', values)
     with open('../templates/permission.model.py', 'w') as f:
         f.write(res)
+
+    res = render_file('../templates/test.jinja2', values)
+    with open('../templates/permission_test.py', 'w') as f:
+        f.write(res)

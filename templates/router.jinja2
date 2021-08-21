@@ -67,7 +67,7 @@ async def add_{{ table_name }}(
     _=Depends(get_gettext),
 ) -> {{ table_name | capitalize }}InResponse:
     {%- for field in fields %}
-    {%- if not field.optional and field.name != "id" %}
+    {%- if not field.default and field.name != "id" %}
     if not info.{{ field.name }}:
         raise HttpClientError(_("bad {{ field.name }}"))
     {%- endif %}
@@ -102,3 +102,4 @@ async def update_{{ table_name }}(
     target_{{ table_name }}.updated = updated
 
     return target_{{ table_name }}
+
