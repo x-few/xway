@@ -2,6 +2,13 @@ from typing import Optional, List
 
 from .base import Base, IDModel, DateTimeModel
 
+{%- for field in fields %}
+{%- if field.import %}
+{{ field.import }}
+{%- endif %}
+{%- endfor %}
+
+
 class {{ table_name | capitalize }}InCreate(Base):
     {%- for field in fields %}
     {%- if field.name != "id" and not field.default %}
@@ -15,7 +22,7 @@ class {{ table_name | capitalize }}InCreate(Base):
     {%- endfor %}
 
 
-class {{ table_name | capitalize }}InUpdate():
+class {{ table_name | capitalize }}InUpdate(Base):
     {%- for field in fields %}
     {%- if field.name != "id" %}
     {{ field.name }}: Optional[{{ field.type }}] = None

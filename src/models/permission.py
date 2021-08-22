@@ -12,7 +12,7 @@ class PermissionInCreate(Base):
     status: int = PERMISSIONS_STATUS_ENABLE
 
 
-class PermissionInUpdate(PermissionInCreate):
+class PermissionInUpdate(Base):
     name: Optional[str] = None
     uri: Optional[str] = None
     description: Optional[str] = None

@@ -88,7 +88,9 @@ async def update_{{ table_name }}(
     target_{{ table_name }} = await {{ table_name }}_crud.get_{{ table_name }}_by_id({{ table_name }}_id)
     if not target_{{ table_name }}:
         raise HttpNotFound(_("{{ table_name }} not found"))
-    {% for field in fields %}
+{% if fields %}{% endif %}
+
+    {%- for field in fields -%}
     {%- if field.name != "id" %}
     target_{{ table_name }}.{{ field.name }} = info.{{ field.name }} or target_{{ table_name }}.{{ field.name }}
     {%- endif %}
