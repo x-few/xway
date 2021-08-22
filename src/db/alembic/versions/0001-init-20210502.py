@@ -229,7 +229,7 @@ def get_all_tables():
     return tables
 
 
-def create_login_record() -> None:
+def create_login_record_table() -> None:
     table_name = "login_record"
     op.create_table(
         table_name,
@@ -249,18 +249,51 @@ def create_login_record() -> None:
     )
 
 
-def create_permission() -> None:
+def create_permission_table() -> None:
     table_name = "permission"
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),
         sa.Column("uri", sa.Text, nullable=False),
+        sa.Column("uri_type", sa.Text, nullable=False),
         sa.Column("description", sa.Text, nullable=True),
         sa.Column("method", sa.Integer, nullable=True,
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
+        *timestamps(),
+    )
+
+
+def create_role_table() -> None:
+    table_name = "role"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        # sa.Column("parent_id", sa.Integer, nullable=True)     # parent_id
+        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("description", sa.Text, nullable=True),
+        *timestamps(),
+    )
+
+
+def create_user_role_table() -> None:
+    table_name = "user_role"
+    op.create_table(
+        table_name,
+        sa.Column("user_id", sa.Integer, nullable=False),
+        sa.Column("role_id", sa.Integer, nullable=False),
+        *timestamps(),
+    )
+
+
+def create_role_permission_table() -> None:
+    table_name = "role_permission"
+    op.create_table(
+        table_name,
+        sa.Column("role_id", sa.Integer, nullable=False),
+        sa.Column("permission_id", sa.Integer, nullable=False),
         *timestamps(),
     )
 
@@ -277,11 +310,17 @@ def upgrade():
     create_release_log_table()
     create_language_table()
     insert_language_table()
-    create_login_record()
-    create_permission()
+    create_login_record_table()
+    create_permission_table()
+    create_role_table()
+    create_user_role_table()
+    create_role_permission_table()
 
 
 def downgrade():
+    op.drop_table('role_permission')
+    op.drop_table('user_role')
+    op.drop_table('role')
     op.drop_table('permission')
     op.drop_table('login_record')
     op.drop_table('language')
