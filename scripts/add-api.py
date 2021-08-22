@@ -9,12 +9,9 @@ def render_file(filename, values):
 
 
 if __name__ == '__main__':
-    table_name = 'permission'
-
     # TODO: save values, in case we need it in the future.
-
     values = {
-        'table_name': table_name,
+        'table_name': 'permission',
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
             {'name': 'name', 'type': 'str', 'default': None},
@@ -29,11 +26,11 @@ if __name__ == '__main__':
     }
 
     template_files = {
-        '../templates/sql.jinja2': '../src/db/queries/sql/{}.sql'.format(table_name),
-        '../templates/crud.jinja2': '../src/db/crud/{}.py'.format(table_name),
-        '../templates/router.jinja2': '../src/routers/{}.py'.format(table_name),
-        '../templates/model.jinja2': '../src/models/{}.py'.format(table_name),
-        '../templates/test.jinja2': '../src/tests/{}_test.py'.format(table_name),
+        '../templates/sql.jinja2': '../src/db/queries/sql/{}.sql'.format(values['table_name']),
+        '../templates/crud.jinja2': '../src/db/crud/{}.py'.format(values['table_name']),
+        '../templates/router.jinja2': '../src/routers/{}.py'.format(values['table_name']),
+        '../templates/model.jinja2': '../src/models/{}.py'.format(values['table_name']),
+        '../templates/test.jinja2': '../src/tests/{}_test.py'.format(values['table_name']),
     }
 
     for template_file, res_file in template_files.items():
