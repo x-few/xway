@@ -15,7 +15,7 @@ class {{ table_name | capitalize }}(Base):
         count = record[0][0]
         {{ table_name }}s = list()
 
-        records = await self.exec("get_{{ table_name }}s", offset=offset, limit=limit)
+        records = await self.exec("list_{{ table_name }}s", offset=offset, limit=limit)
         if records:
             {{ table_name }}s = [{{ table_name | capitalize }}InDB(**record) for record in records]
 
@@ -32,7 +32,7 @@ class {{ table_name | capitalize }}(Base):
                             {%- endfor %}
                                 )
 
-        return record[0][0]     # id
+        return await self.get_{{ table_name }}_by_id(record[0])
 
 
     async def get_{{ table_name }}_by_id(self, id) -> {{ table_name | capitalize }}InDB:
@@ -58,5 +58,5 @@ class {{ table_name | capitalize }}(Base):
                     {%- endfor %}
                         )
 
-        return record[0][0]     # updated
+        return record
 

@@ -13,7 +13,11 @@ class PermissionInCreate(Base):
 
 
 class PermissionInUpdate(PermissionInCreate):
-    """PermissionInUpdate"""
+    name: Optional[str] = None
+    uri: Optional[str] = None
+    description: Optional[str] = None
+    method: Optional[int] = None
+    status: Optional[int] = None
 
 
 class PermissionInDB(PermissionInCreate, IDModel, DateTimeModel):

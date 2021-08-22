@@ -15,7 +15,7 @@ class Permission(Base):
         count = record[0][0]
         permissions = list()
 
-        records = await self.exec("get_permissions", offset=offset, limit=limit)
+        records = await self.exec("list_permissions", offset=offset, limit=limit)
         if records:
             permissions = [PermissionInDB(**record) for record in records]
 
@@ -31,8 +31,7 @@ class Permission(Base):
                                  status=permission.status,
                                  )
 
-        print(record)
-        return record[0][0]     # id
+        return await self.get_permission_by_id(record[0])
 
     async def get_permission_by_id(self, id) -> PermissionInDB:
         record = await self.exec("get_permission_by_id", id)
@@ -55,4 +54,4 @@ class Permission(Base):
                                  status=permission.status,
                                  )
 
-        return record[0][0]     # updated
+        return record

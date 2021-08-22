@@ -15,9 +15,12 @@ class {{ table_name | capitalize }}InCreate(Base):
     {%- endfor %}
 
 
-class {{ table_name | capitalize }}InUpdate({{ table_name | capitalize }}InCreate):
-    """{{ table_name | capitalize }}InUpdate"""
-
+class {{ table_name | capitalize }}InUpdate():
+    {%- for field in fields %}
+    {%- if field.name != "id" %}
+    {{ field.name }}: Optional[{{ field.type }}] = None
+    {%- endif %}
+    {%- endfor %}
 
 class {{ table_name | capitalize }}InDB({{ table_name | capitalize }}InCreate, IDModel, DateTimeModel):
     """{{ table_name | capitalize }}InDB"""
