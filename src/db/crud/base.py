@@ -12,13 +12,15 @@ class Base:
     def pool(self) -> Pool:
         return self._pool
 
-    async def exec(self, name, *args, **kwargs):
+    async def exec(self, _name, *args, **kwargs):
         try:
             async with self._pool.acquire() as conn:
                 async with conn.transaction():
-                    func = getattr(queries, name)
+                    func = getattr(queries, _name)
                     return await func(conn, *args, **kwargs)
         except Exception as e:
-            func = getattr(queries, name)
-            print(func.sql)
+            func = getattr(queries, _name)
+            print("sql = ", func.sql)
+            print("args = ", args)
+            print("kwargs = ", kwargs)
             raise HttpServerError(str(e))

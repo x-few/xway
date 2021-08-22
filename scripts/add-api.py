@@ -17,7 +17,7 @@ if __name__ == '__main__':
             {'name': 'id', 'type': 'int', 'default': None},
             {'name': 'name', 'type': 'str', 'default': None},
             {'name': 'uri', 'type': 'str', 'default': None},
-            {'name': 'desc', 'type': 'str', 'default': 'None'},
+            {'name': 'description', 'type': 'str', 'default': '""'},
             {'name': 'method', 'type': 'int', 'default': 'PERMISSIONS_METHOD_ALL'},
             {'name': 'status', 'type': 'int',
                 'default': 'PERMISSIONS_STATUS_ENABLE'},

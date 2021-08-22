@@ -96,6 +96,10 @@ psql:
 	cd /tmp; sudo -u postgres psql -U postgres -d xway
 	# psql -h 127.0.0.1 -p 5432 -U postgres -d xway
 
+.PHONY: orpsql
+orpsql:
+	/usr/local/openresty-postgresql12/bin/psql -U postgres -d xway
+
 local:
 	@for lang in `ls src/locales`; do \
 		if [ ! -f src/locales/$$lang/LC_MESSAGES/base.mo ]; then \

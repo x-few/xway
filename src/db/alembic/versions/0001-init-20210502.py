@@ -256,11 +256,12 @@ def create_permission() -> None:
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),
         sa.Column("uri", sa.Text, nullable=False),
-        sa.Column("desc", sa.Text, nullable=True),
+        sa.Column("description", sa.Text, nullable=True),
         sa.Column("method", sa.Integer, nullable=True,
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
+        *timestamps(),
     )
 
 

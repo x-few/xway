@@ -10,7 +10,7 @@ class {{ table_name | capitalize }}InCreate(Base):
     {%- endfor %}
     {%- for field in fields %}
     {%- if field.name != "id" and field.default %}
-    {{ field.name }}: Optional[{{ field.type }}] = {{ field.default }}
+    {{ field.name }}: {% if field.default == "None" %}Optional[{%- endif %}{{ field.type }}{% if field.default == "None" %}]{%- endif %} = {{ field.default }}
     {%- endif %}
     {%- endfor %}
 

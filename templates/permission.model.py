@@ -1,7 +1,6 @@
 from typing import Optional, List
 
 from .base import Base, IDModel, DateTimeModel
-from utils.const import PERMISSIONS_METHOD_ALL, PERMISSIONS_STATUS_ENABLE
 
 
 class PermissionInCreate(Base):

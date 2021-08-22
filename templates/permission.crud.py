@@ -31,7 +31,6 @@ class Permission(Base):
                                  status=permission.status,
                                  )
 
-        print(record)
         return record[0][0]     # id
 
     async def get_permission_by_id(self, id) -> PermissionInDB:

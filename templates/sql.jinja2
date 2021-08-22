@@ -18,7 +18,7 @@ DELETE FROM {{ table_name }} where id = :id RETURNING id;
 INSERT INTO {{ table_name }} (
 {%- for field in fields %}
     {%- if field.name != "id" %}
-    {{ field.name }}{% if not loop.last %},{% endif -%}
+    "{{ field.name }}"{% if not loop.last %},{% endif -%}
     {%- endif -%}
 {% endfor %}
 )
@@ -38,7 +38,7 @@ UPDATE
 SET
 {%- for field in fields %}
     {%- if field.name != "id" %}
-    {{ field.name }} = :{{ field.name }}{% if not loop.last %},{% endif -%}
+    "{{ field.name }}" = :{{ field.name }}{% if not loop.last %},{% endif -%}
     {%- endif -%}
 {% endfor %}
 WHERE id = :id
