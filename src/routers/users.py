@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from copy import deepcopy
 from fastapi import APIRouter, Depends, Path, Query, Body, Request
 from starlette.status import HTTP_201_CREATED
-from typing import Optional
 
 from models.users import UserInCreate, \
     UserListInResponse, \
     UserInResponse, UserInUpdate
-from models.response import Response
 from db.crud.users import User as UserCRUD
 from services.localization import get_gettext
 from services.users import add_user as do_add_user
 from models.errors import HttpClientError, HttpForbidden, HttpNotFound
-from utils.const import is_system_maintainer, is_admin_user, is_normal_user, \
-    get_user_type_normal_user, get_user_type_system_maintainer, get_user_type_admin_user
 
 router = APIRouter()
 

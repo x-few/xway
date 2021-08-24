@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+import json
+from typing import AsyncIterator
 from starlette.requests import Request
-from starlette.responses import Response
+from starlette.responses import Response, StreamingResponse
 from starlette.status import HTTP_200_OK, HTTP_300_MULTIPLE_CHOICES
 
 from db.crud.operation_log import OperationLog as OperationLogCRUD
@@ -26,10 +27,10 @@ async def get_path_segs(path: str):
     return path.split("/")
 
 
-async def gen_btree_path(path_segs: list, id: int):
+async def gen_btree_path(path_segs: list):
     path = ".".join(path_segs[3:])
-    if len(path_segs) == 4 and id:
-        path = "{}.{}".format(path, id)
+    # if len(path_segs) == 4 and id:
+    #     path = "{}.{}".format(path, id)
 
     return path
 
@@ -124,11 +125,10 @@ async def record(request: Request, response: Response):
     if not is_need_record(method):
         return
 
-    dbpool = request.app.state.pgpool
+    pool = request.app.state.pgpool
 
     oplog = request.state.oplog
     path_segs = await get_path_segs(request['path'])
-    data_id = get_data_id(path_segs, oplog)
 
     old: str = None
     if method == "PUT" or method == "DELETE":
@@ -136,16 +136,21 @@ async def record(request: Request, response: Response):
 
     new: str = None
     if method == "PUT" or method == "POST":
-        data = await get_data(path_segs[3], data_id, dbpool)
-        new = data.json()
+        new = response.body.decode("utf-8")
+
+    if method == "POST":
+        new_json = json.loads(new)
+        id = new_json['id']
+        path_segs.append(str(id))
 
     # record oplog to db
-    oplog_crud = OperationLogCRUD(dbpool)
-    path = await gen_btree_path(path_segs, data_id)
+    oplog_crud = OperationLogCRUD(pool)
+    path = await gen_btree_path(path_segs)
     current_user = request.state.current_user
 
     creator = 0
     if current_user:
         creator = current_user.id
 
-    await oplog_crud.add_operation_log(op=method, path=path, new=new, old=old, creator=creator)
+    await oplog_crud.add_operation_log(op=method, path=path, new=new,
+                                       old=old, creator=creator)

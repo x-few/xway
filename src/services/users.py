@@ -25,7 +25,4 @@ async def add_user(request: Request, info: dict, _):
         email=info.email,
         creator=creator)
 
-    # for oplog
-    await set_new_data_id(request, user.id)     # user.json()
-
     return user
