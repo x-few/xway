@@ -1,25 +1,20 @@
 from typing import Optional
-from starlette import status as slstatus
-from fastapi import Depends, HTTPException, Security
-from pydantic import EmailStr, BaseConfig, BaseModel
 
 from db.crud.base import Base
-from db.queries import queries
 from models.users import UserInDB
-from models.errors import EntityDoesNotExist
 from models.errors import HttpClientError
 
 
 class User(Base):
-    async def get_all_users(self, offset, limit) -> list:
-        record = await self.exec("count_all_users")
+    async def list_user(self, offset, limit) -> list:
+        record = await self.exec("count_user")
         if not record or not record[0] or record[0][0] == 0:
             return list(), 0
 
         count = record[0][0]
         users = list()
 
-        records = await self.exec("get_all_users", offset=offset, limit=limit)
+        records = await self.exec("list_user", offset=offset, limit=limit)
         if records:
             users = [UserInDB(**record) for record in records]
 

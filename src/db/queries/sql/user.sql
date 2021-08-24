@@ -1,8 +1,8 @@
--- name: get-all-users
+-- name: list-user
 SELECT * FROM users ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-all-users
+-- name: count-user
 SELECT count(id) from users;
 
 

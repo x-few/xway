@@ -1,4 +1,3 @@
-from asyncpg.connection import Connection
 from asyncpg.pool import Pool
 from db.queries import queries
 from models.errors import HttpServerError

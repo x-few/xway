@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 @router.get("/users", response_model=UserListInResponse)
-async def get_users(
+async def list_user(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
@@ -32,7 +32,7 @@ async def get_users(
 
     offset = (page - 1) * pagesize
     user_crud = UserCRUD(request.app.state.pgpool)
-    users, count = await user_crud.get_all_users(offset, pagesize)
+    users, count = await user_crud.list_user(offset, pagesize)
 
     return UserListInResponse(data=users, count=count)
 
