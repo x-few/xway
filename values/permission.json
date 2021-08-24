@@ -1,0 +1,37 @@
+{
+    "table_name": "permission",
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "name",
+            "type": "str",
+            "default": null
+        },
+        {
+            "name": "uri",
+            "type": "str",
+            "default": null
+        },
+        {
+            "name": "description",
+            "type": "str",
+            "default": "\"\""
+        },
+        {
+            "name": "method",
+            "type": "int",
+            "default": "PERMISSIONS_METHOD_ALL"
+        },
+        {
+            "name": "status",
+            "type": "int",
+            "default": "PERMISSIONS_STATUS_ENABLE",
+            "import": "from utils.const import PERMISSIONS_METHOD_ALL, PERMISSIONS_STATUS_ENABLE"
+        }
+    ],
+    "time": "2021-08-23-123814"
+}

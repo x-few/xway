@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette.status import HTTP_200_OK, HTTP_300_MULTIPLE_CHOICES
 
 from db.crud.operation_log import OperationLog as OperationLogCRUD
 from db.crud.users import User
@@ -24,27 +25,8 @@ RECORD_METHOD = {
 async def get_path_segs(path: str):
     return path.split("/")
 
-# async def get_path(request: Request):
-#     pass
 
-
-async def get_data(module_name, id, dbpool):
-    info = GET_DATA_CLASS_MAP[module_name]
-    obj = info['classname'](dbpool)
-    func = getattr(obj, info['method'])
-    # try:
-    return await func(id)
-    # except Exception as e:
-    #     print(repr(e))
-
-    return None
-
-
-# async def get_data(module_name, id, dbpool):
-#     func = await get_func(module_name, id)
-#     return
-
-async def gen_btree_path(path_segs: list, id):
+async def gen_btree_path(path_segs: list, id: int):
     path = ".".join(path_segs[3:])
     if len(path_segs) == 4 and id:
         path = "{}.{}".format(path, id)
@@ -52,20 +34,33 @@ async def gen_btree_path(path_segs: list, id):
     return path
 
 
+async def get_data(name: str, id: int, pgpool):
+    if name not in GET_DATA_CLASS_MAP.keys():
+        raise HttpNotFound("bad uri")
+
+    info = GET_DATA_CLASS_MAP[name]
+    obj = info['classname'](pgpool)
+    func = getattr(obj, info['method'])
+
+    return await func(id)
+
+
 async def get_old_data(request: Request):
     # generate path: /api/v{api version}/xx/{id}
     path_segs = await get_path_segs(request['path'])
     if len(path_segs) < 5:
-        # TODO ...
-        print("---ERROR---")
-        return
+        raise HttpNotFound("bad uri")
+
+    id = int(path_segs[-1])
+    if id <= 0:
+        raise HttpNotFound("bad uri")
+
+    name = str(path_segs[-2])
+    if not name:
+        raise HttpNotFound("bad uri")
 
     # btree_path = gen_btree_path(path_segs)
-    # get old data from db
-    data = await get_data(path_segs[3], int(path_segs[4]), request.app.state.pgpool)
-    # request.state.oplog['old'] = data   # note: not string
-
-    return data
+    return await get_data(name, id, request.app.state.pgpool)
 
 
 async def set_new_data(request: Request, data: str):
@@ -78,21 +73,6 @@ async def set_new_data_id(request: Request, id: int):
 
 async def get_new_data_id(request: Request):
     return request.state.oplog['id']
-
-
-async def init(request: Request):
-    request.state.oplog = dict()
-
-    # check http mathod
-    method = request.method
-    if method == "PUT" or method == "DELETE":
-        # backup old data
-        request.state.oplog['old'] = await get_old_data(request)
-        request.state.oplog['enable'] = True
-    elif method == "POST":
-        request.state.oplog['enable'] = True
-    else:
-        request.state.oplog['enable'] = False
 
 
 def get_data_id(path_segs, oplog):
@@ -112,8 +92,24 @@ def is_need_record(method):
     return False
 
 
+async def enable(request: Request):
+    request.state.oplog = dict()
+
+    # check http mathod
+    method = request.method
+    if method == "PUT" or method == "DELETE":
+        # backup old data
+        request.state.oplog['old'] = await get_old_data(request)
+        request.state.oplog['enable'] = True
+    elif method == "POST":
+        request.state.oplog['enable'] = True
+    else:
+        request.state.oplog['enable'] = False
+
+
 async def record(request: Request, response: Response):
-    if response.status_code < 200 or response.status_code >= 300:
+    if response.status_code < HTTP_200_OK \
+            or response.status_code >= HTTP_300_MULTIPLE_CHOICES:
         return
 
     try:

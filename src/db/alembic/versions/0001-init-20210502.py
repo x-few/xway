@@ -256,7 +256,6 @@ def create_permission_table() -> None:
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False),
         sa.Column("uri", sa.Text, nullable=False),
-        sa.Column("uri_type", sa.Text, nullable=False),
         sa.Column("description", sa.Text, nullable=True),
         sa.Column("method", sa.Integer, nullable=True,
                   default=PERMISSIONS_METHOD_ALL),

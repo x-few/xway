@@ -1,5 +1,7 @@
 import os
+import json
 from jinja2 import Template
+from datetime import datetime
 
 
 def render_file(filename, values):
@@ -11,17 +13,11 @@ def render_file(filename, values):
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
-        'table_name': 'permission',
+        'table_name': 'role',
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
             {'name': 'name', 'type': 'str', 'default': None},
-            {'name': 'uri', 'type': 'str', 'default': None},
             {'name': 'description', 'type': 'str', 'default': '""'},
-            {'name': 'method', 'type': 'int', 'default': 'PERMISSIONS_METHOD_ALL'},
-            {'name': 'status', 'type': 'int',
-                'default': 'PERMISSIONS_STATUS_ENABLE',
-                'import': 'from utils.const import PERMISSIONS_METHOD_ALL, PERMISSIONS_STATUS_ENABLE'
-             },
         ]
     }
 
@@ -41,3 +37,11 @@ if __name__ == '__main__':
 
         if res_file.endswith(".py"):
             os.system("autopep8 -i {}".format(res_file))
+
+    now = datetime.now()
+    values['time'] = now.strftime("%Y-%m-%d-%H%M%S")
+
+    value_file = "../values/{}.json".format(values['table_name'])
+
+    with open(value_file, "w") as f:
+        json.dump(values, f, indent=4)

@@ -1,0 +1,21 @@
+{
+    "table_name": "role",
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "name",
+            "type": "str",
+            "default": null
+        },
+        {
+            "name": "description",
+            "type": "str",
+            "default": "\"\""
+        }
+    ],
+    "time": "2021-08-23-124525"
+}
