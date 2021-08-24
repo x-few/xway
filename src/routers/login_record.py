@@ -26,8 +26,8 @@ async def add(
     token_type_value = AUTH_TYPES.get(token_type)
 
     login_record_crud = LoginRecord(request.app.state.pgpool)
-    record = await login_record_crud.add(creator=user.id,
-                                         host=request.client.host, type=token_type_value, token="")
+    record = await login_record_crud.add_login_record(creator=user.id,
+                                                      host=request.client.host, type=token_type_value, token="")
 
     return record
 
@@ -46,7 +46,7 @@ async def list(
     offset = (page - 1) * pagesize
 
     login_record_crud = LoginRecord(request.app.state.pgpool)
-    records, count = await login_record_crud.list(
+    records, count = await login_record_crud.list_login_record(
         creator=user.id, offset=offset, limit=pagesize)
 
     return LoginRecordListInResponse(data=records, count=count)

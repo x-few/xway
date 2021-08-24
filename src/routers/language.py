@@ -22,7 +22,7 @@ async def list_languages(
         LanguagesInResponse: list of languages.
     """
     languages_crud = LanguageCRUD(request.app.state.pgpool)
-    langs: LanguageInDB = await languages_crud.list()
+    langs: LanguageInDB = await languages_crud.list_languages()
     return LanguagesInResponse(
         data=langs,
     )

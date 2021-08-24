@@ -148,13 +148,4 @@ async def record(request: Request, response: Response):
     if current_user:
         creator = current_user.id
 
-    await oplog_crud.add_oplog(op=method, path=path, new=new, old=old, creator=creator)
-
-
-async def rollback(request: Request):
-    # get all operation records that need to be rollback
-
-    # do rollback
-
-    # add new record
-    pass
+    await oplog_crud.add_operation_log(op=method, path=path, new=new, old=old, creator=creator)

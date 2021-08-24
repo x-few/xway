@@ -3,7 +3,7 @@ from models.language import LanguageInDB
 
 
 class Language(Base):
-    async def list(self):
+    async def list_languages(self):
         records = await self.exec("list_languages")
         # print("records = ", records)
         if records:

@@ -1,13 +1,11 @@
 from copy import deepcopy
 from fastapi import APIRouter, Depends, Body, Request
-from fastapi.security import OAuth2PasswordRequestForm, OAuth2
+from fastapi.security import OAuth2PasswordRequestForm
 
-from models.users import UserInLogin, UserWithToken, UserWithTokenInResponse
-from models.login_record import LoginRecordInDB
+from models.users import UserInLogin, UserWithTokenInResponse
 from db.crud.login_record import LoginRecord
-from models.errors import HttpForbidden
 from services.jwt import create_access_token
-from models.token import Token, TokenInResponse
+from models.token import Token
 from services.authentication import authenticate_user
 from services.localization import get_gettext
 from utils.const import AUTH_TYPES
@@ -30,8 +28,8 @@ async def do_login(request, info, _):
     host = request.client.host
 
     login_record_crud = LoginRecord(pgpool)
-    await login_record_crud.add(creator=user.id,
-                                host=host, type=token_type_value, token=token)
+    await login_record_crud.add_login_record(creator=user.id, host=host,
+                                             type=token_type_value, token=token)
 
     return user, token, token_type
 

@@ -9,7 +9,7 @@ from db.crud.language import Language as LanguageCRUD
 async def init_translation_object(app: FastAPI) -> None:
     # get languages from db
     languages_crud = LanguageCRUD(app.state.pgpool)
-    langs = await languages_crud.list()
+    langs = await languages_crud.list_languages()
     app.state.languages = dict()
     for lang in langs:
         gnu = gettext.translation(
