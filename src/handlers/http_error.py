@@ -8,7 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 
 from models.errors import HttpServerError, HttpClientError, \
-    HttpForbidden, HttpNotFound, HttpUnauthorized, EntityDoesNotExist
+    HttpForbidden, HttpNotFound, HttpUnauthorized, \
+    EntityDoesNotExist, UnprocessableEntity
 
 
 async def handler(request: Request, exc: HTTPException) -> JSONResponse:
@@ -45,6 +46,12 @@ async def notfound(request: Request, exc: HttpNotFound) -> JSONResponse:
 async def entitynotfound(request: Request, exc: EntityDoesNotExist) -> JSONResponse:
     return JSONResponse({"errors": [exc.detail]},
                         status_code=status.HTTP_404_NOT_FOUND)
+
+
+async def unprocessable_entity(request: Request, exc: UnprocessableEntity) -> JSONResponse:
+    traceback.print_exc()
+    return JSONResponse({"errors": [exc.detail]},
+                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 async def validation_error(

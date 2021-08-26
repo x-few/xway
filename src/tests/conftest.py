@@ -4,6 +4,7 @@ import uuid
 import warnings
 import os
 import sys
+import random
 import pytest
 import alembic.config
 from asgi_lifespan import LifespanManager
@@ -22,11 +23,11 @@ from db.crud.users import User as UserCRUD
 
 def random_value(type) -> Any:
     if type == "int":
-        return 0
+        return random.randint(1, 100000000)
     elif type == "str":
-        return "xxx"
+        return ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 6))
     else:
-        return "yyy"
+        return ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 6))
 
 
 @pytest.fixture(autouse=True)
@@ -39,9 +40,9 @@ async def init_db() -> None:
     yield
     # after test, clean db
     # clean
-    alembic.config.main(argv=["downgrade", "base"])
+    # alembic.config.main(argv=["downgrade", "base"])
     # reinit for dev
-    alembic.config.main(argv=["upgrade", "head"])
+    # alembic.config.main(argv=["upgrade", "head"])
 
 
 @pytest.fixture

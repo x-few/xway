@@ -67,7 +67,7 @@ async def add_role(
     _=Depends(get_gettext),
 ) -> RoleInResponse:
     if not info.name:
-        raise HttpClientError(_("bad name"))
+        raise HttpClientError(_("bad role name"))
 
     role_crud = RoleCRUD(request.app.state.pgpool)
     return await role_crud.add_role(role=info)

@@ -67,9 +67,9 @@ async def add_permission(
     _=Depends(get_gettext),
 ) -> PermissionInResponse:
     if not info.name:
-        raise HttpClientError(_("bad name"))
+        raise HttpClientError(_("bad permission name"))
     if not info.uri:
-        raise HttpClientError(_("bad uri"))
+        raise HttpClientError(_("bad permission uri"))
 
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     return await permission_crud.add_permission(permission=info)

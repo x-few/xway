@@ -32,6 +32,19 @@ freeze:
 pip-install:
 	$(PIP) install -r requirements.txt
 
+local:
+	@for lang in `ls src/locales`; do \
+		if [ ! -f src/locales/$$lang/LC_MESSAGES/base.mo ]; then \
+			sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/base.po; \
+			msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
+		fi; \
+		find src/ -iname "*.py" | xargs xgettext --from-code utf-8 -o src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		msgmerge -U src/locales/$$lang/LC_MESSAGES/base.po src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+		msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
+		rm -f src/locales/$$lang/LC_MESSAGES/new_base.pot; \
+	done
+
 .PHONY: start
 start: local
 	# pg_ctlcluster 12 main start
@@ -51,7 +64,7 @@ restart:
 	$(MAKE) stop
 
 .PHONY: test
-test:
+test: local
 	cd src; $(PYTHON) -m pytest -s $(FILES)
 
 .PHONY: revision
@@ -99,19 +112,6 @@ psql:
 .PHONY: orpsql
 orpsql:
 	/usr/local/openresty-postgresql12/bin/psql -U postgres -d xway
-
-local:
-	@for lang in `ls src/locales`; do \
-		if [ ! -f src/locales/$$lang/LC_MESSAGES/base.mo ]; then \
-			sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/base.po; \
-			msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
-		fi; \
-		find src/ -iname "*.py" | xargs xgettext --from-code utf-8 -o src/locales/$$lang/LC_MESSAGES/new_base.pot; \
-		sed s/charset=CHARSET/charset=UTF-8/ -i src/locales/$$lang/LC_MESSAGES/new_base.pot; \
-		msgmerge -U src/locales/$$lang/LC_MESSAGES/base.po src/locales/$$lang/LC_MESSAGES/new_base.pot; \
-		msgfmt -o src/locales/$$lang/LC_MESSAGES/base.mo src/locales/$$lang/LC_MESSAGES/base.po; \
-		rm -f src/locales/$$lang/LC_MESSAGES/new_base.pot; \
-	done
 
 add-api:
 	cd scripts; $(PYTHON) add-api.py

@@ -108,10 +108,21 @@ async def enable(request: Request):
         request.state.oplog['enable'] = False
 
 
-async def record(request: Request, response: Response):
+async def read_bytes(generator: AsyncIterator[bytes]) -> bytes:
+    body = b""
+    async for data in generator:
+        body += data
+    return body
+
+
+async def get_body_from_streaming_response(streaming: StreamingResponse):
+    return await read_bytes(streaming.body_iterator)
+
+
+async def record(request: Request, response: StreamingResponse):
     if response.status_code < HTTP_200_OK \
             or response.status_code >= HTTP_300_MULTIPLE_CHOICES:
-        return
+        return response
 
     try:
         oplog_enable = request.state.oplog['enable']
@@ -119,11 +130,26 @@ async def record(request: Request, response: Response):
         oplog_enable = False
 
     if not oplog_enable:
-        return
+        return response
 
     method = request.method
     if not is_need_record(method):
-        return
+        return response
+
+    if method == "PUT" or method == "POST":
+        if response.headers['content-type'] != "application/json" \
+                and response.media_type != "application/json":
+            # TODO warning log
+            pass
+
+        content = await get_body_from_streaming_response(response)
+        response = Response(
+            content,
+            response.status_code,
+            response.headers,
+            response.media_type,
+            response.background
+        )
 
     pool = request.app.state.pgpool
 
@@ -136,12 +162,15 @@ async def record(request: Request, response: Response):
 
     new: str = None
     if method == "PUT" or method == "POST":
-        new = response.body.decode("utf-8")
+        body = response.body.decode("utf-8")
+        body_json = json.loads(body)
+        id = body_json['id']
 
-    if method == "POST":
-        new_json = json.loads(new)
-        id = new_json['id']
-        path_segs.append(str(id))
+        if method == "POST":
+            path_segs.append(str(id))
+
+        new = await get_data(path_segs[-2], id, pool)
+        new = new.json()
 
     # record oplog to db
     oplog_crud = OperationLogCRUD(pool)
@@ -154,3 +183,5 @@ async def record(request: Request, response: Response):
 
     await oplog_crud.add_operation_log(op=method, path=path, new=new,
                                        old=old, creator=creator)
+
+    return response

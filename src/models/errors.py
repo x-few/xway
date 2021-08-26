@@ -28,3 +28,7 @@ class HttpNotFound(BaseException):
 
 class HttpForbidden(BaseException):
     """Raised when 403 Error"""
+
+
+class UnprocessableEntity(BaseException):
+    """Raised when unprocessable entity."""

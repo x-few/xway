@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 12:47-0300\n"
+"POT-Creation-Date: 2021-08-26 13:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,21 +30,42 @@ msgstr ""
 msgid "this user has been disabled"
 msgstr ""
 
-#: src/routers/users.py:31 src/routers/users.py:61 src/routers/users.py:84
-#: src/routers/users.py:108
+#: src/routers/role.py:38 src/routers/role.py:54 src/routers/role.py:86
+msgid "role not found"
+msgstr ""
+
+#: src/routers/role.py:70
+msgid "bad role name"
+msgstr ""
+
+#: src/routers/users.py:26 src/routers/users.py:56 src/routers/users.py:79
+#: src/routers/users.py:103
 msgid "current user not found"
 msgstr ""
 
-#: src/routers/users.py:69 src/routers/users.py:93 src/routers/users.py:113
+#: src/routers/users.py:64 src/routers/users.py:88 src/routers/users.py:108
 msgid "user not found"
 msgstr ""
 
-#: src/routers/users.py:88
+#: src/routers/users.py:83
 msgid "not allowed delete current user"
 msgstr ""
 
-#: src/routers/users.py:118
+#: src/routers/users.py:113
 msgid "username already exists"
+msgstr ""
+
+#: src/routers/permission.py:38 src/routers/permission.py:54
+#: src/routers/permission.py:88
+msgid "permission not found"
+msgstr ""
+
+#: src/routers/permission.py:70
+msgid "bad permission name"
+msgstr ""
+
+#: src/routers/permission.py:72
+msgid "bad permission uri"
 msgstr ""
 
 #: src/routers/register.py:33

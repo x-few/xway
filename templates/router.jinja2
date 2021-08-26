@@ -69,7 +69,7 @@ async def add_{{ table_name }}(
     {%- for field in fields %}
     {%- if field.name != "id" and not field.default %}
     if not info.{{ field.name }}:
-        raise HttpClientError(_("bad {{ field.name }}"))
+        raise HttpClientError(_("bad {{ table_name }} {{ field.name }}"))
     {%- endif %}
     {%- endfor %}
 
