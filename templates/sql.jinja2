@@ -1,20 +1,20 @@
--- name: list-{{ table_name }}s
+-- name: list-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}s
 SELECT * FROM {{ table_name }} ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-{{ table_name }}s
+-- name: count-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}s
 SELECT count(id) from {{ table_name }};
 
 
--- name: get-{{ table_name }}-by-id^
+-- name: get-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}-by-id^
 SELECT * FROM {{ table_name }} where id = :id;
 
 
--- name: delete-{{ table_name }}-by-id<!
+-- name: delete-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}-by-id<!
 DELETE FROM {{ table_name }} where id = :id RETURNING id;
 
 
--- name: add-{{ table_name }}<!
+-- name: add-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}<!
 INSERT INTO {{ table_name }} (
 {%- for field in fields %}
     {%- if field.name != "id" %}
@@ -32,7 +32,7 @@ VALUES (
 RETURNING id, created;
 
 
--- name: update-{{ table_name }}-by-id<!
+-- name: update-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}-by-id<!
 UPDATE
     {{ table_name }}
 SET
