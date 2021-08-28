@@ -10,6 +10,10 @@ def render_file(filename, values):
     return Template(template_string).render(values)
 
 
+def add_line_to_file(file, line, keyword):
+    with open(file, 'r') as f:
+
+
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
@@ -45,3 +49,8 @@ if __name__ == '__main__':
 
     with open(value_file, "w") as f:
         json.dump(values, f, indent=4)
+
+    line = ''
+    file = ''
+    keyword = ''
+    add_line_to_file(file, line, keyword)

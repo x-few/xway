@@ -5,15 +5,19 @@ from starlette.responses import Response, StreamingResponse
 from starlette.status import HTTP_200_OK, HTTP_300_MULTIPLE_CHOICES
 
 from db.crud.operation_log import OperationLog as OperationLogCRUD
-from db.crud.users import User
 from models.errors import HttpNotFound, HttpServerError
+
+from db.crud.users import User
+from db.crud.role import Role
+# auto add import in here
 
 # TODO support multiple level(like: user/1/xxx/1) in the future
 GET_DATA_CLASS_MAP = {
     # router: crud classname, crud method
     "users": {"classname": User, "method": "get_user_by_id"},
-    "owner_user": {"classname": User, "method": "get_user_by_id"},
     "register": {"classname": User, "method": "get_user_by_id"},
+    "role": {"classname": Role, "method": "get_role_by_id"},
+    # auto add map in here
 }
 
 RECORD_METHOD = {
@@ -37,7 +41,7 @@ async def gen_btree_path(path_segs: list):
 
 async def get_data(name: str, id: int, pgpool):
     if name not in GET_DATA_CLASS_MAP.keys():
-        raise HttpNotFound("bad uri")
+        raise HttpServerError("bad uri")
 
     info = GET_DATA_CLASS_MAP[name]
     obj = info['classname'](pgpool)
