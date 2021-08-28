@@ -10,14 +10,35 @@ def render_file(filename, values):
     return Template(template_string).render(values)
 
 
-def add_line_to_file(file, line, keyword):
+def add_line_to_file(file, add_line, keyword):
+    i = 0
     with open(file, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            if add_line in line:
+                print("[!] Warn: {} already exists".format(add_line))
+                return
+                # raise Exception("line already exists")
+
+            if line in add_line:
+                print("[!] Warn: {} already exists".format(add_line))
+                return
+
+            if keyword in line:
+                lines.insert(i, add_line + '\n')
+                break
+
+            i = i + 1
+
+    with open(file, 'w') as f:
+        f.write(''.join(lines))
 
 
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
         'table_name': 'role',
+        'need_oplog': True,
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
             {'name': 'name', 'type': 'str', 'default': None},
@@ -50,7 +71,25 @@ if __name__ == '__main__':
     with open(value_file, "w") as f:
         json.dump(values, f, indent=4)
 
-    line = ''
-    file = ''
-    keyword = ''
-    add_line_to_file(file, line, keyword)
+    oplog_dep = ""
+    if values['need_oplog']:
+        oplog_dep = "Depends(enable_operation_log),"
+        add_line_to_file('../src/services/operation_log.py',
+                         '    "%s": {"classname": %s, "method": "get_%s_by_id"},' % (
+                             values['table_name'], values['table_name'].capitalize(), values['table_name']),
+                         'auto add map in here')
+
+        add_line_to_file('../src/services/operation_log.py',
+                         'from db.crud.{} import {}'.format(
+                             values['table_name'], values['table_name'].capitalize()),
+                         'auto add import in here')
+
+    add_line_to_file('../src/routers/__init__.py',
+                     'from . import {}'.format(values['table_name']),
+                     'auto add import in here')
+
+    add_line_to_file('../src/routers/__init__.py',
+                     """    router.include_router({}.router, prefix="/v1", tags=["{}"],
+                          dependencies=[Depends(get_current_user), {}],)""".format(
+                         values['table_name'], values['table_name'], oplog_dep),
+                     'add router to here')

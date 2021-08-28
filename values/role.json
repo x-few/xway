@@ -1,5 +1,6 @@
 {
     "table_name": "role",
+    "need_oplog": true,
     "fields": [
         {
             "name": "id",
@@ -17,5 +18,5 @@
             "default": "\"\""
         }
     ],
-    "time": "2021-08-26-135751"
+    "time": "2021-08-28-065847"
 }
