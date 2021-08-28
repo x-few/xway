@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from db.crud.base import Base
-from models.{{ table_name }} import {{ table_name | capitalize }}InDB, \
-    {{ table_name | capitalize }}InCreate, \
-    {{ table_name | capitalize }}InUpdate
+from models.{{ table_name }} import {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB, \
+    {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate, \
+    {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
 
 
-class {{ table_name | capitalize }}(Base):
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}(Base):
     async def list_{{ table_name }}s(self, offset, limit) -> list:
         record = await self.exec("count_{{ table_name }}s")
         if not record or not record[0] or record[0][0] == 0:
@@ -17,13 +17,13 @@ class {{ table_name | capitalize }}(Base):
 
         records = await self.exec("list_{{ table_name }}s", offset=offset, limit=limit)
         if records:
-            {{ table_name }}s = [{{ table_name | capitalize }}InDB(**record) for record in records]
+            {{ table_name }}s = [{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB(**record) for record in records]
 
         return {{ table_name }}s, count
 
 
-    async def add_{{ table_name }}(self, {{ table_name }}: {{ table_name | capitalize }}InCreate
-    ) -> {{ table_name | capitalize }}InDB:
+    async def add_{{ table_name }}(self, {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate
+    ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
         record = await self.exec("add_{{ table_name }}",
                             {%- for field in fields %}
                                 {%- if field.name != "id" %}
@@ -35,10 +35,10 @@ class {{ table_name | capitalize }}(Base):
         return await self.get_{{ table_name }}_by_id(record[0])
 
 
-    async def get_{{ table_name }}_by_id(self, id) -> {{ table_name | capitalize }}InDB:
+    async def get_{{ table_name }}_by_id(self, id) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
         record = await self.exec("get_{{ table_name }}_by_id", id)
         if record:
-            return {{ table_name | capitalize }}InDB(**record)
+            return {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB(**record)
 
         return None
 
@@ -47,7 +47,7 @@ class {{ table_name | capitalize }}(Base):
         return await self.exec("delete_{{ table_name }}_by_id", id)
 
 
-    async def update_{{ table_name }}_by_id(self, id: int, {{ table_name }}: {{ table_name | capitalize }}InUpdate
+    async def update_{{ table_name }}_by_id(self, id: int, {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
     ) -> datetime:
         record = await self.exec("update_{{ table_name }}_by_id",
                         id=id,

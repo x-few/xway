@@ -1,0 +1,22 @@
+{
+    "table_name": "user_role",
+    "need_oplog": true,
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "user_id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "role_id",
+            "type": "int",
+            "default": null
+        }
+    ],
+    "time": "2021-08-28-073447"
+}

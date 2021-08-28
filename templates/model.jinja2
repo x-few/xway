@@ -9,7 +9,7 @@ from .base import Base, IDModel, DateTimeModel
 {%- endfor %}
 
 
-class {{ table_name | capitalize }}InCreate(Base):
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate(Base):
     {%- for field in fields %}
     {%- if field.name != "id" and not field.default %}
     {{ field.name }}: {{ field.type }}
@@ -22,22 +22,22 @@ class {{ table_name | capitalize }}InCreate(Base):
     {%- endfor %}
 
 
-class {{ table_name | capitalize }}InUpdate(Base):
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate(Base):
     {%- for field in fields %}
     {%- if field.name != "id" %}
     {{ field.name }}: Optional[{{ field.type }}] = None
     {%- endif %}
     {%- endfor %}
 
-class {{ table_name | capitalize }}InDB({{ table_name | capitalize }}InCreate, IDModel, DateTimeModel):
-    """{{ table_name | capitalize }}InDB"""
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB({% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate, IDModel, DateTimeModel):
+    """{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB"""
 
 
-class {{ table_name | capitalize }}InResponse({{ table_name | capitalize }}InDB):
-    """{{ table_name | capitalize }}InResponse"""
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse({% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB):
+    """{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse"""
 
 
-class {{ table_name | capitalize }}ListInResponse(Base):
-    data: List[{{ table_name | capitalize }}InResponse]
+class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}ListInResponse(Base):
+    data: List[{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse]
     count: Optional[int] = None
 

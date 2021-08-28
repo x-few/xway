@@ -270,7 +270,6 @@ def create_role_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        # sa.Column("parent_id", sa.Integer, nullable=True)     # parent_id
         sa.Column("name", sa.Text, nullable=False),
         sa.Column("description", sa.Text, nullable=True),
         *timestamps(),
@@ -281,8 +280,11 @@ def create_user_role_table() -> None:
     table_name = "user_role"
     op.create_table(
         table_name,
-        sa.Column("user_id", sa.Integer, nullable=False),
-        sa.Column("role_id", sa.Integer, nullable=False),
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("user_id", sa.Integer, sa.ForeignKey(
+            'users.id'), nullable=False, ),
+        sa.Column("role_id", sa.Integer, sa.ForeignKey(
+            'role.id'), nullable=False),
         *timestamps(),
     )
 
@@ -291,8 +293,11 @@ def create_role_permission_table() -> None:
     table_name = "role_permission"
     op.create_table(
         table_name,
-        sa.Column("role_id", sa.Integer, nullable=False),
-        sa.Column("permission_id", sa.Integer, nullable=False),
+        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("role_id", sa.Integer, sa.ForeignKey(
+            'role.id'), nullable=False),
+        sa.Column("permission_id", sa.Integer, sa.ForeignKey(
+            'permission.id'), nullable=False),
         *timestamps(),
     )
 

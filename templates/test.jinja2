@@ -19,6 +19,7 @@ async def test_{{ table_name }}(
     assert response.status_code == 200
     assert response.json()['count'] == 0
 
+    # not supported foreign key yet
     response = await authorized_client.post("/api/v1/{{ table_name }}",
                                             json={"{{ table_name }}":
                                                     {

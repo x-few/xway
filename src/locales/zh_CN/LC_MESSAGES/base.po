@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-26 13:59-0300\n"
+"POT-Creation-Date: 2021-08-28 07:33-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,20 @@ msgstr "无效的权限名称"
 #, fuzzy
 msgid "bad permission uri"
 msgstr "无效的权限 URL"
+
+#: src/routers/user_role.py:38 src/routers/user_role.py:54
+#: src/routers/user_role.py:88
+#, fuzzy
+msgid "user_role not found"
+msgstr "没有找到此角色"
+
+#: src/routers/user_role.py:70
+msgid "bad user_role user_id"
+msgstr ""
+
+#: src/routers/user_role.py:72
+msgid "bad user_role role_id"
+msgstr ""
 
 #: src/routers/register.py:33
 msgid "user with this username already exists"

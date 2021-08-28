@@ -12,20 +12,16 @@ def render_file(filename, values):
 
 def add_line_to_file(file, add_line, keyword):
     i = 0
+    add_line = add_line + '\n'
     with open(file, 'r') as f:
         lines = f.readlines()
         for line in lines:
             if add_line in line:
                 print("[!] Warn: {} already exists".format(add_line))
                 return
-                # raise Exception("line already exists")
-
-            if line in add_line:
-                print("[!] Warn: {} already exists".format(add_line))
-                return
 
             if keyword in line:
-                lines.insert(i, add_line + '\n')
+                lines.insert(i, add_line)
                 break
 
             i = i + 1
@@ -34,15 +30,19 @@ def add_line_to_file(file, add_line, keyword):
         f.write(''.join(lines))
 
 
+def under_score_case_2_camel_case(word):
+    return ''.join(x.capitalize() or '_' for x in word.split('_'))
+
+
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
-        'table_name': 'role',
+        'table_name': 'user_role',
         'need_oplog': True,
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
-            {'name': 'name', 'type': 'str', 'default': None},
-            {'name': 'description', 'type': 'str', 'default': '""'},
+            {'name': 'user_id', 'type': 'int', 'default': None},
+            {'name': 'role_id', 'type': 'int', 'default': None},
         ]
     }
 
@@ -76,20 +76,28 @@ if __name__ == '__main__':
         oplog_dep = "Depends(enable_operation_log),"
         add_line_to_file('../src/services/operation_log.py',
                          '    "%s": {"classname": %s, "method": "get_%s_by_id"},' % (
-                             values['table_name'], values['table_name'].capitalize(), values['table_name']),
+                             values['table_name'],
+                             under_score_case_2_camel_case(
+                                 values['table_name']),
+                             values['table_name']),
                          'auto add map in here')
 
         add_line_to_file('../src/services/operation_log.py',
                          'from db.crud.{} import {}'.format(
-                             values['table_name'], values['table_name'].capitalize()),
+                             values['table_name'],
+                             under_score_case_2_camel_case(values['table_name'])),
                          'auto add import in here')
 
     add_line_to_file('../src/routers/__init__.py',
                      'from . import {}'.format(values['table_name']),
-                     'auto add import in here')
+                     'add import to here')
 
     add_line_to_file('../src/routers/__init__.py',
-                     """    router.include_router({}.router, prefix="/v1", tags=["{}"],
-                          dependencies=[Depends(get_current_user), {}],)""".format(
-                         values['table_name'], values['table_name'], oplog_dep),
+                     '    router.include_router({}.router, prefix="/v1", tags=["{}"],'.format(
+                         values['table_name'], values['table_name']),
+                     'add router to here')
+
+    add_line_to_file('../src/routers/__init__.py',
+                     '                          dependencies=[Depends(get_current_user), {} ],)'.format(
+                         oplog_dep),
                      'add router to here')

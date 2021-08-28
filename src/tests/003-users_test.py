@@ -22,8 +22,8 @@ async def test_get_all_user(
                                             json={"user": {"username": "testuser", "password": "pwd", "email": "abc@bcd.com"}})
     assert response.status_code == 201
 
-    app_id = response.json()['id']
-    assert type(app_id) == int
+    user_id = response.json()['id']
+    assert type(user_id) == int
 
     response = await authorized_client.get("/api/v1/users")
     assert response.status_code == 200
@@ -34,9 +34,9 @@ async def test_get_all_user(
     assert len(response.json()['data']) == 1
     assert response.json()['count'] == 3
 
-    response = await authorized_client.get("/api/v1/users/{}".format(app_id))
+    response = await authorized_client.get("/api/v1/users/{}".format(user_id))
     assert response.status_code == 200
-    assert response.json()['id'] == app_id
+    assert response.json()['id'] == user_id
 
     response = await authorized_client.get("/api/v1/users/{}".format(1))
     assert response.status_code == 200
@@ -45,7 +45,7 @@ async def test_get_all_user(
     response = await authorized_client.get("/api/v1/users/{}".format(10000))
     assert response.status_code == 404
 
-    response = await authorized_client.put("/api/v1/users/{}".format(app_id),
+    response = await authorized_client.put("/api/v1/users/{}".format(user_id),
                                            json={"user": {"username": "bcd", "status": 2}})
     assert response.status_code == 200
     assert response.json()['status'] == 2
@@ -63,7 +63,7 @@ async def test_get_all_user(
     response = await authorized_client.delete("/api/v1/users/{}".format(10000))
     assert response.status_code == 404
 
-    response = await authorized_client.delete("/api/v1/users/{}".format(app_id))
+    response = await authorized_client.delete("/api/v1/users/{}".format(user_id))
     assert response.status_code == 200
 
     response = await authorized_client.get("/api/v1/users")
