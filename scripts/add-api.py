@@ -54,6 +54,7 @@ if __name__ == '__main__':
         '../templates/test.jinja2': '../src/tests/{}_test.py'.format(values['table_name']),
     }
 
+    # render api
     for template_file, res_file in template_files.items():
         print("[+] rendering {} to {}".format(template_file, res_file))
         res = render_file(template_file, values)
@@ -63,14 +64,14 @@ if __name__ == '__main__':
         if res_file.endswith(".py"):
             os.system("autopep8 -i {}".format(res_file))
 
+    # backup value
     now = datetime.now()
     values['time'] = now.strftime("%Y-%m-%d-%H%M%S")
-
     value_file = "../values/{}.json".format(values['table_name'])
-
     with open(value_file, "w") as f:
         json.dump(values, f, indent=4)
 
+    # insert oplog lines
     oplog_dep = ""
     if values['need_oplog']:
         oplog_dep = "Depends(enable_operation_log),"
@@ -88,6 +89,9 @@ if __name__ == '__main__':
                              under_score_case_2_camel_case(values['table_name'])),
                          'auto add import in here')
 
+        os.system("autopep8 -i ../src/services/operation_log.py")
+
+    # insert router
     add_line_to_file('../src/routers/__init__.py',
                      'from . import {}'.format(values['table_name']),
                      'add import to here')
@@ -101,3 +105,5 @@ if __name__ == '__main__':
                      '                          dependencies=[Depends(get_current_user), {} ],)'.format(
                          oplog_dep),
                      'add router to here')
+
+    os.system("autopep8 -i ../src/routers/__init__.py")
