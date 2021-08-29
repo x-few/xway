@@ -7,7 +7,6 @@ from models.permission import PermissionInCreate, \
     PermissionInUpdate
 from db.crud.permission import Permission as PermissionCRUD
 from models.errors import HttpClientError, HttpNotFound
-from services.localization import get_gettext
 
 router = APIRouter()
 
@@ -17,8 +16,8 @@ async def list_permissions(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _=Depends(get_gettext),
 ) -> PermissionListInResponse:
+    _ = request.state.get_gettext
     offset = (page - 1) * pagesize
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     permissions, count = await permission_crud.list_permissions(offset, pagesize)
@@ -30,8 +29,8 @@ async def list_permissions(
 async def get_permission(
     request: Request,
     permission_id: int = Path(..., title="The ID of the permission"),
-    _=Depends(get_gettext),
 ) -> PermissionInResponse:
+    _ = request.state.get_gettext
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     target_permission = await permission_crud.get_permission_by_id(permission_id)
     if not target_permission:
@@ -46,8 +45,8 @@ async def get_permission(
 async def delete_permission(
     request: Request,
     permission_id: int = Path(..., title="The ID of the permission"),
-    _=Depends(get_gettext),
 ) -> PermissionInResponse:
+    _ = request.state.get_gettext
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     target_permission = await permission_crud.get_permission_by_id(permission_id)
     if not target_permission:
@@ -64,12 +63,14 @@ async def delete_permission(
 async def add_permission(
     request: Request,
     info: PermissionInCreate = Body(..., embed=True, alias="permission"),
-    _=Depends(get_gettext),
 ) -> PermissionInResponse:
+    _ = request.state.get_gettext
     if not info.name:
         raise HttpClientError(_("bad permission name"))
     if not info.uri:
         raise HttpClientError(_("bad permission uri"))
+
+    # TODO To avoid too large a match range, a default prefix should be added or check the URI.
 
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     return await permission_crud.add_permission(permission=info)
@@ -80,8 +81,8 @@ async def update_permission(
     request: Request,
     permission_id: int = Path(..., title="The ID of the permission"),
     info: PermissionInUpdate = Body(..., embed=True, alias="permission"),
-    _=Depends(get_gettext),
 ) -> PermissionInResponse:
+    _ = request.state.get_gettext
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     target_permission = await permission_crud.get_permission_by_id(permission_id)
     if not target_permission:

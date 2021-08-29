@@ -1,0 +1,22 @@
+{
+    "table_name": "role_permission",
+    "need_oplog": true,
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "role_id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "permission_id",
+            "type": "int",
+            "default": null
+        }
+    ],
+    "time": "2021-08-29-015048"
+}

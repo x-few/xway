@@ -10,6 +10,7 @@ from models.errors import HttpNotFound, HttpServerError
 from db.crud.users import User
 from db.crud.role import Role
 from db.crud.user_role import UserRole
+from db.crud.role_permission import RolePermission
 # auto add import in here
 
 # TODO support multiple level(like: user/1/xxx/1) in the future
@@ -19,6 +20,7 @@ GET_DATA_CLASS_MAP = {
     "register": {"classname": User, "method": "get_user_by_id"},
     "role": {"classname": Role, "method": "get_role_by_id"},
     "user_role": {"classname": UserRole, "method": "get_user_role_by_id"},
+    "role_permission": {"classname": RolePermission, "method": "get_role_permission_by_id"},
     # auto add map in here
 }
 

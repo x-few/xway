@@ -7,7 +7,6 @@ from models.role import RoleInCreate, \
     RoleInUpdate
 from db.crud.role import Role as RoleCRUD
 from models.errors import HttpClientError, HttpNotFound
-from services.localization import get_gettext
 
 router = APIRouter()
 
@@ -17,8 +16,8 @@ async def list_roles(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _=Depends(get_gettext),
 ) -> RoleListInResponse:
+    _ = request.state.get_gettext
     offset = (page - 1) * pagesize
     role_crud = RoleCRUD(request.app.state.pgpool)
     roles, count = await role_crud.list_roles(offset, pagesize)
@@ -30,8 +29,8 @@ async def list_roles(
 async def get_role(
     request: Request,
     role_id: int = Path(..., title="The ID of the role"),
-    _=Depends(get_gettext),
 ) -> RoleInResponse:
+    _ = request.state.get_gettext
     role_crud = RoleCRUD(request.app.state.pgpool)
     target_role = await role_crud.get_role_by_id(role_id)
     if not target_role:
@@ -46,8 +45,8 @@ async def get_role(
 async def delete_role(
     request: Request,
     role_id: int = Path(..., title="The ID of the role"),
-    _=Depends(get_gettext),
 ) -> RoleInResponse:
+    _ = request.state.get_gettext
     role_crud = RoleCRUD(request.app.state.pgpool)
     target_role = await role_crud.get_role_by_id(role_id)
     if not target_role:
@@ -64,8 +63,8 @@ async def delete_role(
 async def add_role(
     request: Request,
     info: RoleInCreate = Body(..., embed=True, alias="role"),
-    _=Depends(get_gettext),
 ) -> RoleInResponse:
+    _ = request.state.get_gettext
     if not info.name:
         raise HttpClientError(_("bad role name"))
 
@@ -78,8 +77,8 @@ async def update_role(
     request: Request,
     role_id: int = Path(..., title="The ID of the role"),
     info: RoleInUpdate = Body(..., embed=True, alias="role"),
-    _=Depends(get_gettext),
 ) -> RoleInResponse:
+    _ = request.state.get_gettext
     role_crud = RoleCRUD(request.app.state.pgpool)
     target_role = await role_crud.get_role_by_id(role_id)
     if not target_role:

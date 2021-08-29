@@ -7,7 +7,6 @@ from models.user_role import UserRoleInCreate, \
     UserRoleInUpdate
 from db.crud.user_role import UserRole as UserRoleCRUD
 from models.errors import HttpClientError, HttpNotFound
-from services.localization import get_gettext
 
 router = APIRouter()
 
@@ -17,8 +16,8 @@ async def list_user_roles(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _=Depends(get_gettext),
 ) -> UserRoleListInResponse:
+    _ = request.state.get_gettext
     offset = (page - 1) * pagesize
     user_role_crud = UserRoleCRUD(request.app.state.pgpool)
     user_roles, count = await user_role_crud.list_user_roles(offset, pagesize)
@@ -30,8 +29,8 @@ async def list_user_roles(
 async def get_user_role(
     request: Request,
     user_role_id: int = Path(..., title="The ID of the user_role"),
-    _=Depends(get_gettext),
 ) -> UserRoleInResponse:
+    _ = request.state.get_gettext
     user_role_crud = UserRoleCRUD(request.app.state.pgpool)
     target_user_role = await user_role_crud.get_user_role_by_id(user_role_id)
     if not target_user_role:
@@ -46,8 +45,8 @@ async def get_user_role(
 async def delete_user_role(
     request: Request,
     user_role_id: int = Path(..., title="The ID of the user_role"),
-    _=Depends(get_gettext),
 ) -> UserRoleInResponse:
+    _ = request.state.get_gettext
     user_role_crud = UserRoleCRUD(request.app.state.pgpool)
     target_user_role = await user_role_crud.get_user_role_by_id(user_role_id)
     if not target_user_role:
@@ -64,8 +63,8 @@ async def delete_user_role(
 async def add_user_role(
     request: Request,
     info: UserRoleInCreate = Body(..., embed=True, alias="user_role"),
-    _=Depends(get_gettext),
 ) -> UserRoleInResponse:
+    _ = request.state.get_gettext
     if not info.user_id:
         raise HttpClientError(_("bad user_role user_id"))
     if not info.role_id:
@@ -80,8 +79,8 @@ async def update_user_role(
     request: Request,
     user_role_id: int = Path(..., title="The ID of the user_role"),
     info: UserRoleInUpdate = Body(..., embed=True, alias="user_role"),
-    _=Depends(get_gettext),
 ) -> UserRoleInResponse:
+    _ = request.state.get_gettext
     user_role_crud = UserRoleCRUD(request.app.state.pgpool)
     target_user_role = await user_role_crud.get_user_role_by_id(user_role_id)
     if not target_user_role:

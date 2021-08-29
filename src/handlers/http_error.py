@@ -12,11 +12,6 @@ from models.errors import HttpServerError, HttpClientError, \
     EntityDoesNotExist, UnprocessableEntity
 
 
-async def handler(request: Request, exc: HTTPException) -> JSONResponse:
-    # print("exc.status_code = ", exc.status_code)
-    return JSONResponse({"errors": [exc.detail]}, status_code=exc.status_code)
-
-
 async def server(request: Request, exc: HttpServerError) -> JSONResponse:
     traceback.print_exc()
     return JSONResponse({"errors": [exc.detail]},
@@ -60,3 +55,28 @@ async def validation_error(
 ) -> JSONResponse:
     return JSONResponse({"errors": [exc.errors()]},
                         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+async def handler(request: Request, exc: HTTPException) -> JSONResponse:
+    # set to default error detail
+    _ = request.state.get_gettext
+    if exc.status_code == status.HTTP_400_BAD_REQUEST:
+        # TODO
+        return await client(request, exc)
+    elif exc.status_code == status.HTTP_401_UNAUTHORIZED:
+        exc.detail = _("Not authenticated")
+        return await notauth(request, exc)
+    elif exc.status_code == status.HTTP_403_FORBIDDEN:
+        # TODO
+        return await forbidden(request, exc)
+    elif exc.status_code == status.HTTP_404_NOT_FOUND:
+        # TODO
+        return await notfound(request, exc)
+    elif exc.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
+        # TODO
+        return await validation_error(request, exc)
+    elif exc.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+        exc.detail = _("Internal Server Error")
+        return await server(request, exc)
+
+    return JSONResponse({"errors": [exc.detail]}, status_code=exc.status_code)

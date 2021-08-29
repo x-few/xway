@@ -20,6 +20,9 @@ from models.users import UserInDB
 from services.jwt import create_access_token
 from db.crud.users import User as UserCRUD
 
+DEFAULT_BASE_URL = "http://testxway.com"
+DEFAULT_HEADERS = {"Content-Type": "application/json"}
+
 
 def random_value(type) -> Any:
     if type == "int":
@@ -55,13 +58,6 @@ async def app(init_db: None) -> FastAPI:
     # return application()
 
 
-# @pytest.fixture
-# async def initialized_app(app: FastAPI) -> FastAPI:
-#     async with LifespanManager(app):
-#         yield app
-#     # return app
-
-
 @pytest.fixture
 def pool(app: FastAPI) -> Pool:
     return app.state.pgpool
@@ -76,8 +72,8 @@ def default_config(app: FastAPI) -> Pool:
 async def client(app: FastAPI) -> AsyncClient:
     async with AsyncClient(
         app=app,
-        base_url="http://testxway",
-        headers={"Content-Type": "application/json"},
+        base_url=DEFAULT_BASE_URL,
+        headers=DEFAULT_HEADERS,
     ) as client:
         yield client
 
@@ -98,17 +94,23 @@ async def test_user(pool: Pool) -> UserInDB:
 
 
 @pytest.fixture
-def token(test_user: UserInDB, default_config: dict) -> str:
+async def token(test_user: UserInDB, default_config: dict) -> str:
     return create_access_token(test_user, default_config)
 
 
 @pytest.fixture
-def authorized_client(
+async def authorized_client(
+    app: FastAPI,
     client: AsyncClient,
     token: str,
     authorization_prefix: str,
     default_config: dict,
 ) -> AsyncClient:
-    client.headers[default_config['auth_header']
-                   ] = f"{authorization_prefix} {token}"
-    return client
+    async with AsyncClient(
+        app=app,
+        base_url=DEFAULT_BASE_URL,
+        headers=DEFAULT_HEADERS,
+    ) as client:
+        client.headers[default_config['auth_header']
+                       ] = f"{authorization_prefix} {token}"
+        yield client

@@ -196,7 +196,8 @@ def create_language_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("name", sa.Text, nullable=False),      # 简体中文、English(US)
+        sa.Column("name", sa.Text, nullable=False,
+                  unique=True),      # 简体中文、English(US)
         sa.Column("code", sa.String(length=16),
                   nullable=False),      # zh_CN、en_US
         sa.Column("domain", sa.Text, nullable=False, default="base"),
@@ -254,7 +255,8 @@ def create_permission_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("name", sa.Text, nullable=False, unique=True),
+        # uri: consider it a regular expression if it contains special characters
         sa.Column("uri", sa.Text, nullable=False),
         sa.Column("description", sa.Text, nullable=True),
         sa.Column("method", sa.Integer, nullable=True,
@@ -262,6 +264,7 @@ def create_permission_table() -> None:
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
         *timestamps(),
+        sa.UniqueConstraint('uri', 'method'),
     )
 
 
@@ -270,7 +273,7 @@ def create_role_table() -> None:
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("name", sa.Text, nullable=False, unique=True),
         sa.Column("description", sa.Text, nullable=True),
         *timestamps(),
     )

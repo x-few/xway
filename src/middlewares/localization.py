@@ -4,6 +4,8 @@ import typing
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
+from services.localization import get_gettext
+
 
 class LocalizationMiddleware(BaseHTTPMiddleware):
     """
@@ -16,6 +18,7 @@ class LocalizationMiddleware(BaseHTTPMiddleware):
             language_code = language_code.split(',')[0]
 
         request.state.language = language_code
+        request.state.get_gettext = await get_gettext(request)
 
         response = await call_next(request)
         return response

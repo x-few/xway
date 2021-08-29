@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from copy import deepcopy
-from fastapi import APIRouter, Depends, Path, Query, Body, HTTPException, Request
+from fastapi import APIRouter, Body, Request
 from starlette.status import HTTP_201_CREATED
 
-from models.users import UserInCreate, UserWithToken, UserWithTokenInResponse, UserInResponse
-from models.response import Response
-from db.crud.users import User as UserCRUD
-from services.localization import get_gettext
+from models.users import UserInCreate, UserInResponse
 from services.users import add_user as do_add_user
 from services.authentication import check_username_is_taken, check_email_is_taken
 from models.errors import HttpClientError
-from services.jwt import create_access_token
-from models.token import Token, TokenInResponse
 
 router = APIRouter()
 
@@ -27,8 +21,8 @@ router = APIRouter()
 async def register(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
-    _=Depends(get_gettext),
 ) -> UserInResponse:
+    _ = request.state.get_gettext
     if await check_username_is_taken(request.app.state.pgpool, info.username):
         raise HttpClientError(_("user with this username already exists"))
 
@@ -36,7 +30,7 @@ async def register(
         raise HttpClientError(_("user with this email already exists"))
 
     request.state.current_user = None
-    user = await do_add_user(request, info, _)
+    user = await do_add_user(request, info)
 
     return user
 

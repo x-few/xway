@@ -5,6 +5,7 @@ from . import login, users, logout, \
     login_record, permission
 from . import role
 from . import user_role
+from . import role_permission
 # add import to here
 from services.authentication import get_current_user
 from services.operation_log import enable as enable_operation_log
@@ -25,6 +26,8 @@ def include_all_router(app):
     router.include_router(role.router, prefix="/v1", tags=["role"],
                           dependencies=[Depends(get_current_user), Depends(enable_operation_log), ],)
     router.include_router(user_role.router, prefix="/v1", tags=["user_role"],
+                          dependencies=[Depends(get_current_user), Depends(enable_operation_log), ],)
+    router.include_router(role_permission.router, prefix="/v1", tags=["role_permission"],
                           dependencies=[Depends(get_current_user), Depends(enable_operation_log), ],)
     # add router to here
     router.include_router(language.router, prefix="/v1", tags=["language"],)

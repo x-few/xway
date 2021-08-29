@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-28 07:33-0300\n"
+"POT-Creation-Date: 2021-08-29 01:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,81 +17,105 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/services/authentication.py:34 src/services/authentication.py:36
-#: src/services/authentication.py:41
+#: src/handlers/http_error.py:67
+msgid "Not authenticated"
+msgstr "未认证"
+
+#: src/handlers/http_error.py:79
+msgid "Internal Server Error"
+msgstr "服务器内部错误"
+
+#: src/services/authentication.py:33 src/services/authentication.py:35
+#: src/services/authentication.py:40
 msgid "invalid access token"
 msgstr "无效的访问令牌"
 
-#: src/services/authentication.py:64 src/services/authentication.py:70
+#: src/services/authentication.py:63 src/services/authentication.py:69
 msgid "invalid username or password"
 msgstr "无效的用户名或密码"
 
-#: src/services/authentication.py:67
+#: src/services/authentication.py:66
 msgid "this user has been disabled"
 msgstr "此用户已被禁用"
 
-#: src/routers/role.py:38 src/routers/role.py:54 src/routers/role.py:86
+#: src/routers/role.py:37 src/routers/role.py:53 src/routers/role.py:85
 #, fuzzy
 msgid "role not found"
 msgstr "没有找到此角色"
 
-#: src/routers/role.py:70
+#: src/routers/role.py:69
 #, fuzzy
 msgid "bad role name"
 msgstr "无效的角色名称"
 
-#: src/routers/users.py:26 src/routers/users.py:56 src/routers/users.py:79
-#: src/routers/users.py:103
+#: src/routers/users.py:25 src/routers/users.py:54 src/routers/users.py:77
+#: src/routers/users.py:101
 msgid "current user not found"
 msgstr "没找到当前用户"
 
-#: src/routers/users.py:64 src/routers/users.py:88 src/routers/users.py:108
+#: src/routers/users.py:62 src/routers/users.py:86 src/routers/users.py:106
 msgid "user not found"
 msgstr "没有找到此用户"
 
-#: src/routers/users.py:83
+#: src/routers/users.py:81
 msgid "not allowed delete current user"
 msgstr "不允许删除当前用户"
 
-#: src/routers/users.py:113
+#: src/routers/users.py:111
 #, fuzzy
 msgid "username already exists"
 msgstr "用户名已存在"
 
-#: src/routers/permission.py:38 src/routers/permission.py:54
-#: src/routers/permission.py:88
+#: src/routers/permission.py:37 src/routers/permission.py:53
+#: src/routers/permission.py:89
 #, fuzzy
 msgid "permission not found"
 msgstr "没有找到此权限"
 
-#: src/routers/permission.py:70
+#: src/routers/permission.py:69
 #, fuzzy
 msgid "bad permission name"
 msgstr "无效的权限名称"
 
-#: src/routers/permission.py:72
+#: src/routers/permission.py:71
 #, fuzzy
 msgid "bad permission uri"
 msgstr "无效的权限 URL"
 
-#: src/routers/user_role.py:38 src/routers/user_role.py:54
-#: src/routers/user_role.py:88
+#: src/routers/role_permission.py:37 src/routers/role_permission.py:53
+#: src/routers/role_permission.py:89
+#, fuzzy
+msgid "role_permission not found"
+msgstr "没有找到此权限"
+
+#: src/routers/role_permission.py:70
+#, fuzzy
+msgid "bad role_permission role_id"
+msgstr "无效的权限 URL"
+
+#: src/routers/role_permission.py:72
+#, fuzzy
+msgid "bad role_permission permission_id"
+msgstr "无效的权限 URL"
+
+#: src/routers/user_role.py:37 src/routers/user_role.py:53
+#: src/routers/user_role.py:87
 #, fuzzy
 msgid "user_role not found"
 msgstr "没有找到此角色"
 
-#: src/routers/user_role.py:70
+#: src/routers/user_role.py:69
 msgid "bad user_role user_id"
-msgstr ""
+msgstr "无效的用户 ID"
 
-#: src/routers/user_role.py:72
+#: src/routers/user_role.py:71
 msgid "bad user_role role_id"
-msgstr ""
+msgstr "无效的角色 ID"
 
-#: src/routers/register.py:33
+#: src/routers/register.py:27
 msgid "user with this username already exists"
 msgstr "用户名已存在"
 
-#: src/routers/register.py:36
+#: src/routers/register.py:30
 msgid "user with this email already exists"
 msgstr "邮箱已存在"

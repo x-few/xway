@@ -7,7 +7,7 @@ from services.operation_log import set_new_data_id
 from models.errors import HttpClientError
 
 
-async def add_user(request: Request, info: dict, _):
+async def add_user(request: Request, info: dict):
     user_crud = UserCRUD(request.app.state.pgpool)
 
     creator = 0

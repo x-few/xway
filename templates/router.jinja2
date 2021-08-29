@@ -7,7 +7,6 @@ from models.{{ table_name }} import {% set list1 = table_name.split('_') %}{% fo
     {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
 from db.crud.{{ table_name }} import {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %} as {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD
 from models.errors import HttpClientError, HttpNotFound
-from services.localization import get_gettext
 
 router = APIRouter()
 
@@ -17,8 +16,8 @@ async def list_{{ table_name }}s(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _=Depends(get_gettext),
 ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}ListInResponse:
+    _ = request.state.get_gettext
     offset = (page - 1) * pagesize
     {{ table_name }}_crud = {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD(request.app.state.pgpool)
     {{ table_name }}s, count = await {{ table_name }}_crud.list_{{ table_name }}s(offset, pagesize)
@@ -30,8 +29,8 @@ async def list_{{ table_name }}s(
 async def get_{{ table_name }}(
     request: Request,
     {{ table_name }}_id: int = Path(..., title="The ID of the {{ table_name }}"),
-    _=Depends(get_gettext),
 ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse:
+    _ = request.state.get_gettext
     {{ table_name }}_crud = {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD(request.app.state.pgpool)
     target_{{ table_name }} = await {{ table_name }}_crud.get_{{ table_name }}_by_id({{ table_name }}_id)
     if not target_{{ table_name }}:
@@ -46,8 +45,8 @@ async def get_{{ table_name }}(
 async def delete_{{ table_name }}(
     request: Request,
     {{ table_name }}_id: int = Path(..., title="The ID of the {{ table_name }}"),
-    _=Depends(get_gettext),
 ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse:
+    _ = request.state.get_gettext
     {{ table_name }}_crud = {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD(request.app.state.pgpool)
     target_{{ table_name }} = await {{ table_name }}_crud.get_{{ table_name }}_by_id({{ table_name }}_id)
     if not target_{{ table_name }}:
@@ -64,8 +63,8 @@ async def delete_{{ table_name }}(
 async def add_{{ table_name }}(
     request: Request,
     info: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate = Body(..., embed=True, alias="{{ table_name }}"),
-    _=Depends(get_gettext),
 ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse:
+    _ = request.state.get_gettext
     {%- for field in fields %}
     {%- if field.name != "id" and not field.default %}
     if not info.{{ field.name }}:
@@ -82,8 +81,8 @@ async def update_{{ table_name }}(
     request: Request,
     {{ table_name }}_id: int = Path(..., title="The ID of the {{ table_name }}"),
     info: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate = Body(..., embed=True, alias="{{ table_name }}"),
-    _=Depends(get_gettext),
 ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InResponse:
+    _ = request.state.get_gettext
     {{ table_name }}_crud = {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD(request.app.state.pgpool)
     target_{{ table_name }} = await {{ table_name }}_crud.get_{{ table_name }}_by_id({{ table_name }}_id)
     if not target_{{ table_name }}:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-28 07:33-0300\n"
+"POT-Creation-Date: 2021-08-29 01:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,74 +17,95 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/services/authentication.py:34 src/services/authentication.py:36
-#: src/services/authentication.py:41
+#: src/handlers/http_error.py:67
+msgid "Not authenticated"
+msgstr ""
+
+#: src/handlers/http_error.py:79
+msgid "Internal Server Error"
+msgstr ""
+
+#: src/services/authentication.py:33 src/services/authentication.py:35
+#: src/services/authentication.py:40
 msgid "invalid access token"
 msgstr ""
 
-#: src/services/authentication.py:64 src/services/authentication.py:70
+#: src/services/authentication.py:63 src/services/authentication.py:69
 msgid "invalid username or password"
 msgstr ""
 
-#: src/services/authentication.py:67
+#: src/services/authentication.py:66
 msgid "this user has been disabled"
 msgstr ""
 
-#: src/routers/role.py:38 src/routers/role.py:54 src/routers/role.py:86
+#: src/routers/role.py:37 src/routers/role.py:53 src/routers/role.py:85
 msgid "role not found"
 msgstr ""
 
-#: src/routers/role.py:70
+#: src/routers/role.py:69
 msgid "bad role name"
 msgstr ""
 
-#: src/routers/users.py:26 src/routers/users.py:56 src/routers/users.py:79
-#: src/routers/users.py:103
+#: src/routers/users.py:25 src/routers/users.py:54 src/routers/users.py:77
+#: src/routers/users.py:101
 msgid "current user not found"
 msgstr ""
 
-#: src/routers/users.py:64 src/routers/users.py:88 src/routers/users.py:108
+#: src/routers/users.py:62 src/routers/users.py:86 src/routers/users.py:106
 msgid "user not found"
 msgstr ""
 
-#: src/routers/users.py:83
+#: src/routers/users.py:81
 msgid "not allowed delete current user"
 msgstr ""
 
-#: src/routers/users.py:113
+#: src/routers/users.py:111
 msgid "username already exists"
 msgstr ""
 
-#: src/routers/permission.py:38 src/routers/permission.py:54
-#: src/routers/permission.py:88
+#: src/routers/permission.py:37 src/routers/permission.py:53
+#: src/routers/permission.py:89
 msgid "permission not found"
 msgstr ""
 
-#: src/routers/permission.py:70
+#: src/routers/permission.py:69
 msgid "bad permission name"
 msgstr ""
 
-#: src/routers/permission.py:72
+#: src/routers/permission.py:71
 msgid "bad permission uri"
 msgstr ""
 
-#: src/routers/user_role.py:38 src/routers/user_role.py:54
-#: src/routers/user_role.py:88
+#: src/routers/role_permission.py:37 src/routers/role_permission.py:53
+#: src/routers/role_permission.py:89
+msgid "role_permission not found"
+msgstr ""
+
+#: src/routers/role_permission.py:70
+msgid "bad role_permission role_id"
+msgstr ""
+
+#: src/routers/role_permission.py:72
+msgid "bad role_permission permission_id"
+msgstr ""
+
+#: src/routers/user_role.py:37 src/routers/user_role.py:53
+#: src/routers/user_role.py:87
 msgid "user_role not found"
 msgstr ""
 
-#: src/routers/user_role.py:70
+#: src/routers/user_role.py:69
 msgid "bad user_role user_id"
 msgstr ""
 
-#: src/routers/user_role.py:72
+#: src/routers/user_role.py:71
 msgid "bad user_role role_id"
 msgstr ""
 
-#: src/routers/register.py:33
+#: src/routers/register.py:27
 msgid "user with this username already exists"
 msgstr ""
 
-#: src/routers/register.py:36
+#: src/routers/register.py:30
 msgid "user with this email already exists"
 msgstr ""

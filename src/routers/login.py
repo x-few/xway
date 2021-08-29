@@ -7,7 +7,6 @@ from db.crud.login_record import LoginRecord
 from services.jwt import create_access_token
 from models.token import Token
 from services.authentication import authenticate_user
-from services.localization import get_gettext
 from utils.const import AUTH_TYPES
 
 router = APIRouter()
@@ -39,10 +38,9 @@ async def do_login(request, info, _):
 async def login(
     request: Request,
     info: UserInLogin = Body(..., embed=True, alias="user"),
-    _=Depends(get_gettext),
     # info: OAuth2PasswordRequestForm = Depends(),  # Use json instead
 ) -> UserWithTokenInResponse:
-
+    _ = request.state.get_gettext
     user, token, token_type = await do_login(request, info, _)
 
     return UserWithTokenInResponse(
@@ -64,9 +62,9 @@ async def login(
 async def login_access_token(
     request: Request,
     # info: UserInLogin = Body(..., embed=True, alias="user"),
-    _=Depends(get_gettext),
     info: OAuth2PasswordRequestForm = Depends()   # Use json instead
 ) -> Token:
+    _ = request.state.get_gettext
     user, token, token_type = await do_login(request, info, _)
 
     return Token(

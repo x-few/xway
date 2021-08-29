@@ -4,7 +4,6 @@ from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from models.login_record import LoginRecordInResponse, LoginRecordListInResponse
 from db.crud.login_record import LoginRecord
-from services.localization import get_gettext
 
 from utils.const import AUTH_TYPES
 
@@ -17,8 +16,8 @@ router = APIRouter()
              )
 async def add(
         request: Request,
-        _=Depends(get_gettext),
 ) -> LoginRecordInResponse:
+    _ = request.state.get_gettext
     user = request.state.current_user
 
     config = request.app.state.default_config
@@ -39,8 +38,8 @@ async def list(
         request: Request,
         page: int = Query(1, ge=1, title="which page"),
         pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-        _=Depends(get_gettext),
 ) -> LoginRecordListInResponse:
+    _ = request.state.get_gettext
     user = request.state.current_user
 
     offset = (page - 1) * pagesize

@@ -7,7 +7,6 @@ from models.users import UserInCreate, \
     UserListInResponse, \
     UserInResponse, UserInUpdate
 from db.crud.users import User as UserCRUD
-from services.localization import get_gettext
 from services.users import add_user as do_add_user
 from models.errors import HttpClientError, HttpForbidden, HttpNotFound
 
@@ -19,8 +18,8 @@ async def list_user(
     request: Request,
     page: int = Query(1, ge=1, title="which page"),
     pagesize: int = Query(20, ge=1, le=100, title="Page size"),
-    _=Depends(get_gettext),
 ) -> UserListInResponse:
+    _ = request.state.get_gettext
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
@@ -40,17 +39,16 @@ async def list_user(
 async def add_user(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
-    _=Depends(get_gettext),
 ) -> UserInResponse:
-    return await do_add_user(request, info, _)
+    return await do_add_user(request, info)
 
 
 @router.get("/users/{user_id}", response_model=UserInResponse,)
 async def get_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
-    _=Depends(get_gettext),
 ) -> UserInResponse:
+    _ = request.state.get_gettext
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
@@ -72,8 +70,8 @@ async def get_user(
 async def delete_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
-    _=Depends(get_gettext),
 ) -> UserInResponse:
+    _ = request.state.get_gettext
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
@@ -96,8 +94,8 @@ async def update_user(
     request: Request,
     user_id: int = Path(..., title="The ID of the user"),
     info: UserInUpdate = Body(..., embed=True, alias="user"),
-    _=Depends(get_gettext),
 ) -> UserInResponse:
+    _ = request.state.get_gettext
     current_user = request.state.current_user
     if not current_user:
         raise HttpNotFound(_("current user not found"))
