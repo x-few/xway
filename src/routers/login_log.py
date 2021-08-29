@@ -3,8 +3,7 @@ from starlette.status import HTTP_201_CREATED
 
 from models.login_log import LoginRecordInCreate, \
     LoginRecordListInResponse, \
-    LoginRecordInResponse, \
-    LoginRecordInUpdate
+    LoginRecordInResponse
 from db.crud.login_log import LoginRecord as LoginRecordCRUD
 from models.errors import HttpClientError, HttpNotFound
 
@@ -74,30 +73,3 @@ async def add_login_log(
 
     login_log_crud = LoginRecordCRUD(request.app.state.pgpool)
     return await login_log_crud.add_login_log(login_log=info)
-
-
-@router.put("/login_log/{login_log_id}", response_model=LoginRecordInResponse,)
-async def update_login_log(
-    request: Request,
-    login_log_id: int = Path(..., title="The ID of the login_log"),
-    info: LoginRecordInUpdate = Body(..., embed=True, alias="login_log"),
-) -> LoginRecordInResponse:
-    _ = request.state.get_gettext
-    login_log_crud = LoginRecordCRUD(request.app.state.pgpool)
-    target_login_log = await login_log_crud.get_login_log_by_id(login_log_id)
-    if not target_login_log:
-        raise HttpNotFound(_("login_log not found"))
-
-    target_login_log.user_id = info.user_id or target_login_log.user_id
-    target_login_log.host = info.host or target_login_log.host
-    target_login_log.type = info.type or target_login_log.type
-    target_login_log.status = info.status or target_login_log.status
-
-    updated = await login_log_crud.update_login_log_by_id(
-        id=login_log_id,
-        login_log=target_login_log,
-    )
-
-    target_login_log.updated = updated
-
-    return target_login_log

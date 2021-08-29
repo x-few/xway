@@ -2,8 +2,7 @@ from datetime import datetime
 
 from db.crud.base import Base
 from models.login_log import LoginRecordInDB, \
-    LoginRecordInCreate, \
-    LoginRecordInUpdate
+    LoginRecordInCreate
 
 
 class LoginRecord(Base):
@@ -42,17 +41,3 @@ class LoginRecord(Base):
 
     async def delete_login_log_by_id(self, id: int) -> None:
         return await self.exec("delete_login_log_by_id", id)
-
-    async def update_login_log_by_id(self,
-                                     id: int,
-                                     login_log: LoginRecordInUpdate
-                                     ) -> datetime:
-        record = await self.exec("update_login_log_by_id",
-                                 id=id,
-                                 user_id=login_log.user_id,
-                                 host=login_log.host,
-                                 type=login_log.type,
-                                 status=login_log.status,
-                                 )
-
-        return record

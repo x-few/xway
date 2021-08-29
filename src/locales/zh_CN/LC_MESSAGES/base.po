@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 12:56-0300\n"
+"POT-Creation-Date: 2021-08-29 13:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,18 +112,17 @@ msgstr "无效的用户 ID"
 msgid "bad user_role role_id"
 msgstr "无效的角色 ID"
 
-#: src/routers/login_log.py:39 src/routers/login_log.py:55
-#: src/routers/login_log.py:89
+#: src/routers/login_log.py:38 src/routers/login_log.py:54
 #, fuzzy
 msgid "login_log not found"
 msgstr "没有找到此角色"
 
-#: src/routers/login_log.py:71
+#: src/routers/login_log.py:70
 #, fuzzy
 msgid "bad login_log user_id"
 msgstr "无效的用户 ID"
 
-#: src/routers/login_log.py:73
+#: src/routers/login_log.py:72
 #, fuzzy
 msgid "bad login_log status"
 msgstr "无效的用户 ID"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 12:56-0300\n"
+"POT-Creation-Date: 2021-08-29 13:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,16 +102,15 @@ msgstr ""
 msgid "bad user_role role_id"
 msgstr ""
 
-#: src/routers/login_log.py:39 src/routers/login_log.py:55
-#: src/routers/login_log.py:89
+#: src/routers/login_log.py:38 src/routers/login_log.py:54
 msgid "login_log not found"
 msgstr ""
 
-#: src/routers/login_log.py:71
+#: src/routers/login_log.py:70
 msgid "bad login_log user_id"
 msgstr ""
 
-#: src/routers/login_log.py:73
+#: src/routers/login_log.py:72
 msgid "bad login_log status"
 msgstr ""
 

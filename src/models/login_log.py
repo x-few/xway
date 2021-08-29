@@ -10,13 +10,6 @@ class LoginRecordInCreate(Base):
     type: int = 0
 
 
-class LoginRecordInUpdate(Base):
-    user_id: Optional[int] = None
-    host: Optional[str] = None
-    type: Optional[int] = None
-    status: Optional[int] = None
-
-
 class LoginRecordInDB(LoginRecordInCreate, IDModel, DateTimeModel):
     """LoginRecordInDB"""
 
