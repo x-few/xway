@@ -8,7 +8,7 @@ from starlette.responses import Response, StreamingResponse
 from services.operation_log import record as record_operation_log
 
 
-class OperationLog(BaseHTTPMiddleware):
+class OperationLogMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         return await record_operation_log(request, response)

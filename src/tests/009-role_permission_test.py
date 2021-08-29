@@ -15,7 +15,7 @@ async def test_role_permission(
     authorized_client: AsyncClient,
     pool: Pool
 ) -> None:
-    response = await authorized_client.get("/api/v1/role_permissions")
+    response = await authorized_client.get("/api/v1/role_permissions/?a=a")
     assert response.status_code == 200
     assert response.json()['count'] == 0
 

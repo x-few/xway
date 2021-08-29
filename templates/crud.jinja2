@@ -7,7 +7,7 @@ from models.{{ table_name }} import {% set list1 = table_name.split('_') %}{% fo
 
 
 class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}(Base):
-    async def list_{{ table_name }}s(self, offset, limit) -> list:
+    async def list_{{ table_name }}s(self, offset: int, limit: int) -> list:
         record = await self.exec("count_{{ table_name }}s")
         if not record or not record[0] or record[0][0] == 0:
             return list(), 0
@@ -22,7 +22,8 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
         return {{ table_name }}s, count
 
 
-    async def add_{{ table_name }}(self, {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate
+    async def add_{{ table_name }}(self,
+        {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate
     ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
         record = await self.exec("add_{{ table_name }}",
                             {%- for field in fields %}
@@ -35,7 +36,7 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
         return await self.get_{{ table_name }}_by_id(record[0])
 
 
-    async def get_{{ table_name }}_by_id(self, id) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
+    async def get_{{ table_name }}_by_id(self, id: int) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
         record = await self.exec("get_{{ table_name }}_by_id", id)
         if record:
             return {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB(**record)
@@ -43,11 +44,13 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
         return None
 
 
-    async def delete_{{ table_name }}_by_id(self, id) -> None:
+    async def delete_{{ table_name }}_by_id(self, id: int) -> None:
         return await self.exec("delete_{{ table_name }}_by_id", id)
 
 
-    async def update_{{ table_name }}_by_id(self, id: int, {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
+    async def update_{{ table_name }}_by_id(self,
+        id: int,
+        {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
     ) -> datetime:
         record = await self.exec("update_{{ table_name }}_by_id",
                         id=id,

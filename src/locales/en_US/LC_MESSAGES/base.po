@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 01:57-0300\n"
+"POT-Creation-Date: 2021-08-29 04:58-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,10 +102,10 @@ msgstr ""
 msgid "bad user_role role_id"
 msgstr ""
 
-#: src/routers/register.py:27
+#: src/routers/register.py:26
 msgid "user with this username already exists"
 msgstr ""
 
-#: src/routers/register.py:30
+#: src/routers/register.py:29
 msgid "user with this email already exists"
 msgstr ""

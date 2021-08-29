@@ -263,7 +263,8 @@ def create_permission_table() -> None:
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
-        *timestamps(),
+        sa.Column("creator", sa.Integer, nullable=True,)
+        * timestamps(),
         sa.UniqueConstraint('uri', 'method'),
     )
 
