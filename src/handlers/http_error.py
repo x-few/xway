@@ -23,7 +23,7 @@ async def client(request: Request, exc: HttpClientError) -> JSONResponse:
                         status_code=status.HTTP_400_BAD_REQUEST)
 
 
-async def notauth(request: Request, exc: HttpUnauthorized) -> JSONResponse:
+async def unauthorized(request: Request, exc: HttpUnauthorized) -> JSONResponse:
     return JSONResponse({"errors": [exc.detail]},
                         status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -65,7 +65,7 @@ async def handler(request: Request, exc: HTTPException) -> JSONResponse:
         return await client(request, exc)
     elif exc.status_code == status.HTTP_401_UNAUTHORIZED:
         exc.detail = _("Not authenticated")
-        return await notauth(request, exc)
+        return await unauthorized(request, exc)
     elif exc.status_code == status.HTTP_403_FORBIDDEN:
         # TODO
         return await forbidden(request, exc)

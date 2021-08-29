@@ -41,12 +41,14 @@ def under_score_case_2_camel_case(word):
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
-        'table_name': 'role_permission',
-        'need_oplog': True,
+        'table_name': 'login_log',
+        'need_oplog': False,
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
-            {'name': 'role_id', 'type': 'int', 'default': None},
-            {'name': 'permission_id', 'type': 'int', 'default': None},
+            {'name': 'user_id', 'type': 'int', 'default': None},
+            {'name': 'host', 'type': 'str', 'default': '""'},
+            {'name': 'type', 'type': 'int', 'default': "0"},
+            {'name': 'status', 'type': 'int', 'default': None},
         ]
     }
 
@@ -78,7 +80,7 @@ if __name__ == '__main__':
     # insert oplog lines
     oplog_dep = ""
     if values['need_oplog']:
-        oplog_dep = "Depends(enable_operation_log), "
+        oplog_dep = "dependencies=[Depends(enable_operation_log), ]"
         add_line_to_file('../src/services/operation_log.py',
                          ['    "%s": {"classname": %s, "method": "get_%s_by_id"},' % (
                              values['table_name'],
@@ -101,10 +103,10 @@ if __name__ == '__main__':
                      'add import to here')
 
     lines = [
-        '    router.include_router({}.router, prefix="/v1", tags=["{}"],'.format(
-            values['table_name'], values['table_name']),
-        '                          dependencies=[Depends(get_current_user), {}],)'.format(
-            oplog_dep),
+        '    router.include_router({}.router,'.format(
+            values['table_name']),
+        '                          prefix="/v1", tags=["{}"], {},)'.format(
+            values['table_name'], oplog_dep),
     ]
     add_line_to_file('../src/routers/__init__.py',
                      lines,

@@ -7,6 +7,6 @@ from middlewares.permission import PermissionMiddleware
 
 
 def add_all_middleware(app: FastAPI):
-    app.add_middleware(LocalizationMiddleware)
     app.add_middleware(PermissionMiddleware)
+    app.add_middleware(LocalizationMiddleware)
     app.add_middleware(OperationLogMiddleware)

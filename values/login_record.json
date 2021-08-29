@@ -1,0 +1,32 @@
+{
+    "table_name": "login_record",
+    "need_oplog": false,
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "user_id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "host",
+            "type": "str",
+            "default": "\"\""
+        },
+        {
+            "name": "type",
+            "type": "int",
+            "default": "0"
+        },
+        {
+            "name": "status",
+            "type": "int",
+            "default": null
+        }
+    ],
+    "time": "2021-08-29-124456"
+}

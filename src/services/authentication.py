@@ -7,9 +7,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt
 from pydantic import ValidationError
 
-from models.errors import HttpForbidden
 from services.config import get_default_config
-from models.errors import HttpUnauthorized, EntityDoesNotExist
+from models.errors import HttpUnauthorized, HttpForbidden
 from db.crud.users import User as UserCRUD
 from models.users import UserInDB
 
@@ -20,10 +19,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
 async def get_current_user(
     request: Request,
-    token: str = Depends(oauth2_scheme),
 ) -> UserInDB:
     _ = request.state.get_gettext
     try:
+        token = await oauth2_scheme(request)
         config = request.app.state.default_config
         pgpool = request.app.state.pgpool
         payload = jwt.decode(token, config['secret_key'], algorithms=[

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 04:58-0300\n"
+"POT-Creation-Date: 2021-08-29 12:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,16 +25,16 @@ msgstr "未认证"
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: src/services/authentication.py:33 src/services/authentication.py:35
-#: src/services/authentication.py:40
+#: src/services/authentication.py:32 src/services/authentication.py:34
+#: src/services/authentication.py:39
 msgid "invalid access token"
 msgstr "无效的访问令牌"
 
-#: src/services/authentication.py:63 src/services/authentication.py:69
+#: src/services/authentication.py:62 src/services/authentication.py:68
 msgid "invalid username or password"
 msgstr "无效的用户名或密码"
 
-#: src/services/authentication.py:66
+#: src/services/authentication.py:65
 msgid "this user has been disabled"
 msgstr "此用户已被禁用"
 
@@ -111,6 +111,22 @@ msgstr "无效的用户 ID"
 #: src/routers/user_role.py:71
 msgid "bad user_role role_id"
 msgstr "无效的角色 ID"
+
+#: src/routers/login_log.py:39 src/routers/login_log.py:55
+#: src/routers/login_log.py:89
+#, fuzzy
+msgid "login_log not found"
+msgstr "没有找到此角色"
+
+#: src/routers/login_log.py:71
+#, fuzzy
+msgid "bad login_log user_id"
+msgstr "无效的用户 ID"
+
+#: src/routers/login_log.py:73
+#, fuzzy
+msgid "bad login_log status"
+msgstr "无效的用户 ID"
 
 #: src/routers/register.py:26
 msgid "user with this username already exists"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 04:58-0300\n"
+"POT-Creation-Date: 2021-08-29 12:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,16 +25,16 @@ msgstr ""
 msgid "Internal Server Error"
 msgstr ""
 
-#: src/services/authentication.py:33 src/services/authentication.py:35
-#: src/services/authentication.py:40
+#: src/services/authentication.py:32 src/services/authentication.py:34
+#: src/services/authentication.py:39
 msgid "invalid access token"
 msgstr ""
 
-#: src/services/authentication.py:63 src/services/authentication.py:69
+#: src/services/authentication.py:62 src/services/authentication.py:68
 msgid "invalid username or password"
 msgstr ""
 
-#: src/services/authentication.py:66
+#: src/services/authentication.py:65
 msgid "this user has been disabled"
 msgstr ""
 
@@ -100,6 +100,19 @@ msgstr ""
 
 #: src/routers/user_role.py:71
 msgid "bad user_role role_id"
+msgstr ""
+
+#: src/routers/login_log.py:39 src/routers/login_log.py:55
+#: src/routers/login_log.py:89
+msgid "login_log not found"
+msgstr ""
+
+#: src/routers/login_log.py:71
+msgid "bad login_log user_id"
+msgstr ""
+
+#: src/routers/login_log.py:73
+msgid "bad login_log status"
 msgstr ""
 
 #: src/routers/register.py:26

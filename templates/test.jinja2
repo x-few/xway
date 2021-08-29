@@ -3,7 +3,7 @@ import warnings
 from asyncpg.pool import Pool
 from fastapi import FastAPI
 from httpx import AsyncClient
-from starlette.status import HTTP_201_CREATED
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
 from .conftest import random_value
 
@@ -16,7 +16,7 @@ async def test_{{ table_name }}(
     pool: Pool
 ) -> None:
     response = await authorized_client.get("/api/v1/{{ table_name }}s")
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert response.json()['count'] == 0
 
     # not supported foreign key yet
@@ -37,7 +37,7 @@ async def test_{{ table_name }}(
     assert type(id) == int
 
     response = await authorized_client.get("/api/v1/{{ table_name }}s")
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert len(response.json()['data']) == 1
 
     response = await authorized_client.put("/api/v1/{{ table_name }}/{}".format(id),
@@ -51,15 +51,15 @@ async def test_{{ table_name }}(
                                                     }
                                                 }
                                            )
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
 
     response = await authorized_client.get("/api/v1/{{ table_name }}/{}".format(id))
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
 
     response = await authorized_client.delete("/api/v1/{{ table_name }}/{}".format(id))
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
 
     response = await authorized_client.get("/api/v1/{{ table_name }}s")
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert len(response.json()['data']) == 0
     assert response.json()['count'] == 0

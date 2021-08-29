@@ -35,8 +35,17 @@ async def test_login_log(
 
     response = await authorized_client.get("/api/v1/login_logs")
     assert response.status_code == HTTP_200_OK
-    # added record, but not for test user
-    assert len(response.json()['data']) == 0
+    assert len(response.json()['data']) == 1
+
+    response = await authorized_client.put("/api/v1/login_log/{}".format(id),
+                                           json={"login_log":
+                                                 {
+                                                     "user_id": random_value("int"),
+                                                     "status": random_value("int")
+                                                 }
+                                                 }
+                                           )
+    assert response.status_code == HTTP_200_OK
 
     response = await authorized_client.get("/api/v1/login_log/{}".format(id))
     assert response.status_code == HTTP_200_OK
@@ -48,28 +57,3 @@ async def test_login_log(
     assert response.status_code == HTTP_200_OK
     assert len(response.json()['data']) == 0
     assert response.json()['count'] == 0
-
-    response = await authorized_client.post("/api/v1/login",
-                                            json={"user": {"username": "test", "password": "pwd@test"}})
-    assert response.status_code == HTTP_200_OK
-    assert response.json()['access_token']
-
-    response = await authorized_client.post("/api/v1/login",
-                                            json={"user": {"username": "test", "password": "pwd@test"}})
-    assert response.status_code == HTTP_200_OK
-    assert response.json()['access_token']
-
-    response = await authorized_client.get("/api/v1/login_logs")
-    assert response.status_code == HTTP_200_OK
-    assert len(response.json()["data"]) == 2
-    assert response.json()["count"] == 2
-
-    response = await authorized_client.get("/api/v1/login_logs", params={"page": 1, "pagesize": 1})
-    assert response.status_code == HTTP_200_OK
-    assert len(response.json()["data"]) == 1
-    assert response.json()["count"] == 2
-
-    response = await authorized_client.get("/api/v1/login_logs", params={"page": 10, "pagesize": 1})
-    assert response.status_code == HTTP_200_OK
-    assert response.json()["data"] == []
-    assert response.json()["count"] == 2

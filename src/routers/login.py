@@ -3,11 +3,13 @@ from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from models.users import UserInLogin, UserWithTokenInResponse
-from db.crud.login_record import LoginRecord
+from db.crud.login_log import LoginRecord
 from services.jwt import create_access_token
 from models.token import Token
 from services.authentication import authenticate_user
-from utils.const import AUTH_TYPES
+from utils.const import AUTH_TYPES, LOGIN_STATUS_SUCCESS, LOGIN_STATUS_FAILURE
+from models.login_log import LoginRecordInCreate
+from models.errors import HttpForbidden
 
 router = APIRouter()
 
@@ -18,17 +20,27 @@ async def do_login(request, info, _):
     # TODO: support admin level config
     config = request.app.state.default_config
 
-    user = await authenticate_user(pgpool, info, _)
-    token = create_access_token(user, config)
-
-    token_type = config.get('jwt_token_prefix')
-    token_type_value = AUTH_TYPES.get(token_type)
-
-    host = request.client.host
-
-    login_record_crud = LoginRecord(pgpool)
-    await login_record_crud.add_login_record(creator=user.id, host=host,
-                                             type=token_type_value, token=token)
+    status = None
+    try:
+        user = await authenticate_user(pgpool, info, _)
+        token = create_access_token(user, config)
+        status = LOGIN_STATUS_SUCCESS
+    except HttpForbidden as e:
+        status = LOGIN_STATUS_FAILURE
+        raise HttpForbidden(str(e))
+    finally:
+        token_type = config.get('jwt_token_prefix')
+        token_type_value = AUTH_TYPES.get(token_type)
+        host = request.client.host
+        login_log_crud = LoginRecord(pgpool)
+        await login_log_crud.add_login_log(
+            LoginRecordInCreate(
+                user_id=user.id,
+                status=status,
+                host=host,
+                type=token_type_value,
+                token=token)
+        )
 
     return user, token, token_type
 

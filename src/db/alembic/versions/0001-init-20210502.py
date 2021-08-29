@@ -109,7 +109,7 @@ def insert_default_users() -> None:
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Integer, default=1),
-        sa.Column("creator", sa.Integer, nullable=False),
+        sa.Column("creator", sa.Integer),
     )
 
     op.bulk_insert(table,
@@ -171,6 +171,7 @@ def create_operation_log_table() -> None:
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
         sa.Column("op", sa.String(length=16), nullable=False, ),
+        # Do not use foreign keys, because it will cause the user can not delete
         sa.Column("creator", sa.Integer, nullable=False),
         sa.Column("path", LtreeType, nullable=True),
         sa.Column("new", JSONB, nullable=True),
@@ -230,17 +231,16 @@ def get_all_tables():
     return tables
 
 
-def create_login_record_table() -> None:
-    table_name = "login_record"
+def create_login_log_table() -> None:
+    table_name = "login_log"
     op.create_table(
         table_name,
         sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("creator", sa.Integer, sa.ForeignKey(
-            'users.id'), nullable=False),
+        sa.Column("user_id", sa.Integer, nullable=False),
         sa.Column("host", sa.Text, nullable=True),
-        sa.Column("type", sa.Integer, nullable=True,
-                  default=AUTH_TYPE_OAUTH2_BEARER_JWT),
-        sa.Column("token", sa.Text, nullable=True),
+        sa.Column("type", sa.Integer, nullable=True),
+        # login status: success or failure
+        sa.Column("status", sa.Integer, nullable=False),
         sa.Column(
             "created",
             sa.TIMESTAMP(timezone=True),
@@ -263,7 +263,7 @@ def create_permission_table() -> None:
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
-        sa.Column("creator", sa.Integer, nullable=True,)
+        sa.Column("creator", sa.Integer, nullable=True,),
         * timestamps(),
         sa.UniqueConstraint('uri', 'method'),
     )
@@ -318,7 +318,7 @@ def upgrade():
     create_release_log_table()
     create_language_table()
     insert_language_table()
-    create_login_record_table()
+    create_login_log_table()
     create_permission_table()
     create_role_table()
     create_user_role_table()
@@ -330,7 +330,7 @@ def downgrade():
     op.drop_table('user_role')
     op.drop_table('role')
     op.drop_table('permission')
-    op.drop_table('login_record')
+    op.drop_table('login_log')
     op.drop_table('language')
     op.drop_table('release_log')
     op.drop_table('operation_log')
