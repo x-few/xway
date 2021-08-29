@@ -58,7 +58,6 @@ async def authenticate_user(pgpool, info, _):
         pass
 
     if not user:
-        print("----ishse---: 1----")
         raise HttpForbidden(_("invalid username or password"))
 
     if user.is_disabled():
@@ -91,5 +90,15 @@ async def check_email_is_taken(pgpool, email: str) -> bool:
 
     if user is None:
         return False
+
+    return True
+
+
+async def access_check(
+    request: Request,
+    token: str = Depends(oauth2_scheme)
+) -> UserInDB:
+    print("---isshe---: access_check---")
+    # TODO move permission middleware to here
 
     return True

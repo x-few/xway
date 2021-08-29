@@ -20,6 +20,8 @@ async def do_login(request, info, _):
     # TODO: support admin level config
     config = request.app.state.default_config
 
+    user = None
+    token = None
     status = None
     try:
         user = await authenticate_user(pgpool, info, _)
@@ -29,18 +31,19 @@ async def do_login(request, info, _):
         status = LOGIN_STATUS_FAILURE
         raise HttpForbidden(str(e))
     finally:
-        token_type = config.get('jwt_token_prefix')
-        token_type_value = AUTH_TYPES.get(token_type)
-        host = request.client.host
-        login_log_crud = LoginRecord(pgpool)
-        await login_log_crud.add_login_log(
-            LoginRecordInCreate(
-                user_id=user.id,
-                status=status,
-                host=host,
-                type=token_type_value,
-                token=token)
-        )
+        if user:
+            token_type = config.get('jwt_token_prefix')
+            token_type_value = AUTH_TYPES.get(token_type)
+            host = request.client.host
+            login_log_crud = LoginRecord(pgpool)
+            await login_log_crud.add_login_log(
+                LoginRecordInCreate(
+                    user_id=user.id,
+                    status=status,
+                    host=host,
+                    type=token_type_value,
+                    token=token)
+            )
 
     return user, token, token_type
 
