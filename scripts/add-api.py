@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # insert oplog lines
     oplog_dep = ""
     if values['need_oplog']:
-        oplog_dep = "dependencies=[Depends(enable_operation_log), ]"
+        oplog_dep = "dependencies=[Depends(access_check), Depends(enable_operation_log), ]"
         add_line_to_file('../src/services/operation_log.py',
                          ['    "%s": {"classname": %s, "method": "get_%s_by_id"},' % (
                              values['table_name'],

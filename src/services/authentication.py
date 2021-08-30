@@ -98,7 +98,15 @@ async def access_check(
     request: Request,
     token: str = Depends(oauth2_scheme)
 ) -> UserInDB:
-    print("---isshe---: access_check---")
-    # TODO move permission middleware to here
 
-    return True
+    # get access user
+    current_user = await get_current_user(request)
+
+    # check if user has permission to access the uri
+    # get user's roles
+
+    # get role's permissions
+
+    # check permissions
+
+    return current_user
