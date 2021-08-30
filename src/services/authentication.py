@@ -38,9 +38,6 @@ async def get_current_user(
     if user is None:
         raise HttpUnauthorized(_("invalid access token"))
 
-    # set user to request context
-    request.state.current_user = user
-
     return user
 
 
@@ -101,6 +98,9 @@ async def access_check(
 
     # get access user
     current_user = await get_current_user(request)
+
+    # set user to request context
+    request.state.current_user = current_user
 
     # check if user has permission to access the uri
     # get user's roles
