@@ -17,16 +17,12 @@ DELETE FROM {{ table_name }} where id = :id RETURNING id;
 -- name: add-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}<!
 INSERT INTO {{ table_name }} (
 {%- for field in fields %}
-    {%- if field.name != "id" %}
     "{{ field.name }}"{% if not loop.last %},{% endif -%}
-    {%- endif -%}
 {% endfor %}
 )
 VALUES (
 {%- for field in fields %}
-    {%- if field.name != "id" %}
     :{{ field.name }}{% if not loop.last %},{% endif -%}
-    {%- endif -%}
 {% endfor %}
 )
 RETURNING id, created;

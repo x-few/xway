@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.{{ table_name }} import {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB, \
     {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate, \
     {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate
@@ -26,6 +27,7 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
         {{ table_name }}: {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InCreate
     ) -> {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InDB:
         record = await self.exec("add_{{ table_name }}",
+                                id=get_id(),
                             {%- for field in fields %}
                                 {%- if field.name != "id" %}
                                 {{ field.name }}={{ table_name }}.{{ field.name }},
