@@ -11,6 +11,7 @@ from db.crud.users import User
 from db.crud.role import Role
 from db.crud.user_role import UserRole
 from db.crud.role_permission import RolePermission
+from db.crud.user_group import UserGroup
 # auto add import in here
 
 # TODO support multiple level(like: user/1/xxx/1) in the future
@@ -21,6 +22,7 @@ GET_DATA_CLASS_MAP = {
     "role": {"classname": Role, "method": "get_role_by_id"},
     "user_role": {"classname": UserRole, "method": "get_user_role_by_id"},
     "role_permission": {"classname": RolePermission, "method": "get_role_permission_by_id"},
+    "user_group": {"classname": UserGroup, "method": "get_user_group_by_id"},
     # auto add map in here
 }
 

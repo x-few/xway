@@ -31,6 +31,7 @@ class Permission(Base):
                                  description=permission.description,
                                  method=permission.method,
                                  status=permission.status,
+                                 creator=permission.creator,
                                  )
 
         return await self.get_permission_by_id(record[0])

@@ -7,6 +7,7 @@ from . import role
 from . import user_role
 from . import role_permission
 from . import login_log
+from . import user_group
 # add import to here
 from services.authentication import access_check
 from services.operation_log import enable as enable_operation_log
@@ -35,6 +36,9 @@ def include_all_router(app):
                           dependencies=[Depends(access_check), Depends(enable_operation_log), ],)
     router.include_router(role_permission.router, prefix="/v1", tags=["role_permission"],
                           dependencies=[Depends(access_check), Depends(enable_operation_log), ],)
+    router.include_router(user_group.router,
+                          prefix="/v1", tags=["user_group"],
+                          dependencies=[Depends(access_check), Depends(enable_operation_log)])
     # add router to here
 
     app.include_router(router, prefix="/api")

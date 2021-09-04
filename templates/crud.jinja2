@@ -57,7 +57,7 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
         record = await self.exec("update_{{ table_name }}_by_id",
                         id=id,
                     {%- for field in fields %}
-                        {%- if field.name != "id" %}
+                        {%- if field.name != "id" and field.name != "creator" %}
                         {{ field.name }}={{ table_name }}.{{ field.name }},
                         {%- endif %}
                     {%- endfor %}

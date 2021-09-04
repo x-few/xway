@@ -85,7 +85,7 @@ def create_users_table() -> None:
     table_name = "users"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("username", sa.Text, unique=True,
                   nullable=False, index=True),
         sa.Column("email", sa.Text, unique=True, index=True),
@@ -131,7 +131,7 @@ def create_default_config_table() -> None:
     table_name = "default_config"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("key", sa.Text, unique=True, nullable=False, index=True),
         sa.Column("value", sa.Text, nullable=False),
         sa.Column("comment", sa.Text, nullable=True),
@@ -169,7 +169,7 @@ def create_operation_log_table() -> None:
     table_name = "operation_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("op", sa.String(length=16), nullable=False, ),
         # Do not use foreign keys, because it will cause the user can not delete
         sa.Column("creator", sa.BigInteger, nullable=False),
@@ -184,7 +184,7 @@ def create_release_log_table() -> None:
     table_name = "release_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("creator", sa.BigInteger, nullable=False),
         sa.Column("start_opid", sa.BigInteger, nullable=False),
         sa.Column("end_opid", sa.BigInteger, nullable=False),
@@ -196,7 +196,7 @@ def create_language_table() -> None:
     table_name = "language"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("name", sa.Text, nullable=False,
                   unique=True),      # 简体中文、English(US)
         sa.Column("code", sa.String(length=16),
@@ -235,7 +235,7 @@ def create_login_log_table() -> None:
     table_name = "login_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("user_id", sa.BigInteger, nullable=False),
         sa.Column("host", sa.Text, nullable=True),
         sa.Column("type", sa.Integer, nullable=True),
@@ -254,7 +254,7 @@ def create_permission_table() -> None:
     table_name = "permission"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("name", sa.Text, nullable=False, unique=True),
         # uri: consider it a regular expression if it contains special characters
         sa.Column("uri", sa.Text, nullable=False),
@@ -263,7 +263,7 @@ def create_permission_table() -> None:
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
-        sa.Column("creator", sa.BigInteger, nullable=True,),
+        sa.Column("creator", sa.BigInteger, nullable=False),
         * timestamps(),
         sa.UniqueConstraint('uri', 'method'),
     )
@@ -273,7 +273,7 @@ def create_role_table() -> None:
     table_name = "role"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("name", sa.Text, nullable=False, unique=True),
         sa.Column("description", sa.Text, nullable=True),
         *timestamps(),
@@ -284,7 +284,7 @@ def create_user_role_table() -> None:
     table_name = "user_role"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("user_id", sa.BigInteger, sa.ForeignKey(
             'users.id'), nullable=False, ),
         sa.Column("role_id", sa.BigInteger, sa.ForeignKey(
@@ -297,7 +297,7 @@ def create_role_permission_table() -> None:
     table_name = "role_permission"
     op.create_table(
         table_name,
-        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, primary_key=True),
         sa.Column("role_id", sa.BigInteger, sa.ForeignKey(
             'role.id'), nullable=False),
         sa.Column("permission_id", sa.BigInteger, sa.ForeignKey(
@@ -306,26 +306,86 @@ def create_role_permission_table() -> None:
     )
 
 
+def create_user_group_table() -> None:
+    table_name = "user_group"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.BigInteger, primary_key=True),
+        sa.Column("name", sa.Text, nullable=False, unique=True),
+        sa.Column("description", sa.Text, nullable=True),
+        sa.Column("creator", sa.BigInteger, nullable=False),
+        *timestamps(),
+    )
+
+
+def create_user_group_role_table() -> None:
+    table_name = "user_group_role"
+    op.create_table(
+        table_name,
+        sa.Column("id", sa.BigInteger, primary_key=True),
+        sa.Column("group_id", sa.BigInteger, sa.ForeignKey(
+            'user_group.id'), nullable=False, ),
+        sa.Column("role_id", sa.BigInteger, sa.ForeignKey(
+            'role.id'), nullable=False),
+        *timestamps(),
+    )
+
+
+def insert_default_user_group():
+    table_name = "user_group"
+    table = sa.table(
+        table_name,
+        sa.Column("username", sa.Text),
+        sa.Column("email", sa.Text),
+        sa.Column("salt", sa.Text),
+        sa.Column("password", sa.Text),
+        sa.Column("status", sa.Integer, default=1),
+        sa.Column("creator", sa.BigInteger),
+    )
+
+    op.bulk_insert(table,
+                   [
+                       {
+                           'username': 'admin',
+                           'email': 'admin@xway.com',
+                           'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
+                           # password: pwd@xway
+                           'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
+                           'creator': 0,   # default user
+                       },
+                   ]
+                   )
+
+
+def initial_data():
+    insert_default_users()
+    insert_default_config_table()
+    insert_language_table()
+
+
 def upgrade():
     # tables = get_all_tables()
     create_extensions()
     create_updated_function()
     create_users_table()
-    insert_default_users()
     create_default_config_table()
-    insert_default_config_table()
     create_operation_log_table()
     create_release_log_table()
     create_language_table()
-    insert_language_table()
     create_login_log_table()
     create_permission_table()
     create_role_table()
     create_user_role_table()
     create_role_permission_table()
+    create_user_group_table()
+    create_user_group_role_table()
+
+    initial_data()
 
 
 def downgrade():
+    op.drop_table('user_group_role')
+    op.drop_table('user_group')
     op.drop_table('role_permission')
     op.drop_table('user_role')
     op.drop_table('role')

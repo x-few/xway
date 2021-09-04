@@ -72,6 +72,11 @@ async def add_{{ table_name }}(
     {%- endif %}
     {%- endfor %}
 
+    {%- for field in fields %}
+    {%- if field.name == "creator" %}
+    info.creator = request.state.current_user.id
+    {%- endif %}
+    {%- endfor %}
     {{ table_name }}_crud = {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}CRUD(request.app.state.pgpool)
     return await {{ table_name }}_crud.add_{{ table_name }}({{ table_name }}=info)
 
@@ -90,7 +95,7 @@ async def update_{{ table_name }}(
 {% if fields %}{% endif %}
 
     {%- for field in fields -%}
-    {%- if field.name != "id" %}
+    {%- if field.name != "id" and field.name != "creator" %}
     target_{{ table_name }}.{{ field.name }} = info.{{ field.name }} or target_{{ table_name }}.{{ field.name }}
     {%- endif %}
     {%- endfor %}

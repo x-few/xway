@@ -10,6 +10,7 @@ class PermissionInCreate(Base):
     description: str = ""
     method: int = PERMISSIONS_METHOD_ALL
     status: int = PERMISSIONS_STATUS_ENABLE
+    creator: Optional[int] = None
 
 
 class PermissionInUpdate(Base):

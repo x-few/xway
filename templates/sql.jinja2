@@ -33,7 +33,7 @@ UPDATE
     {{ table_name }}
 SET
 {%- for field in fields %}
-    {%- if field.name != "id" %}
+    {%- if field.name != "id" and field.name != "creator" %}
     "{{ field.name }}" = :{{ field.name }}{% if not loop.last %},{% endif -%}
     {%- endif -%}
 {% endfor %}

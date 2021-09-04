@@ -16,15 +16,18 @@ class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | ca
     {%- endif %}
     {%- endfor %}
     {%- for field in fields %}
-    {%- if field.name != "id" and field.default %}
+    {%- if field.name != "id" and field.name != "creator" and field.default %}
     {{ field.name }}: {% if field.default == "None" %}Optional[{%- endif %}{{ field.type }}{% if field.default == "None" %}]{%- endif %} = {{ field.default }}
+    {%- endif %}
+    {%- if field.name == "creator" %}
+    creator: Optional[int] = None
     {%- endif %}
     {%- endfor %}
 
 
 class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}InUpdate(Base):
     {%- for field in fields %}
-    {%- if field.name != "id" %}
+    {%- if field.name != "id" and field.name != "creator" %}
     {{ field.name }}: Optional[{{ field.type }}] = None
     {%- endif %}
     {%- endfor %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-04 04:35-0300\n"
+"POT-Creation-Date: 2021-09-04 07:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,7 +64,7 @@ msgid "username already exists"
 msgstr ""
 
 #: src/routers/permission.py:37 src/routers/permission.py:53
-#: src/routers/permission.py:89
+#: src/routers/permission.py:90
 msgid "permission not found"
 msgstr ""
 
@@ -87,6 +87,19 @@ msgstr ""
 
 #: src/routers/role_permission.py:72
 msgid "bad role_permission permission_id"
+msgstr ""
+
+#: src/routers/user_group.py:37 src/routers/user_group.py:53
+#: src/routers/user_group.py:87
+msgid "user_group not found"
+msgstr ""
+
+#: src/routers/user_group.py:69
+msgid "bad user_group name"
+msgstr ""
+
+#: src/routers/user_group.py:71
+msgid "bad user_group creator"
 msgstr ""
 
 #: src/routers/user_role.py:37 src/routers/user_role.py:53

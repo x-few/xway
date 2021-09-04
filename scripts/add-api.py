@@ -41,14 +41,14 @@ def under_score_case_2_camel_case(word):
 if __name__ == '__main__':
     # TODO: save values, in case we need it in the future.
     values = {
-        'table_name': 'login_log',
-        'need_oplog': False,
+        'table_name': 'user_group',
+        'need_oplog': True,
+        'need_check_access': True,
         'fields': [
             {'name': 'id', 'type': 'int', 'default': None},
-            {'name': 'user_id', 'type': 'int', 'default': None},
-            {'name': 'host', 'type': 'str', 'default': '""'},
-            {'name': 'type', 'type': 'int', 'default': "0"},
-            {'name': 'status', 'type': 'int', 'default': None},
+            {'name': 'name', 'type': 'str', 'default': None},
+            {'name': 'description', 'type': 'str', 'default': '""'},
+            {'name': 'creator', 'type': 'int', 'default': None, },
         ]
     }
 
@@ -78,9 +78,13 @@ if __name__ == '__main__':
         json.dump(values, f, indent=4)
 
     # insert oplog lines
-    oplog_dep = ""
+    deps = []
+
+    if values['need_check_access']:
+        deps.append("Depends(access_check)")
+
     if values['need_oplog']:
-        oplog_dep = "dependencies=[Depends(access_check), Depends(enable_operation_log), ]"
+        deps.append("Depends(enable_operation_log)")
         add_line_to_file('../src/services/operation_log.py',
                          ['    "%s": {"classname": %s, "method": "get_%s_by_id"},' % (
                              values['table_name'],
@@ -102,11 +106,15 @@ if __name__ == '__main__':
                      ['from . import {}'.format(values['table_name']), ],
                      'add import to here')
 
+    deps_str = ""
+    if deps:
+        deps_str = "\ndependencies=[{}]".format(", ".join(deps))
+
     lines = [
         '    router.include_router({}.router,'.format(
             values['table_name']),
-        '                          prefix="/v1", tags=["{}"], {},)'.format(
-            values['table_name'], oplog_dep),
+        '                          prefix="/v1", tags=["{}"], {})'.format(
+            values['table_name'], deps_str),
     ]
     add_line_to_file('../src/routers/__init__.py',
                      lines,

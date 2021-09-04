@@ -21,7 +21,8 @@ INSERT INTO permission (
     "uri",
     "description",
     "method",
-    "status"
+    "status",
+    "creator"
 )
 VALUES (
     :id,
@@ -29,7 +30,8 @@ VALUES (
     :uri,
     :description,
     :method,
-    :status
+    :status,
+    :creator
 )
 RETURNING id, created;
 

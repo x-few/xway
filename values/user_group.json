@@ -1,0 +1,28 @@
+{
+    "table_name": "user_group",
+    "need_oplog": true,
+    "need_check_access": true,
+    "fields": [
+        {
+            "name": "id",
+            "type": "int",
+            "default": null
+        },
+        {
+            "name": "name",
+            "type": "str",
+            "default": null
+        },
+        {
+            "name": "description",
+            "type": "str",
+            "default": "\"\""
+        },
+        {
+            "name": "creator",
+            "type": "int",
+            "default": null
+        }
+    ],
+    "time": "2021-09-04-080141"
+}

@@ -72,6 +72,7 @@ async def add_permission(
 
     # TODO To avoid too large a match range, a default prefix should be added or check the URI.
 
+    info.creator = request.state.current_user.id
     permission_crud = PermissionCRUD(request.app.state.pgpool)
     return await permission_crud.add_permission(permission=info)
 

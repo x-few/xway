@@ -24,7 +24,7 @@ async def test_{{ table_name }}(
                                             json={"{{ table_name }}":
                                                     {
                                                     {%- for field in fields %}
-                                                        {%- if not field.default and field.name != "id" %}
+                                                        {%- if not field.default and field.name != "id" and field.name != "creator" %}
                                                         "{{ field.name }}":random_value("{{ field.type }}"){% if not loop.last %},{% endif -%}
                                                         {%- endif -%}
                                                     {% endfor %}
