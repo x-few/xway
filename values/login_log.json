@@ -1,5 +1,5 @@
 {
-    "table_name": "login_record",
+    "table_name": "login_log",
     "need_oplog": false,
     "fields": [
         {
@@ -28,5 +28,5 @@
             "default": null
         }
     ],
-    "time": "2021-08-29-124456"
+    "time": "2021-09-04-070738"
 }

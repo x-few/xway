@@ -3,12 +3,12 @@ from fastapi import APIRouter, Depends, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from models.users import UserInLogin, UserWithTokenInResponse
-from db.crud.login_log import LoginRecord
+from db.crud.login_log import LoginLog
 from services.jwt import create_access_token
 from models.token import Token
 from services.authentication import authenticate_user
 from utils.const import AUTH_TYPES, LOGIN_STATUS_SUCCESS, LOGIN_STATUS_FAILURE
-from models.login_log import LoginRecordInCreate
+from models.login_log import LoginLogInCreate
 from models.errors import HttpForbidden
 
 router = APIRouter()
@@ -35,9 +35,9 @@ async def do_login(request, info, _):
             token_type = config.get('jwt_token_prefix')
             token_type_value = AUTH_TYPES.get(token_type)
             host = request.client.host
-            login_log_crud = LoginRecord(pgpool)
+            login_log_crud = LoginLog(pgpool)
             await login_log_crud.add_login_log(
-                LoginRecordInCreate(
+                LoginLogInCreate(
                     user_id=user.id,
                     status=status,
                     host=host,
