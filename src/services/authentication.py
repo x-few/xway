@@ -93,7 +93,7 @@ async def check_email_is_taken(pgpool, email: str) -> bool:
 
 async def access_check(
     request: Request,
-    token: str = Depends(oauth2_scheme)
+    token: str = Depends(oauth2_scheme)     # do not delete
 ) -> UserInDB:
 
     # get access user

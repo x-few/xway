@@ -1,5 +1,6 @@
 from typing import Optional
 
+from utils.snowflake import get_id
 from db.crud.base import Base
 from models.operation_log import OperationLogInDB
 
@@ -24,6 +25,7 @@ class OperationLog(Base):
                                 new: str, old: str, creator: int):
         # oplog = OperationLogInDB()
         await self.exec("add_operation_log",
+                        id=get_id(),
                         op=op,
                         path=path,
                         new=new,

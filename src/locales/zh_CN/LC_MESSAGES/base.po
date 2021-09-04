@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 13:50-0300\n"
+"POT-Creation-Date: 2021-09-04 04:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,11 +30,11 @@ msgstr "服务器内部错误"
 msgid "invalid access token"
 msgstr "无效的访问令牌"
 
-#: src/services/authentication.py:61 src/services/authentication.py:67
+#: src/services/authentication.py:58 src/services/authentication.py:64
 msgid "invalid username or password"
 msgstr "无效的用户名或密码"
 
-#: src/services/authentication.py:64
+#: src/services/authentication.py:61
 msgid "this user has been disabled"
 msgstr "此用户已被禁用"
 
