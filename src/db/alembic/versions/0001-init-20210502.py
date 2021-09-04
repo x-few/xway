@@ -85,7 +85,7 @@ def create_users_table() -> None:
     table_name = "users"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("username", sa.Text, unique=True,
                   nullable=False, index=True),
         sa.Column("email", sa.Text, unique=True, index=True),
@@ -93,7 +93,7 @@ def create_users_table() -> None:
         sa.Column("password", sa.Text, nullable=False,),
         sa.Column("status", sa.Integer, nullable=False,
                   default=1),  # 0: disabled, 1: enabled
-        sa.Column("creator", sa.Integer, nullable=False),
+        sa.Column("creator", sa.BigInteger, nullable=False),
         *timestamps(),
     )
 
@@ -109,7 +109,7 @@ def insert_default_users() -> None:
         sa.Column("salt", sa.Text),
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Integer, default=1),
-        sa.Column("creator", sa.Integer),
+        sa.Column("creator", sa.BigInteger),
     )
 
     op.bulk_insert(table,
@@ -131,7 +131,7 @@ def create_default_config_table() -> None:
     table_name = "default_config"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("key", sa.Text, unique=True, nullable=False, index=True),
         sa.Column("value", sa.Text, nullable=False),
         sa.Column("comment", sa.Text, nullable=True),
@@ -169,10 +169,10 @@ def create_operation_log_table() -> None:
     table_name = "operation_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("op", sa.String(length=16), nullable=False, ),
         # Do not use foreign keys, because it will cause the user can not delete
-        sa.Column("creator", sa.Integer, nullable=False),
+        sa.Column("creator", sa.BigInteger, nullable=False),
         sa.Column("path", LtreeType, nullable=True),
         sa.Column("new", JSONB, nullable=True),
         sa.Column("old", JSONB, nullable=True),
@@ -184,10 +184,10 @@ def create_release_log_table() -> None:
     table_name = "release_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("creator", sa.Integer, nullable=False),
-        sa.Column("start_opid", sa.Integer, nullable=False),
-        sa.Column("end_opid", sa.Integer, nullable=False),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("creator", sa.BigInteger, nullable=False),
+        sa.Column("start_opid", sa.BigInteger, nullable=False),
+        sa.Column("end_opid", sa.BigInteger, nullable=False),
         *timestamps(),
     )
 
@@ -196,7 +196,7 @@ def create_language_table() -> None:
     table_name = "language"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False,
                   unique=True),      # 简体中文、English(US)
         sa.Column("code", sa.String(length=16),
@@ -235,8 +235,8 @@ def create_login_log_table() -> None:
     table_name = "login_log"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("user_id", sa.Integer, nullable=False),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("user_id", sa.BigInteger, nullable=False),
         sa.Column("host", sa.Text, nullable=True),
         sa.Column("type", sa.Integer, nullable=True),
         # login status: success or failure
@@ -254,7 +254,7 @@ def create_permission_table() -> None:
     table_name = "permission"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False, unique=True),
         # uri: consider it a regular expression if it contains special characters
         sa.Column("uri", sa.Text, nullable=False),
@@ -263,7 +263,7 @@ def create_permission_table() -> None:
                   default=PERMISSIONS_METHOD_ALL),
         sa.Column("status", sa.Integer, nullable=True,
                   default=PERMISSIONS_STATUS_ENABLE),
-        sa.Column("creator", sa.Integer, nullable=True,),
+        sa.Column("creator", sa.BigInteger, nullable=True,),
         * timestamps(),
         sa.UniqueConstraint('uri', 'method'),
     )
@@ -273,7 +273,7 @@ def create_role_table() -> None:
     table_name = "role"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
         sa.Column("name", sa.Text, nullable=False, unique=True),
         sa.Column("description", sa.Text, nullable=True),
         *timestamps(),
@@ -284,10 +284,10 @@ def create_user_role_table() -> None:
     table_name = "user_role"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("user_id", sa.Integer, sa.ForeignKey(
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("user_id", sa.BigInteger, sa.ForeignKey(
             'users.id'), nullable=False, ),
-        sa.Column("role_id", sa.Integer, sa.ForeignKey(
+        sa.Column("role_id", sa.BigInteger, sa.ForeignKey(
             'role.id'), nullable=False),
         *timestamps(),
     )
@@ -297,10 +297,10 @@ def create_role_permission_table() -> None:
     table_name = "role_permission"
     op.create_table(
         table_name,
-        sa.Column("id", sa.Integer, autoincrement=True, primary_key=True),
-        sa.Column("role_id", sa.Integer, sa.ForeignKey(
+        sa.Column("id", sa.BigInteger, autoincrement=True, primary_key=True),
+        sa.Column("role_id", sa.BigInteger, sa.ForeignKey(
             'role.id'), nullable=False),
-        sa.Column("permission_id", sa.Integer, sa.ForeignKey(
+        sa.Column("permission_id", sa.BigInteger, sa.ForeignKey(
             'permission.id'), nullable=False),
         *timestamps(),
     )

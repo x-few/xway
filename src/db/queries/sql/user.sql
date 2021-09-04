@@ -7,9 +7,28 @@ SELECT count(id) from users;
 
 
 -- name: add-user<!
-INSERT INTO users (username, email, salt, password, status, creator)
-VALUES (:username, :email, :salt, :password, :status, :creator)
-RETURNING id, created, updated;
+INSERT INTO users (
+    id,
+    username,
+    email,
+    salt,
+    password,
+    status,
+    creator
+)
+VALUES (
+    :id,
+    :username,
+    :email,
+    :salt,
+    :password,
+    :status,
+    :creator
+)
+RETURNING
+    id,
+    created,
+    updated;
 
 
 -- name: get-user-by-id^

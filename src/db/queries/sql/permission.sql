@@ -16,6 +16,7 @@ DELETE FROM permission where id = :id RETURNING id;
 
 -- name: add-permission<!
 INSERT INTO permission (
+    "id",
     "name",
     "uri",
     "description",
@@ -23,6 +24,7 @@ INSERT INTO permission (
     "status"
 )
 VALUES (
+    :id,
     :name,
     :uri,
     :description,

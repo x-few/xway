@@ -1,7 +1,5 @@
-from typing import Optional
-
-from utils.snowflake import get_id
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.operation_log import OperationLogInDB
 
 

@@ -16,10 +16,12 @@ DELETE FROM user_role where id = :id RETURNING id;
 
 -- name: add-user-role<!
 INSERT INTO user_role (
+    "id",
     "user_id",
     "role_id"
 )
 VALUES (
+    :id,
     :user_id,
     :role_id
 )

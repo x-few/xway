@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.role_permission import RolePermissionInDB, \
     RolePermissionInCreate, \
     RolePermissionInUpdate
@@ -26,6 +27,7 @@ class RolePermission(Base):
                                   role_permission: RolePermissionInCreate
                                   ) -> RolePermissionInDB:
         record = await self.exec("add_role_permission",
+                                 id=get_id(),
                                  role_id=role_permission.role_id,
                                  permission_id=role_permission.permission_id,
                                  )

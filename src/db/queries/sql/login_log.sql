@@ -16,12 +16,14 @@ DELETE FROM login_log where id = :id RETURNING id;
 
 -- name: add-login-log<!
 INSERT INTO login_log (
+    "id",
     "user_id",
     "host",
     "type",
     "status"
 )
 VALUES (
+    :id,
     :user_id,
     :host,
     :type,

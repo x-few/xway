@@ -1,6 +1,7 @@
 from typing import Optional
 
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.users import UserInDB
 from models.errors import HttpClientError
 
@@ -34,6 +35,7 @@ class User(Base):
                         status=status, creator=creator)
         user.update_password(password)
         record = await self.exec("add_user",
+                                 id=get_id(),
                                  username=user.username,
                                  email=user.email,
                                  salt=user.salt,

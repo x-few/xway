@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.role import RoleInDB, \
     RoleInCreate, \
     RoleInUpdate
@@ -24,6 +25,7 @@ class Role(Base):
     async def add_role(self, role: RoleInCreate
                        ) -> RoleInDB:
         record = await self.exec("add_role",
+                                 id=get_id(),
                                  name=role.name,
                                  description=role.description,
                                  )

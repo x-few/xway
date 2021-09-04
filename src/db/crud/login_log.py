@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from db.crud.base import Base
+from utils.snowflake import get_id
 from models.login_log import LoginRecordInDB, \
     LoginRecordInCreate
 
@@ -24,6 +23,7 @@ class LoginRecord(Base):
                             login_log: LoginRecordInCreate
                             ) -> LoginRecordInDB:
         record = await self.exec("add_login_log",
+                                 id=get_id(),
                                  user_id=login_log.user_id,
                                  host=login_log.host,
                                  type=login_log.type,

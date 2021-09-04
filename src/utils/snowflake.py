@@ -81,6 +81,7 @@ id_worker = None
 
 
 def get_id():
+    global id_worker
     if id_worker is None:
         id_worker = IdWorker(1, 1)
 

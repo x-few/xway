@@ -16,10 +16,12 @@ DELETE FROM role_permission where id = :id RETURNING id;
 
 -- name: add-role-permission<!
 INSERT INTO role_permission (
+    "id",
     "role_id",
     "permission_id"
 )
 VALUES (
+    :id,
     :role_id,
     :permission_id
 )
