@@ -2,8 +2,8 @@
 SELECT * FROM role_permission ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-role-permissions
-SELECT count(id) from role_permission;
+-- name: count-role-permissions$
+SELECT count(*) from role_permission;
 
 
 -- name: get-role-permission-by-id^

@@ -2,8 +2,8 @@
 SELECT * FROM login_log where user_id = :user_id ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-login-logs
-SELECT count(id) from login_log where user_id = :user_id;
+-- name: count-login-logs$
+SELECT count(*) from login_log where user_id = :user_id;
 
 
 -- name: get-login-log-by-id^

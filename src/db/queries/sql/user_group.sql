@@ -2,8 +2,8 @@
 SELECT * FROM user_group ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-user-groups
-SELECT count(id) from user_group;
+-- name: count-user-groups$
+SELECT count(*) from user_group;
 
 
 -- name: get-user-group-by-id^

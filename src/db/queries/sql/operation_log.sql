@@ -1,5 +1,5 @@
--- name: count-operation-log
-SELECT count(id) from operation_log;
+-- name: count-operation-log$
+SELECT count(*) from operation_log;
 
 
 -- name: list-operation-log

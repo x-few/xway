@@ -9,11 +9,10 @@ from models.permission import PermissionInDB, \
 
 class Permission(Base):
     async def list_permissions(self, offset, limit) -> list:
-        record = await self.exec("count_permissions")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_permissions")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         permissions = list()
 
         records = await self.exec("list_permissions", offset=offset, limit=limit)

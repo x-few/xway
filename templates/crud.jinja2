@@ -9,11 +9,10 @@ from models.{{ table_name }} import {% set list1 = table_name.split('_') %}{% fo
 
 class {% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item | capitalize }}{% endfor %}(Base):
     async def list_{{ table_name }}s(self, offset: int, limit: int) -> list:
-        record = await self.exec("count_{{ table_name }}s")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_{{ table_name }}s")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         {{ table_name }}s = list()
 
         records = await self.exec("list_{{ table_name }}s", offset=offset, limit=limit)

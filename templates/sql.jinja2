@@ -2,8 +2,8 @@
 SELECT * FROM {{ table_name }} ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}s
-SELECT count(id) from {{ table_name }};
+-- name: count-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}s$
+SELECT count(*) from {{ table_name }};
 
 
 -- name: get-{% set list1 = table_name.split('_') %}{% for item in list1 %}{{ item }}{% if not loop.last %}-{% endif -%}{% endfor %}-by-id^

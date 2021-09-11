@@ -8,11 +8,10 @@ from models.errors import HttpClientError
 
 class User(Base):
     async def list_user(self, offset, limit) -> list:
-        record = await self.exec("count_user")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_user")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         users = list()
 
         records = await self.exec("list_user", offset=offset, limit=limit)

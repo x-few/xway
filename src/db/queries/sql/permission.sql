@@ -2,8 +2,8 @@
 SELECT * FROM permission ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-permissions
-SELECT count(id) from permission;
+-- name: count-permissions$
+SELECT count(*) from permission;
 
 
 -- name: get-permission-by-id^

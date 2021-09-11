@@ -6,11 +6,10 @@ from models.login_log import LoginLogInDB, \
 
 class LoginLog(Base):
     async def list_login_logs(self, user_id: int, offset: int, limit: int) -> list:
-        record = await self.exec("count_login_logs", user_id=user_id)
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_login_logs", user_id=user_id)
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         login_logs = list()
 
         records = await self.exec("list_login_logs", user_id=user_id, offset=offset, limit=limit)

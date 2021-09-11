@@ -2,8 +2,8 @@
 SELECT * FROM user_role ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-user-roles
-SELECT count(id) from user_role;
+-- name: count-user-roles$
+SELECT count(*) from user_role;
 
 
 -- name: get-user-role-by-id^

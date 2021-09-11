@@ -2,8 +2,8 @@
 SELECT * FROM users ORDER BY id desc LIMIT :limit OFFSET :offset;
 
 
--- name: count-user
-SELECT count(id) from users;
+-- name: count-user$
+SELECT count(*) from users;
 
 
 -- name: add-user<!

@@ -9,11 +9,10 @@ from models.role import RoleInDB, \
 
 class Role(Base):
     async def list_roles(self, offset, limit) -> list:
-        record = await self.exec("count_roles")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_roles")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         roles = list()
 
         records = await self.exec("list_roles", offset=offset, limit=limit)

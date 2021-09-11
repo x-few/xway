@@ -9,11 +9,10 @@ from models.user_group import UserGroupInDB, \
 
 class UserGroup(Base):
     async def list_user_groups(self, offset: int, limit: int) -> list:
-        record = await self.exec("count_user_groups")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_user_groups")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         user_groups = list()
 
         records = await self.exec("list_user_groups", offset=offset, limit=limit)

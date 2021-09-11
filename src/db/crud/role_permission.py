@@ -9,11 +9,10 @@ from models.role_permission import RolePermissionInDB, \
 
 class RolePermission(Base):
     async def list_role_permissions(self, offset: int, limit: int) -> list:
-        record = await self.exec("count_role_permissions")
-        if not record or not record[0] or record[0][0] == 0:
+        count = await self.exec("count_role_permissions")
+        if not count:
             return list(), 0
 
-        count = record[0][0]
         role_permissions = list()
 
         records = await self.exec("list_role_permissions", offset=offset, limit=limit)
