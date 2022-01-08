@@ -91,10 +91,10 @@ gen-downgrade-sql:
 	cd src; alembic downgrade $(FROMREV):$(TOREV) --sql
 
 gen-init-sql:
-	cd src; alembic upgrade base:head --sql > db/alembic/schema/upgrade.sql
+	cd src; alembic upgrade base:head --sql > db/schema/upgrade.sql
 
 gen-uninit-sql:
-	cd src; alembic downgrade head:base --sql > db/alembic/schema/downgrade.sql
+	cd src; alembic downgrade head:base --sql > db/schema/downgrade.sql
 
 .PHONY: history
 history:
