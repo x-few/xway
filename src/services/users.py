@@ -22,6 +22,7 @@ async def add_user(request: Request, info: dict):
     user = await user_crud.add_user(
         username=info.username,
         password=info.password,
+        type='admin',       # TODO support more user type
         email=info.email,
         creator=creator)
 

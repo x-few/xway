@@ -76,12 +76,12 @@ revision:
 
 .PHONY: upgrade
 # make upgrade n=1
-upgrade:
+upgrade: gen-init-sql
 	cd src; alembic upgrade $(VALUE)
 
 .PHONY: downgrade
 # make downgrade n=2
-downgrade:
+downgrade: gen-uninit-sql
 	cd src; alembic downgrade -$(VALUE)
 
 gen-upgrade-sql:
@@ -91,17 +91,17 @@ gen-downgrade-sql:
 	cd src; alembic downgrade $(FROMREV):$(TOREV) --sql
 
 gen-init-sql:
-	cd src; alembic upgrade base:head --sql
+	cd src; alembic upgrade base:head --sql > db/alembic/schema/upgrade.sql
 
 gen-uninit-sql:
-	cd src; alembic head:base downgrade --sql
+	cd src; alembic downgrade head:base --sql > db/alembic/schema/downgrade.sql
 
 .PHONY: history
 history:
 	cd src; alembic history --verbose
 
 .PHONY: base
-base:
+base: gen-uninit-sql
 	cd src; alembic downgrade base
 
 .PHONY: psql

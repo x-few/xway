@@ -40,6 +40,7 @@ async def add_user(
     request: Request,
     info: UserInCreate = Body(..., embed=True, alias="user"),
 ) -> UserInResponse:
+    from loguru import logger
     return await do_add_user(request, info)
 
 

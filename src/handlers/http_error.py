@@ -53,6 +53,7 @@ async def validation_error(
     _: Request,
     exc: Union[RequestValidationError, ValidationError],
 ) -> JSONResponse:
+    traceback.print_exc()
     return JSONResponse({"errors": [exc.errors()]},
                         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 

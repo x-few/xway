@@ -81,6 +81,7 @@ def timestamps() -> Tuple[sa.Column, sa.Column]:
     )
 
 
+# main user
 def create_users_table() -> None:
     table_name = "users"
     op.create_table(
@@ -93,6 +94,7 @@ def create_users_table() -> None:
         sa.Column("password", sa.Text, nullable=False,),
         sa.Column("status", sa.Integer, nullable=False,
                   default=1),  # 0: disabled, 1: enabled
+        sa.Column("type", sa.Text, nullable=False),  # maintainers/admin/ram
         sa.Column("creator", sa.BigInteger, nullable=False),
         *timestamps(),
     )
@@ -107,6 +109,7 @@ def insert_default_users() -> None:
         sa.Column("username", sa.Text),
         sa.Column("email", sa.Text),
         sa.Column("salt", sa.Text),
+        sa.Column("type", sa.Text),
         sa.Column("password", sa.Text),
         sa.Column("status", sa.Integer, default=1),
         sa.Column("creator", sa.BigInteger),
@@ -118,6 +121,7 @@ def insert_default_users() -> None:
                            'username': 'admin',
                            'email': 'admin@xway.com',
                            'salt': '$2b$12$0nGbQiYmgsz5pYm0gS0EBu',
+                           'type': 'admin',
                            # password: pwd@xway
                            'password': '$2b$12$S9uiHIDezEpJdFzbBcku6.EpE6Ozc4aOkUCG0ZDTdKirpl03jWQ2O',
                            'creator': 0,   # default user

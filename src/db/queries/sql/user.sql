@@ -14,6 +14,7 @@ INSERT INTO users (
     salt,
     password,
     status,
+    type,
     creator
 )
 VALUES (
@@ -23,6 +24,7 @@ VALUES (
     :salt,
     :password,
     :status,
+    :type,
     :creator
 )
 RETURNING

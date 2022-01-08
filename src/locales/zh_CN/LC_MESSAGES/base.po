@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-04 07:51-0300\n"
+"POT-Creation-Date: 2022-01-08 11:17-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/handlers/http_error.py:67
+#: src/handlers/http_error.py:68
 msgid "Not authenticated"
-msgstr "未认证"
+msgstr "请先登录"
 
-#: src/handlers/http_error.py:79
+#: src/handlers/http_error.py:80
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
@@ -48,20 +48,20 @@ msgstr "没有找到此角色"
 msgid "bad role name"
 msgstr "无效的角色名称"
 
-#: src/routers/users.py:25 src/routers/users.py:54 src/routers/users.py:77
-#: src/routers/users.py:101
+#: src/routers/users.py:25 src/routers/users.py:55 src/routers/users.py:78
+#: src/routers/users.py:102
 msgid "current user not found"
 msgstr "没找到当前用户"
 
-#: src/routers/users.py:62 src/routers/users.py:86 src/routers/users.py:106
+#: src/routers/users.py:63 src/routers/users.py:87 src/routers/users.py:107
 msgid "user not found"
 msgstr "没有找到此用户"
 
-#: src/routers/users.py:81
+#: src/routers/users.py:82
 msgid "not allowed delete current user"
 msgstr "不允许删除当前用户"
 
-#: src/routers/users.py:111
+#: src/routers/users.py:112
 #, fuzzy
 msgid "username already exists"
 msgstr "用户名已存在"

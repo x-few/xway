@@ -87,7 +87,7 @@ def authorization_prefix(default_config) -> str:
 async def test_user(pool: Pool) -> UserInDB:
     user_crud = UserCRUD(pool)
     return await user_crud.add_user(
-        username="test", password="pwd@test",
+        username="test", password="pwd@test", type='admin',
         creator=0, email="admin@test.com")
 
 # config = request.app.state.default_config

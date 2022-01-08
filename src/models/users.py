@@ -8,6 +8,7 @@ from utils.const import USER_STATUS_ENABLED
 
 class User(Base):
     username: str
+    type: str = None
     email: Optional[EmailStr] = None
     status: Optional[int] = 1
 

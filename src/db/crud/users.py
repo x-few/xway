@@ -23,6 +23,7 @@ class User(Base):
     async def add_user(self,
                        username: str,
                        password: str,
+                       type: str,
                        email: Optional[str] = None,
                        status: Optional[int] = 1,
                        creator: Optional[int] = 0,
@@ -30,8 +31,12 @@ class User(Base):
         if not password or not username:
             raise HttpClientError("bad username or password")
 
-        user = UserInDB(username=username, email=email,
-                        status=status, creator=creator)
+        user = UserInDB(username=username,
+                        email=email,
+                        type=type,
+                        status=status,
+                        creator=creator)
+
         user.update_password(password)
         record = await self.exec("add_user",
                                  id=get_id(),
@@ -40,6 +45,7 @@ class User(Base):
                                  salt=user.salt,
                                  password=user.password,
                                  status=user.status,
+                                 type=user.type,
                                  creator=user.creator,
                                  )
 
