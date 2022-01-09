@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  log-converter:
+    build:
+      context: ./   # dockerfile文件目录
+      dockerfile: Dockerfile # dockerfile 名
+    image: iwaf-log-converter:1.0.0
+    container_name: log-converter
+    volumes:
+    - ./conf:/usr/local/services/log-converter/conf
+    - ./logs:/usr/local/services/log-converter/logs

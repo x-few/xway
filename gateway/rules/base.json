@@ -1,0 +1,100 @@
+[
+  {
+    "id": 100000000,
+    "enable": 0,
+    "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+    "version": "1.0.0",
+    "category": "xss",
+    "desc": "",
+    "action": "deny",
+    "expire": 0,
+    "priority": 100,
+    "conditions": [
+      {
+        "key": "",
+        "pattern":"((<|ADw-)(\\s|(\\r)*\\n|\\?)*\\b(script|link|meta|embed|iframe|comment|applet|base|bgsound|frame|frameset|layer|ilayer|marquee|object|param|form|style|import|set|animate|svg|AttributeType)\b)|((['\"`]|\/|\\s|(\\r)*\\n|:)+\\b(srcdoc|(on((after|before)print|error|(has|form|duration|rate|readystate)?change|(beforeun)?load(start)?|message|o(n|ff)line|page(hide|show)|popstate|re(do|size|set)|storage|un(do|load)|blur|contextmenu|focus|(form)?input|invalid|select|submit|key(down|press|up)|(db)?lclick|drag(end|enter|leave|over|start)?|drop|mouse(down|move|out|over|up|wheel)|scroll|abort|canplay(through)?|emptied|ended|loaded(meta)?data|pause|play(ing)?|progress|seek(ed|ing)|stalled|suspend|timeupdate|volumechange|waiting))|background|allowscriptaccess|dynsrc|datasrc|dataformatas|handler)\\b(\\s|\\/|(\\r)*\\n)*=)(['\"`]|\/|\\s|(\\r)*\\n|:)*[^&=}]+|(\\b(document(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*cookie|location(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*(href|hash)|window(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*open|window(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*navigate|\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*location)\\b|\\b(alert|confirm|prompt|eval|msgbox|string(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*fromCharCode)(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\()",
+        "logic": "regex",
+        "type": ["request_uri"],
+        "case_sensitivity": false
+      }
+    ],
+    "relationship": "or",
+    "severity": "high",
+    "owner": "base",
+    "magic": 1,
+    "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+  },
+  {
+    "id": 100000001,
+    "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+    "enable": 1,
+    "version": "1.0.0",
+    "category": "xss",
+    "desc": "",
+    "action": "deny",
+    "expire": 0,
+    "priority": 80,
+    "conditions": [
+      {
+        "key": "",
+        "pattern": "(file_get_contents|file_put_contents|print_r|eval|phpinfo|response\\.write|fopen|assert|unlink|execute|alert)\\s*\\([ -~]*\\)",
+        "logic": "regex",
+        "type": ["uri_arg", "post_arg"],
+        "case_sensitivity": false
+      }
+    ],
+    "relationship": "or",
+    "severity": "high",
+    "owner": "base",
+    "magic": 1,
+    "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+  },
+  {
+    "id": 100000002,
+    "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+    "enable": 0,
+    "version": "1.0.0",
+    "category": "xss",
+    "desc": "",
+    "action": "deny",
+    "expire": 0,
+    "priority": 80,
+    "conditions": [
+      {
+        "key": "",
+        "pattern":"\\b(alert|getscript|confirm|prompt|eval|msgbox|string(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\n)*\\.(\\s|(\r?\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*fromCharCode)(\\s|(\r?\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*`",        "logic": "regex",
+        "type": ["request_uri"],
+        "case_sensitivity": false
+      }
+    ],
+    "relationship": "or",
+    "severity": "high",
+    "owner": "base",
+    "magic": 1,
+    "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+  },
+  {
+    "id": 100000003,
+    "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+    "enable": 0,
+    "version": "1.0.0",
+    "category": "xss",
+    "desc": "",
+    "action": "deny",
+    "expire": 0,
+    "priority": 80,
+    "conditions": [
+      {
+        "key": "",
+        "pattern":"((<|adw-)(\\s|(\\r)*\\n|\\?)*\\b(script|link|meta|embed|iframe|comment|applet|base|bgsound|frame|frameset|layer|ilayer|marquee|object|param|form|style|import|set|animate|svg|AttributeType)\b)|((['\"`]|\/|\\s|(\\r)*\\n|:)+\\b(srcdoc|(on((after|before)print|error|(has|form|duration|rate|readystate)?change|(beforeun)?load(start)?|message|o(n|ff)line|page(hide|show)|popstate|re(do|size|set)|storage|un(do|load)|blur|contextmenu|focus|(form)?input|invalid|select|submit|key(down|press|up)|(db)?lclick|drag(end|enter|leave|over|start)?|drop|mouse(down|move|out|over|up|wheel)|scroll|abort|canplay(through)?|emptied|ended|loaded(meta)?data|pause|play(ing)?|progress|seek(ed|ing)|stalled|suspend|timeupdate|volumechange|waiting))|background|allowscriptaccess|dynsrc|datasrc|dataformatas|handler)\\b(\\s|\\/|(\\r)*\\n)*=)(['\"`]|\/|\\s|(\\r)*\\n|:)*[^&=}]+|(\\b(document(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*cookie|location(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*(href|hash)|window(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*open|window(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*navigate|\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*location)\\b|\\b(getscript|alert|confirm|prompt|eval|msgbox|string(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\.(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*fromCharCode)(\\s|(\\r?\\n)|\/\\*.*?\\*\/|\/\/.*?\\n)*\\()",        "logic": "regex",
+        "type": ["request_uri"],
+        "case_sensitivity": false
+      }
+    ],
+    "relationship": "or",
+    "severity": "high",
+    "owner": "base",
+    "magic": 1,
+    "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+  }
+]

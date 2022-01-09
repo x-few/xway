@@ -1,0 +1,15 @@
+{
+  "name": "iwaf",
+  "ipdb": "lib/ipipfree.ipdb",
+  "html": "html",
+  "kafka": {
+    "topic": "test",
+    "attack_log_topic": "test",
+    "access_log_topic": "test",
+    "error_log_topic": "test",
+    "brokers": [{
+      "host": "35.194.129.162",
+      "port": 9092
+    }]
+  }
+}

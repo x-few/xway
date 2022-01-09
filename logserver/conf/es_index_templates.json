@@ -1,0 +1,73 @@
+{
+  "iwaf-attack-log": {
+    "index_patterns": ["iwaf-attack-log-*"],
+    "doc_type": "_doc",
+    "settings": {},
+    "others": {
+      "version": 1
+    },
+    "aliases": {},
+    "properties": {
+      "uid": {
+        "type": "keyword"
+      },
+      "uri": {
+        "type": "text"
+      },
+      "method": {
+        "type": "keyword"
+      },
+      "rule_id": {
+        "type": "long"
+      },
+      "rule_action": {
+        "type": "keyword"
+      },
+      "http_version": {
+        "type": "float"
+      },
+      "attack_content": {
+        "type": "text"
+      },
+      "server_host": {
+        "type": "text"
+      },
+      "server_port": {
+        "type": "integer"
+      },
+      "attack_time": {
+        "type": "date"
+      },
+      "attack_category": {
+        "type": "keyword"
+      },
+      "attack_severity": {
+        "type": "keyword"
+      },
+      "attack_ip": {
+        "type": "ip"
+      },
+      "attack_to": {
+        "type": "geo_point"
+      },
+      "attack_from": {
+        "type": "geo_point"
+      },
+      "from_country": {
+        "type": "keyword"
+      },
+      "from_city": {
+        "type": "keyword"
+      },
+      "to_country": {
+        "type": "keyword"
+      },
+      "to_city": {
+        "type": "keyword"
+      },
+      "count": {
+        "type": "long"
+      }
+    }
+  }
+}

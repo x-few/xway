@@ -1,0 +1,39 @@
+{
+  "kafka_readme": "以下kafka配置直接用于faust app参数，因此不可随意命名，需要按照faust的参数命名",
+  "app": {
+    "id": "iwaf-log-converter",
+    "version": 1,
+    "value_serializer": "raw",
+    "topic_partitions": 8,
+    "broker": [
+      "kafka://10.11.12.13:9091",
+      "kafka://10.11.12.13:9092",
+      "kafka://10.11.12.13:9093"
+    ],
+    "broker_heartbeat_interval": 2.8,
+    "broker_max_poll_records": 1024,
+    "broker_max_poll_interval": 3000.0,
+    "consumer_auto_offset_reset": "latest"
+  },
+  "es": {
+    "hosts": [
+      {
+        "host": "10.11.12.13",
+        "port": "9207"
+      }
+    ],
+    "timeout": 10
+  },
+  "to_es": {
+    "interval": 5,
+    "index_prefix": "iwaf-attack-log-",
+    "doc_type": "_doc"
+  },
+  "to_es_interval": 5,
+  "attack_log_topic": "test",
+  "concurrency": 100,
+  "batch_size": 128,
+  "batch_second": 5,
+  "debug": true,
+  "templates": "conf/es_index_templates.json"
+}

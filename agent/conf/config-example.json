@@ -1,0 +1,10 @@
+{
+  "redis": {
+    "host": "10.11.12.13",
+    "port": 6379,
+    "password": "",
+    "db": 0
+  },
+  "channels": ["base-rule", "user-rule"],
+  "interval": 3
+}

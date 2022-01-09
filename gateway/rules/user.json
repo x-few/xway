@@ -1,0 +1,138 @@
+{
+  "www.test.com": [
+    {
+      "id": 1,
+      "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+      "enable": 0,
+      "version": "1.0.0",
+      "category": "sql_injection",
+      "desc": "IP黑名单",
+      "action": "deny",
+      "expire": 1588574006,
+      "priority": 2,
+      "conditions": [
+        {
+          "key": "",
+          "pattern": "127.0.0.2",
+          "logic": "equal",
+          "type": ["ip"]
+        }
+      ],
+      "relationship": "or",
+      "severity": "high",
+      "owner": "user",
+      "type": "基础规则,和owner重复了",
+      "magic": 3,
+      "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+    },
+    {
+      "id": 2,
+      "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+      "enable": 0,
+      "version": "1.0.0",
+      "category": "cc",
+      "desc": "IP黑名单",
+      "action": "frequency",
+      "expire": 1588574006,
+      "frequency": {
+        "count": 3,
+        "interval": 30,
+        "desc": "30 内访问超过 3 次，惩罚 60s。",
+        "punishment": 60,
+        "punishment_desc": "惩罚时间，单位秒"
+      },
+      "priority": 2,
+      "conditions": [
+        {
+          "key": "",
+          "pattern": "/abc",
+          "logic": "contain",
+          "type": ["uri"]
+        }
+      ],
+      "relationship": "or",
+      "severity": "high",
+      "owner": "user",
+      "type": "基础规则,和owner重复了",
+      "magic": 3,
+      "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+    },
+    {
+      "id": 3,
+      "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+      "enable": 0,
+      "version": "1.0.0",
+      "category": "allow",
+      "desc": "IP黑名单",
+      "action": "allow",
+      "expire": 1588574006,
+      "priority": 2,
+      "conditions": [
+        {
+          "key": "User-Agent",
+          "pattern": "abc",
+          "logic": "contain",
+          "type": ["header"]
+        }
+      ],
+      "relationship": "or",
+      "severity": "high",
+      "owner": "user",
+      "type": "基础规则,和owner重复了",
+      "magic": 3,
+      "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+    },
+    {
+      "id": 4,
+      "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+      "enable": 0,
+      "version": "1.0.0",
+      "category": "area",
+      "desc": "IP黑名单",
+      "action": "deny",
+      "expire": 1588574006,
+      "priority": 2,
+      "conditions": [
+        {
+          "key": "",
+          "pattern": "{\"中国\":[\"广州\"]}",
+          "logic": "in_area",
+          "type": ["area"],
+          "case_sensitivity": false
+        }
+      ],
+      "relationship": "or",
+      "severity": "high",
+      "owner": "user",
+      "type": "基础规则,和owner重复了",
+      "magic": 3,
+      "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+    },
+    {
+      "id": 5,
+      "id_desc": "用户规则从1开始，基础规则ID从1亿开始",
+      "enable": 0,
+      "version": "1.0.0",
+      "category": "area",
+      "desc": "IP黑名单",
+      "action": "deny",
+      "expire": 1588574006,
+      "priority": 2,
+      "conditions": [
+        {
+          "key": "",
+          "pattern": "iSShe",
+          "logic": "equal",
+          "type": ["uri_arg_keys", "post_arg_keys"],
+          "case_sensitivity": false
+        }
+      ],
+      "relationship": "or",
+      "severity": "high",
+      "owner": "user",
+      "type": "基础规则,和owner重复了",
+      "magic": 3,
+      "magic_desc": "cc规则依赖这个，因此编辑规则下发要自增这个值"
+    }
+  ]
+}
