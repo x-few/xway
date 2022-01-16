@@ -1,6 +1,6 @@
 # xway
 
-xway is an easy-to-use, powerful gateway.
+A complete gateway solution.
 
 # Feature
 
@@ -31,3 +31,4 @@ xway is an easy-to-use, powerful gateway.
 - github project: https://github.com/orgs/x-few/projects/3
 - structure diagram: https://www.processon.com/view/link/5f20e0db1e08533a628cdec6
 - detailed design: https://docs.qq.com/doc/DRWZ3eG9aTlFWS2tj
+- web ui: https://app.mockplus.cn/s/pMpk9FZDqWv
