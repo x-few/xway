@@ -3,6 +3,7 @@ package initialize
 import (
 	"os"
 	"fmt"
+	"syscall"
 
     "github.com/fsnotify/fsnotify"
     "github.com/spf13/viper"
@@ -34,10 +35,14 @@ func Viper(conf *config.Config) *viper.Viper {
     v.WatchConfig()
 
     v.OnConfigChange(func(e fsnotify.Event) {
+		// TODO add timer here to avoid multiple reload
         fmt.Println("config file changed:", e.Name)
+		fmt.Println("Actual pid is ", syscall.Getpid())
         if err := v.Unmarshal(conf); err != nil {
             fmt.Println(err)
         }
+
+		syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
     })
     if err := v.Unmarshal(conf); err != nil {
         fmt.Println(err)

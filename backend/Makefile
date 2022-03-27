@@ -2,12 +2,11 @@
 
 .PHONY: build run
 
-mod-update:
+update:
 	go mod tidy
 
 build:
 	go build
 
-run:
-	# ./xway
-	go run main.go
+run: build
+	./backend
