@@ -1,0 +1,152 @@
+
+- users
+    id BIGSERIAL NOT NULL,
+    username TEXT NOT NULL,
+    email TEXT,
+    salt TEXT NOT NULL,
+    password TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    creator BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+
+    - http_application
+        id BIGSERIAL NOT NULL,
+        - http_app_ssl
+        - http_app_router
+        - http_app_waf
+        - http_app_rule
+        - http_app_upstream
+
+    - dns_application
+        id BIGSERIAL NOT NULL,
+
+- partition
+    id BIGSERIAL NOT NULL,
+
+- cluster
+    id BIGSERIAL NOT NULL,
+
+- gateway
+    id BIGSERIAL NOT NULL,
+
+# global upstream
+- upstream
+    id BIGSERIAL NOT NULL,
+
+- nginx_config
+    id BIGSERIAL NOT NULL,
+    # global/partition/cluster/gateway
+    type TEXT NOT NULL,
+    type_id INTEGER NOT NULL,
+
+# global default config
+- default_config
+    id BIGSERIAL NOT NULL,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    comment TEXT,
+    PRIMARY KEY (id),
+
+- operation_log
+    id BIGSERIAL NOT NULL,
+    op VARCHAR(16) NOT NULL,
+    creator BIGINT NOT NULL,
+    path LTREE,
+    "new" JSONB,
+    "old" JSONB,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+
+- release_log
+    id BIGSERIAL NOT NULL,
+    creator BIGINT NOT NULL,
+    start_opid BIGINT NOT NULL,
+    end_opid BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+
+- login_log
+    id BIGSERIAL NOT NULL,
+    uid BIGINT NOT NULL,
+    host TEXT,
+    type INTEGER,
+    status INTEGER NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+
+- language
+    id BIGSERIAL NOT NULL,
+    name TEXT NOT NULL,
+    code VARCHAR(16) NOT NULL,
+    domain TEXT NOT NULL,
+    localedir TEXT NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (name)
+
+- permission
+    id BIGSERIAL NOT NULL,
+    name TEXT NOT NULL,
+    uri TEXT NOT NULL,
+    description TEXT,
+    method INTEGER,
+    status INTEGER,
+    creator BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (uri, method),
+    UNIQUE (name)
+
+- role
+    id BIGSERIAL NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (name)
+
+- user_role
+    id BIGSERIAL NOT NULL,
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY(user_id) REFERENCES users (id),
+    FOREIGN KEY(role_id) REFERENCES role (id)
+
+- role_permission
+    id BIGSERIAL NOT NULL,
+    role_id BIGINT NOT NULL,
+    permission_id BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY(role_id) REFERENCES role (id),
+    FOREIGN KEY(permission_id) REFERENCES permission (id)
+
+- user_group
+    id BIGSERIAL NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    creator BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (name)
+
+- user_group_role
+    id BIGSERIAL NOT NULL,
+    group_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    updated TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY(group_id) REFERENCES user_group (id),
+    FOREIGN KEY(role_id) REFERENCES role (id)
