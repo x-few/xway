@@ -17,7 +17,17 @@ import (
 func main() {
 	// initialize
 	global.VIPER = initialize.Viper(&global.CONFIG)
-	global.DB = initialize.Database()
+	db, err := initialize.Database()
+	if err != nil {
+		log.Fatal("init database failed: ", err)
+	}
+
+	global.DB = db
+
+	err = initialize.Tables(global.DB)
+	if err != nil {
+		log.Fatal("init table failed: ", err)
+	}
 
 	fmt.Println("config = ", global.CONFIG)
 
@@ -45,7 +55,7 @@ func main() {
         log.Printf("Actual pid is %d", syscall.Getpid())
     }
 
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
     if err != nil {
         log.Printf("Server err: %v", err)
     }

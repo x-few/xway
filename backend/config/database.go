@@ -16,3 +16,11 @@ func (p *Database) Dsn() string {
 	return "host=" + p.Host + " user=" + p.Username + " password=" + p.Password + " dbname=" + p.Dbname + " port=" + p.Port + " " + p.Config
 }
 
+func (p *Database) DsnWithoutDBName() string {
+	return "host=" + p.Host + " user=" + p.Username + " password=" + p.Password + " port=" + p.Port + " " + p.Config
+}
+
+func (p *Database) GetDBName() string {
+	return p.Dbname
+}
+
