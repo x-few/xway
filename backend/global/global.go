@@ -11,5 +11,4 @@ var (
 	DB     	*gorm.DB
 	CONFIG 	config.Config
 	VIPER 	*viper.Viper
-	MASTER_PID int
 )

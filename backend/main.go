@@ -6,7 +6,6 @@ import (
 	"log"
 	"syscall"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fvbock/endless"
 
 	"github.com/x-few/xway/backend/global"
@@ -31,11 +30,10 @@ func main() {
 
 	fmt.Println("config = ", global.CONFIG)
 
+	// TODO init middlewares
+
 	// init router
-	router := gin.Default()
-	router.GET("/hello", func(c *gin.Context) {
-		c.String(200, "world")
-	})
+	router := initialize.Router()
 
 	// start server
 	address := fmt.Sprintf("%s:%d",
@@ -51,7 +49,6 @@ func main() {
 	server.MaxHeaderBytes = 1 << 20
 
 	server.BeforeBegin = func(add string) {
-		global.MASTER_PID = syscall.Getpid()
         log.Printf("Actual pid is %d", syscall.Getpid())
     }
 
