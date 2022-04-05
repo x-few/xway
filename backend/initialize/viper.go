@@ -8,16 +8,16 @@ import (
     "github.com/fsnotify/fsnotify"
     "github.com/spf13/viper"
 
-    "github.com/x-few/xway/backend/utils"
+    "github.com/x-few/xway/backend/utils/constant"
     "github.com/x-few/xway/backend/config"
 )
 
 func Viper(conf *config.Config) *viper.Viper {
     var file string
 
-    if fileEnv := os.Getenv(utils.CONFIG_ENV_KEY); fileEnv == "" {
+    if fileEnv := os.Getenv(constant.CONFIG_ENV_KEY); fileEnv == "" {
 		workDir, _ := os.Getwd()
-        file = workDir + "/config/" + utils.CONFIG_DEF_FILE
+        file = workDir + "/config/" + constant.CONFIG_DEF_FILE
     } else {
         file = fileEnv
     }
@@ -26,7 +26,7 @@ func Viper(conf *config.Config) *viper.Viper {
 
     v := viper.New()
     v.SetConfigFile(file)
-    v.SetConfigType(utils.CONFIG_FILE_TYPE)
+    v.SetConfigType(constant.CONFIG_FILE_TYPE)
 
     err := v.ReadInConfig()
     if err != nil {

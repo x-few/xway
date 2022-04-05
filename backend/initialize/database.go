@@ -8,7 +8,7 @@ import (
     "gorm.io/driver/postgres"
 
     "github.com/x-few/xway/backend/global"
-    "github.com/x-few/xway/backend/model"
+    "github.com/x-few/xway/backend/model/schema"
 )
 
 func GormConfig() *gorm.Config {
@@ -83,7 +83,7 @@ func Database() (*gorm.DB, error) {
 
 func Tables(db *gorm.DB) error {
     return db.AutoMigrate(
-        model.Users{},
-        model.KVConfigs{},
+        schema.Users{},
+        schema.KVConfigs{},
     )
 }

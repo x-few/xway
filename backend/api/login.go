@@ -6,5 +6,5 @@ import (
 )
 
 func Login(c *gin.Context) {
-	c.String(200, "hello login")
+	c.String(200, `{"hello": "login", "world": {"haha":"hehe"}}`)
 }

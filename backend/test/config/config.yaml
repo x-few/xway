@@ -1,0 +1,15 @@
+server:
+  host: ''
+  port: 8080
+
+database:
+  # postgres://postgres:postgres@127.0.0.1:5432/xway
+  type: 'postgres'
+  path: '127.0.0.1'
+  port: '5432'
+  config: 'sslmode=disable'
+  db-name: 'xway'
+  username: 'postgres'
+  password: 'postgres'
+  max-idle-conns: 10
+  max-open-conns: 100

@@ -1,4 +1,8 @@
-package model
+package schema
+
+import (
+	"github.com/x-few/xway/backend/model"
+)
 
 type Users struct {
 	ID          uint64         `json:"id" gorm:"primarykey"`
@@ -8,5 +12,5 @@ type Users struct {
 	Creator     uint64         `json:"creator" gorm:"comment:who create this user"`
 	Phone       string         `json:"phone" gorm:"comment:phone"`
 	Email       string         `json:"email" gorm:"comment:email"`
-    DateTime
+    model.DateTime
 }
