@@ -13,3 +13,8 @@ database:
   password: 'postgres'
   max-idle-conns: 10
   max-open-conns: 100
+
+id-generator:
+  type: 'snowflake'
+  # ENV: XWAY_BACKEND_SF_MACHINE_ID
+  machine-id: 0

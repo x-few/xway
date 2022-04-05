@@ -17,9 +17,7 @@ import (
 
 var engine *gin.Engine
 
-func init() {
-	router := initialize.Initialize()
-
+func ReinitDB() {
 	// clean all data in db
 	err := test_utils.CleanDB(global.DB)
 	if err != nil {
@@ -30,6 +28,12 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func init() {
+	router := initialize.Initialize()
+
+	ReinitDB()
 
 	engine = router
 }
@@ -72,4 +76,3 @@ func NewRequest(method string, path string, body interface{},
 
 	return w
 }
-

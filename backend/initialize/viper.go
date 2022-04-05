@@ -9,13 +9,13 @@ import (
     "github.com/spf13/viper"
 
     "github.com/x-few/xway/backend/utils/constant"
-    "github.com/x-few/xway/backend/config"
+    "github.com/x-few/xway/backend/model/config"
 )
 
 func Viper(conf *config.Config) *viper.Viper {
     var file string
 
-    if fileEnv := os.Getenv(constant.CONFIG_ENV_KEY); fileEnv == "" {
+    if fileEnv := os.Getenv(constant.ENV_CONFIG_FILE_KEY); fileEnv == "" {
 		workDir, _ := os.Getwd()
         file = workDir + "/config/" + constant.CONFIG_DEF_FILE
     } else {

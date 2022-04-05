@@ -12,3 +12,7 @@ func GetUserList(c *gin.Context) {
 func GetUserInfo(c *gin.Context) {
 	c.String(200, "hello info")
 }
+
+func AddUser() {
+
+}

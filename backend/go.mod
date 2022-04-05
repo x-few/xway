@@ -6,6 +6,7 @@ require (
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.7.7
+	github.com/sony/sonyflake v1.0.0
 	github.com/spf13/viper v1.10.1
 	github.com/stretchr/testify v1.7.0
 	gorm.io/driver/postgres v1.3.1

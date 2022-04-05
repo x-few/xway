@@ -26,6 +26,11 @@ func Initialize() *gin.Engine {
 
 	fmt.Println("config = ", global.CONFIG)
 
+	err = Snowflake()
+	if err != nil {
+		log.Fatal("init snowflake failed: ", err)
+	}
+
 	// TODO init middlewares
 
 	// init router

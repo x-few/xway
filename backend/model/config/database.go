@@ -8,8 +8,8 @@ type Database struct {
 	Username     string `mapstructure:"username" json:"username" yaml:"username"`                 // username
 	Password     string `mapstructure:"password" json:"password" yaml:"password"`                 // password
 	Config       string `mapstructure:"config" json:"config" yaml:"config"`                       // advanced configuration
-	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns" yaml:"max-idle-conns"` // max idle connections
-	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns" yaml:"max-open-conns"` // max open connections
+	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"max-idle-conns" yaml:"max-idle-conns"` // max idle connections
+	MaxOpenConns int    `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"` // max open connections
 }
 
 func (p *Database) Dsn() string {
