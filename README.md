@@ -15,9 +15,9 @@ A complete gateway solution.
 
 - Console
     - frontend: vue3
-    - backend: fastapi(python)
+    - backend: gin(golang)
 - Gateway
-    - gateway: openresty
+    - gateway: golang
     - agent: golang
     - logclient: filebeat, send logs to `msgqueue` or `Log Center`.
 - Log Center
